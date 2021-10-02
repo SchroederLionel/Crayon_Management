@@ -10,9 +10,8 @@ class Dashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final menuProvider = Provider.of<MenuProvider>(context, listen: false);
     return Scaffold(
-      drawer: SideMenu(),
+      drawer: const SideMenu(),
       key: context.read<MenuProvider>().scaffoldKey,
       body: SafeArea(
         child: Row(

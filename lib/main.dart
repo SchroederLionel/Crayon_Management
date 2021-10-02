@@ -1,14 +1,20 @@
 import 'package:crayon_management/providers/locale_provider.dart';
+import 'package:crayon_management/providers/menu_provider.dart';
+import 'package:crayon_management/screens/dashboard/components/header.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:crayon_management/providers/theme_provider.dart';
 import 'route/route.dart' as route;
+import 'package:url_strategy/url_strategy.dart';
 
 void main() {
+  // Removes # from url.
+  setPathUrlStrategy();
   runApp(MultiProvider(
     providers: [
+      ChangeNotifierProvider<MenuProvider>(create: (context) => MenuProvider()),
       ChangeNotifierProvider<ThemeProvider>(
         create: (BuildContext context) => ThemeProvider(isDarkMode: true),
       ),

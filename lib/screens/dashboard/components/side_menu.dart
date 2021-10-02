@@ -31,7 +31,9 @@ class SideMenu extends StatelessWidget {
             DrawerListTile(
               title: 'Logout',
               icon: Icons.logout,
-              pressed: () {},
+              pressed: () {
+                print('settings');
+              },
             ),
           ],
         ),
