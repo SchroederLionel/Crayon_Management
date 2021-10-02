@@ -17,7 +17,7 @@ class Lectures extends StatelessWidget {
           children: [
             Text(
               'My Lectures',
-              style: Theme.of(context).textTheme.subtitle1,
+              style: Theme.of(context).textTheme.headline2,
             ),
             ElevatedButton.icon(
                 style: TextButton.styleFrom(

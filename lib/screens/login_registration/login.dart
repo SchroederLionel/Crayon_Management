@@ -26,8 +26,7 @@ class LoginScreen extends StatelessWidget {
                   IconButton(
                       onPressed: () => themeProvider.swapTheme(),
                       icon: const Icon(
-                        Icons.brightness_6,
-                        color: Colors.black,
+                        Icons.lightbulb,
                       )),
                   Spacer(),
                   ElevatedButton(

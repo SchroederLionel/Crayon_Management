@@ -15,9 +15,9 @@ class LanguageWidget extends StatelessWidget {
       value: locale,
       icon: Container(
         child: const Icon(
-          Icons.arrow_downward,
+          Icons.arrow_drop_down,
         ),
-        margin: EdgeInsets.only(left: 20),
+        margin: EdgeInsets.only(left: 5),
       ),
       iconSize: 24,
       elevation: 16,
@@ -25,7 +25,7 @@ class LanguageWidget extends StatelessWidget {
       onChanged: (_) {},
       underline: Container(
         height: 2,
-        color: Colors.deepPurple,
+        color: Theme.of(context).primaryColor,
       ),
       items: L10n.languages.map((Locale locale) {
         final String flag = L10n.getFlag(locale.languageCode);

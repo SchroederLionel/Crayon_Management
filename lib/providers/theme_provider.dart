@@ -3,29 +3,58 @@ import 'package:google_fonts/google_fonts.dart';
 
 class ThemeProvider extends ChangeNotifier {
   late ThemeData _selectedTheme;
-
-  ThemeData light = ThemeData.light().copyWith(
-      primaryColor: const Color(0xFF212332),
+  static const hex_primary_color = 0xFF2A2D3E;
+  ThemeData light = ThemeData(
+      primaryColor: Colors.blueAccent,
+      iconTheme: IconThemeData(color: Colors.black),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all<Color>(Colors.blueAccent),
+      )),
+      backgroundColor: const Color(0xFFFFFFFF),
+      brightness: Brightness.light,
+      scaffoldBackgroundColor: const Color(0xFFFEFEFE),
+      canvasColor: Colors.white,
+      cardColor: const Color(0xFFF2F2F2),
       textTheme: TextTheme(
-        headline1:
-            GoogleFonts.poppins(fontSize: 72.0, fontWeight: FontWeight.bold),
-      ));
+          headline1: GoogleFonts.lato(
+              fontSize: 32.0, fontWeight: FontWeight.bold, color: Colors.black),
+          headline2: GoogleFonts.lato(
+              fontSize: 24.0,
+              fontWeight: FontWeight.bold,
+              color: Colors.black54),
+          subtitle1: GoogleFonts.lato(
+              fontSize: 21.0,
+              fontWeight: FontWeight.bold,
+              color: Colors.blueAccent),
+          bodyText1: GoogleFonts.lato(fontSize: 18, color: Colors.black),
+          bodyText2: GoogleFonts.lato(fontSize: 18, color: Colors.black)));
 
   ThemeData dark = ThemeData(
+      primaryColor: Colors.blueAccent,
+      iconTheme: const IconThemeData(color: Colors.white54),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all<Color>(Colors.blueAccent),
+      )),
       backgroundColor: const Color(0xFF212332),
       brightness: Brightness.dark,
       scaffoldBackgroundColor: const Color(0xFF212332),
       canvasColor: const Color(0xFF2A2D3E),
       cardColor: const Color(0xFF2A2D3E),
       textTheme: TextTheme(
-          headline1: GoogleFonts.poppins(
+          headline1: GoogleFonts.lato(
+              fontSize: 32.0, fontWeight: FontWeight.bold, color: Colors.white),
+          headline2: GoogleFonts.lato(
               fontSize: 24.0,
-              fontWeight: FontWeight.w300,
-              color: Colors.white54),
-          subtitle1: GoogleFonts.poppins(
-              fontSize: 18.0,
-              fontWeight: FontWeight.w100,
-              color: Colors.white54)));
+              fontWeight: FontWeight.bold,
+              color: Colors.white60),
+          subtitle1: GoogleFonts.lato(
+              fontSize: 21.0,
+              fontWeight: FontWeight.bold,
+              color: Colors.blueAccent),
+          bodyText1: GoogleFonts.lato(fontSize: 18, color: Colors.white),
+          bodyText2: GoogleFonts.lato(fontSize: 18, color: Colors.white)));
 
   ThemeProvider({required bool isDarkMode}) {
     _selectedTheme = isDarkMode ? dark : light;

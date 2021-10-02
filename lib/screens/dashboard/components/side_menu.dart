@@ -1,5 +1,7 @@
+import 'package:crayon_management/providers/theme_provider.dart';
 import 'package:crayon_management/widgets/drawer_list_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SideMenu extends StatelessWidget {
   const SideMenu({
@@ -8,34 +10,41 @@ class SideMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
     return Drawer(
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            DrawerHeader(child: Image.asset('assets/images/crayon.png')),
-            DrawerListTile(
-              title: 'Dashboard',
-              icon: Icons.dashboard,
-              pressed: () {},
-            ),
-            DrawerListTile(
-              title: 'Profile',
-              icon: Icons.account_circle,
-              pressed: () {},
-            ),
-            DrawerListTile(
-              title: 'Settings',
-              icon: Icons.settings,
-              pressed: () {},
-            ),
-            DrawerListTile(
-              title: 'Logout',
-              icon: Icons.logout,
-              pressed: () {
-                print('settings');
-              },
-            ),
-          ],
+      elevation: 16,
+      child: Container(
+        color: Color(0xFF2A2D3E),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              DrawerHeader(child: Image.asset('assets/images/crayon.png')),
+              DrawerListTile(
+                title: 'Dashboard',
+                icon: Icons.dashboard,
+                pressed: () {},
+              ),
+              DrawerListTile(
+                title: 'Profile',
+                icon: Icons.account_circle,
+                pressed: () {},
+              ),
+              DrawerListTile(
+                title: 'Brightness',
+                icon: Icons.lightbulb_outline,
+                pressed: () {
+                  themeProvider.swapTheme();
+                },
+              ),
+              DrawerListTile(
+                title: 'Logout',
+                icon: Icons.logout,
+                pressed: () {
+                  print('settings');
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

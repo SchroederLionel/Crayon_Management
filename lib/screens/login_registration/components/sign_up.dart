@@ -22,8 +22,12 @@ class SignUp extends StatelessWidget {
                 height: 14,
               ),
               TextFormField(
+                style: Theme.of(context).textTheme.bodyText1,
                 decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.email),
+                    prefixIcon: Icon(
+                      Icons.email,
+                      size: 18,
+                    ),
                     border: UnderlineInputBorder(),
                     labelText: 'Email'),
               ),
@@ -31,8 +35,12 @@ class SignUp extends StatelessWidget {
                 height: 14,
               ),
               TextFormField(
+                style: Theme.of(context).textTheme.bodyText1,
                 decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.email),
+                    prefixIcon: Icon(
+                      Icons.person,
+                      size: 18,
+                    ),
                     border: UnderlineInputBorder(),
                     labelText: 'Firstname'),
               ),
@@ -40,8 +48,12 @@ class SignUp extends StatelessWidget {
                 height: 14,
               ),
               TextFormField(
+                style: Theme.of(context).textTheme.bodyText1,
                 decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.email),
+                    prefixIcon: Icon(
+                      Icons.person,
+                      size: 18,
+                    ),
                     border: UnderlineInputBorder(),
                     labelText: 'Lastname'),
               ),
@@ -49,18 +61,26 @@ class SignUp extends StatelessWidget {
                 height: 14,
               ),
               TextFormField(
+                  style: Theme.of(context).textTheme.bodyText1,
                   obscureText: true,
                   decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.password),
+                      prefixIcon: Icon(
+                        Icons.password,
+                        size: 18,
+                      ),
                       border: UnderlineInputBorder(),
                       labelText: 'Password')),
               const SizedBox(
                 height: 14,
               ),
               TextFormField(
+                  style: Theme.of(context).textTheme.bodyText1,
                   obscureText: true,
                   decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.password),
+                      prefixIcon: Icon(
+                        Icons.password,
+                        size: 18,
+                      ),
                       border: UnderlineInputBorder(),
                       labelText: 'Password')),
               const Spacer(),

@@ -12,15 +12,14 @@ class ProfileCard extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(Radius.circular(10)),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: Colors.blueAccent),
       ),
       child: DropdownButton(
           value: 'Lionel Schroeder',
           icon: Container(
             margin: const EdgeInsets.only(left: 5),
             child: const Icon(
-              Icons.arrow_downward,
-              color: Colors.white54,
+              Icons.arrow_drop_down,
             ),
           ),
           onChanged: (_) {},
@@ -34,14 +33,17 @@ class ProfileCard extends StatelessWidget {
                 child: Row(
                   children: [
                     Container(
-                      width: 40,
-                      height: 40,
+                      width: 30,
+                      height: 30,
                       child: Image.asset(
                         "assets/images/profile.png",
                       ),
                     ),
                     const SizedBox(width: 5.0),
-                    const Text("Lionel Schroeder"),
+                    Text(
+                      "Lionel Schroeder",
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
                   ],
                 )),
             DropdownMenuItem(
@@ -57,7 +59,10 @@ class ProfileCard extends StatelessWidget {
                       height: 40,
                     ),
                     SizedBox(width: 5.0),
-                    Text('Logout')
+                    Text(
+                      'Logout',
+                      style: Theme.of(context).textTheme.bodyText1,
+                    )
                   ],
                 ))
           ]),
