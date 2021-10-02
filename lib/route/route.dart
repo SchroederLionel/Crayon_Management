@@ -1,4 +1,3 @@
-import 'package:crayon_management/screens/settings.dart';
 import 'package:flutter/material.dart';
 
 import 'package:crayon_management/screens/login_registration/login.dart';
@@ -21,8 +20,6 @@ Route<dynamic> controller(RouteSettings routerSettings) {
           builder: (context) => const RegistrationScreen());
     case dashboard:
       return MaterialPageRoute(builder: (context) => const Dashboard());
-    case settings:
-      return MaterialPageRoute(builder: (context) => const SettingsScreen());
     default:
       return MaterialPageRoute(builder: (context) => const LoginScreen());
   }

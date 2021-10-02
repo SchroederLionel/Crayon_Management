@@ -21,10 +21,9 @@ class Header extends StatelessWidget {
         if (!Responsive.isMobile(context))
           Text(
             "Dashboard",
-            style: Theme.of(context).textTheme.headline6,
+            style: Theme.of(context).textTheme.headline1,
           ),
-        if (!Responsive.isMobile(context))
-          Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
+        Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
         const ProfileCard()
       ],
     );
