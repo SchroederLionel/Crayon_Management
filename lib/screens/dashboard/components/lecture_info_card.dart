@@ -9,28 +9,123 @@ class LectureInfoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(5.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
           children: [
-            Flexible(
-              child: Container(
-                child: Text(
-                  lecture.title,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.subtitle1,
-                ),
+            Container(
+              child: Text(
+                lecture.title,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.subtitle1,
               ),
+            ),
+            const SizedBox(
+              height: 14.0,
+            ),
+            Row(
+              children: [
+                Text(
+                  'Last Powerpoint:',
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+                Text(
+                  lecture.lastPowerPointTitle,
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+              ],
             ),
             const SizedBox(
               height: 14.0,
             ),
             Text(
               'Dates:',
-              style: Theme.of(context).textTheme.subtitle2,
+              style: Theme.of(context).textTheme.bodyText1,
             ),
-            Expanded(
-              child: Container(
+            const SizedBox(
+              height: 10.0,
+            ),
+            Table(
+              border: TableBorder.all(color: Theme.of(context).primaryColor),
+              children:
+                  List<TableRow>.generate(lecture.dates.length, (int index) {
+                return TableRow(children: [
+                  Padding(
+                    padding: EdgeInsets.all(2.0),
+                    child: Text(
+                      lecture.dates[index].room,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(2.0),
+                    child: Text(
+                      lecture.dates[index].starting_time,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(2.0),
+                    child: Text(
+                      lecture.dates[index].ending_time,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(2.0),
+                    child: Text(
+                      getlectureType(lecture.dates[index].type),
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                  )
+                ]);
+              }),
+            ),
+            const Spacer(),
+            Container(
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ElevatedButton.icon(
+                      onPressed: () {},
+                      icon: Icon(Icons.open_in_browser),
+                      label: Text('Open')),
+                  ElevatedButton.icon(
+                      style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              Colors.redAccent)),
+                      onPressed: () {},
+                      icon: Icon(Icons.delete),
+                      label: Text('Delete'))
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  String getlectureType(LectureType type) {
+    if (type == LectureType.exercise) {
+      return 'Excercise';
+    } else {
+      return 'Lecture';
+    }
+  }
+}
+
+/**
+ * 
+ * 
+ * Container(
                 child: ListView.builder(
                     itemCount: lecture.dates.length,
                     itemBuilder: (BuildContext context, int index) {
@@ -43,11 +138,5 @@ class LectureInfoCard extends StatelessWidget {
                         ],
                       );
                     }),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+              )
+ */

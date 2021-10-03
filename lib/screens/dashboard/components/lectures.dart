@@ -37,11 +37,11 @@ class Lectures extends StatelessWidget {
 
 class LectureInfoCardGridView extends StatelessWidget {
   final int crossAxisCount;
+  final double childAspectRatio;
 
-  LectureInfoCardGridView({
-    Key? key,
-    this.crossAxisCount = 4,
-  }) : super(key: key);
+  LectureInfoCardGridView(
+      {Key? key, this.crossAxisCount = 4, this.childAspectRatio = 1.5})
+      : super(key: key);
 
   final lectures = [
     Lecture(
@@ -167,6 +167,7 @@ class LectureInfoCardGridView extends StatelessWidget {
       shrinkWrap: true,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: crossAxisCount,
+        childAspectRatio: childAspectRatio,
         crossAxisSpacing: 5.0,
         mainAxisSpacing: 5.0,
       ),

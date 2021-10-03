@@ -19,11 +19,7 @@ class DrawerListTile extends StatelessWidget {
         icon,
         color: Colors.white54,
       ),
-      title: Text(
-        title,
-        style: const TextStyle(
-            color: Colors.white54, fontSize: 18, fontWeight: FontWeight.w100),
-      ),
+      title: Text(title, style: Theme.of(context).textTheme.bodyText2),
     );
   }
 }

@@ -48,7 +48,9 @@ class ProfileCard extends StatelessWidget {
                 )),
             DropdownMenuItem(
                 value: 'logout',
-                onTap: () {},
+                onTap: () {
+                  Navigator.pop(context);
+                },
                 child: Row(
                   children: [
                     Container(
