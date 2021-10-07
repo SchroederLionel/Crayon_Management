@@ -21,14 +21,18 @@ class LoginScreen extends StatelessWidget {
           child: Column(
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const LanguageWidget(),
-                  IconButton(
-                      onPressed: () => themeProvider.swapTheme(),
-                      icon: const Icon(
-                        Icons.lightbulb,
-                      )),
-                  Spacer(),
+                  Row(
+                    children: [
+                      const LanguageWidget(),
+                      IconButton(
+                          onPressed: () => themeProvider.swapTheme(),
+                          icon: const Icon(
+                            Icons.lightbulb,
+                          )),
+                    ],
+                  ),
                   ElevatedButton(
                       style: TextButton.styleFrom(
                           padding: const EdgeInsets.symmetric(
@@ -45,7 +49,9 @@ class LoginScreen extends StatelessWidget {
                   flipOnTouch: false,
                   direction: FlipDirection.HORIZONTAL,
                   front: SignIn(),
-                  back: SignUp(),
+                  back: SignUp(
+                    cardKey: cardKey,
+                  ),
                 ),
               ),
             ],

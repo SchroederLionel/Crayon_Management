@@ -1,5 +1,7 @@
 import 'package:crayon_management/Custom_scroll_behavior.dart';
 import 'package:crayon_management/providers/locale_provider.dart';
+import 'package:crayon_management/providers/login_registration_provider/login_provider.dart';
+import 'package:crayon_management/providers/login_registration_provider/registration_provider.dart';
 import 'package:crayon_management/providers/menu_provider.dart';
 import 'package:crayon_management/providers/presentation_provider.dart';
 import 'package:crayon_management/screens/dashboard/components/header.dart';
@@ -25,6 +27,12 @@ void main() {
       ),
       ChangeNotifierProvider<PresentationProvider>(
         create: (BuildContext context) => PresentationProvider(),
+      ),
+      ChangeNotifierProvider<LoginProvider>(
+        create: (BuildContext context) => LoginProvider(),
+      ),
+      ChangeNotifierProvider<RegistrationProvider>(
+        create: (BuildContext context) => RegistrationProvider(),
       ),
     ],
     child: const MyApp(),
