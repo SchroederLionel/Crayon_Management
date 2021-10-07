@@ -1,3 +1,5 @@
+import 'package:crayon_management/datamodels/lecture.dart';
+import 'package:crayon_management/screens/presentation/presentation_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:crayon_management/screens/login_registration/login.dart';
@@ -8,7 +10,7 @@ import 'package:crayon_management/screens/login_registration/registration.dart';
 const String loginScreen = 'login';
 const String registration = 'registration';
 const String dashboard = 'dashboard';
-const String settings = 'settings';
+const String presentation = 'presentation';
 
 /// Routes of the application.
 Route<dynamic> controller(RouteSettings routerSettings) {
@@ -20,6 +22,11 @@ Route<dynamic> controller(RouteSettings routerSettings) {
           builder: (context) => const RegistrationScreen());
     case dashboard:
       return MaterialPageRoute(builder: (context) => const Dashboard());
+    case presentation:
+      return MaterialPageRoute(
+          builder: (context) => PresentationScreen(
+                lecture: routerSettings.arguments as Lecture,
+              ));
     default:
       return MaterialPageRoute(builder: (context) => const LoginScreen());
   }

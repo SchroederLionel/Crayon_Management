@@ -9,8 +9,6 @@ class Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final menuProvider = Provider.of<MenuProvider>(context, listen: false);
-
     return Row(
       children: [
         if (!Responsive.isDesktop(context))

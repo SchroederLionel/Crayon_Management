@@ -32,6 +32,7 @@ dependencies:
   flutter_localizations: # Add this line
     sdk: flutter
   intl: ^0.17.0
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
@@ -40,6 +41,8 @@ dependencies:
   google_fonts: ^2.1.0
   url_strategy: ^0.2.0
   flip_card: ^0.5.0
+  pdf_render: ^1.0.13
+  scrollable_positioned_list: ^0.2.0-nullsafety.0
 
 dev_dependencies:
   flutter_test:
@@ -64,6 +67,9 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+    - assets/DataAnalysis.pdf
+    - assets/QuantumComputing.pdf
+    - assets/test.pdf
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

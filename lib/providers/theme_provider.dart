@@ -6,7 +6,7 @@ class ThemeProvider extends ChangeNotifier {
   static const hex_primary_color = 0xFF2A2D3E;
   ThemeData light = ThemeData(
       primaryColor: Colors.blueAccent,
-      iconTheme: IconThemeData(color: Colors.black),
+      iconTheme: const IconThemeData(color: Colors.black),
       elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all<Color>(Colors.blueAccent),

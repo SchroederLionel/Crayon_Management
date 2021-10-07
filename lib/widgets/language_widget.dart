@@ -9,7 +9,7 @@ class LanguageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final locale = Localizations.localeOf(context);
-    final localeProvider = Provider.of<LocaleProvider>(context);
+    final localeProvider = Provider.of<LocaleProvider>(context, listen: false);
 
     return DropdownButton(
       value: locale,

@@ -1,5 +1,6 @@
 import 'package:crayon_management/datamodels/lecture.dart';
 import 'package:flutter/material.dart';
+import 'package:crayon_management/route/route.dart' as route;
 
 class LectureInfoCard extends StatelessWidget {
   final Lecture lecture;
@@ -94,7 +95,10 @@ class LectureInfoCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   ElevatedButton.icon(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(context, route.presentation,
+                            arguments: lecture);
+                      },
                       icon: Icon(Icons.open_in_browser),
                       label: Text('Open')),
                   ElevatedButton.icon(

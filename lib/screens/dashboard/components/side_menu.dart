@@ -14,7 +14,7 @@ class SideMenu extends StatelessWidget {
     return Drawer(
       elevation: 16,
       child: Container(
-        color: Color(0xFF2A2D3E),
+        color: const Color(0xFF2A2D3E),
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -29,19 +29,19 @@ class SideMenu extends StatelessWidget {
                 icon: Icons.account_circle,
                 pressed: () {},
               ),
-              DrawerListTile(
-                title: 'Brightness',
-                icon: Icons.lightbulb_outline,
-                pressed: () {
-                  themeProvider.swapTheme();
-                },
+              Consumer<ThemeProvider>(
+                builder: (context, theme, child) => DrawerListTile(
+                  title: 'Brightness',
+                  icon: Icons.lightbulb_outline,
+                  pressed: () {
+                    themeProvider.swapTheme();
+                  },
+                ),
               ),
               DrawerListTile(
                 title: 'Logout',
                 icon: Icons.logout,
-                pressed: () {
-                  print('settings');
-                },
+                pressed: () {},
               ),
             ],
           ),
