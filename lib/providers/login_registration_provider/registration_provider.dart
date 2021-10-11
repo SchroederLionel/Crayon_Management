@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-class RegistrationProvider extends ChangeNotifier {
+class RegistrationProvider {
   late String _email;
   late String _firstName;
   late String _lastName;

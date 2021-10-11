@@ -1,5 +1,6 @@
 import 'package:crayon_management/providers/theme_provider.dart';
 import 'package:crayon_management/widgets/drawer_list_tile.dart';
+import 'package:crayon_management/widgets/language_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -21,7 +22,8 @@ class SideMenu extends StatelessWidget {
               DrawerHeader(
                   child: Image.asset(
                 'assets/images/crayon.png',
-                fit: BoxFit.fill,
+                height: 100,
+                width: 150,
               )),
               DrawerListTile(
                 title: 'Dashboard',
@@ -33,19 +35,17 @@ class SideMenu extends StatelessWidget {
                 icon: Icons.account_circle,
                 pressed: () {},
               ),
-              Consumer<ThemeProvider>(
-                builder: (context, theme, child) => DrawerListTile(
-                  title: 'Brightness',
-                  icon: Icons.lightbulb_outline,
-                  pressed: () {
-                    themeProvider.swapTheme();
-                  },
-                ),
+              DrawerListTile(
+                title: 'Brightness',
+                icon: Icons.lightbulb_outline,
+                pressed: () {
+                  themeProvider.swapTheme();
+                },
               ),
               DrawerListTile(
                 title: 'Logout',
                 icon: Icons.logout,
-                pressed: () {},
+                pressed: () => Navigator.pop(context),
               ),
             ],
           ),

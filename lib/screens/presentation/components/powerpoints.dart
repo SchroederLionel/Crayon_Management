@@ -1,4 +1,7 @@
+import 'package:crayon_management/providers/pdf_provider.dart';
+import 'package:crayon_management/screens/presentation/components/drop_zone.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Powerpoints extends StatelessWidget {
   const Powerpoints({Key? key}) : super(key: key);
@@ -11,13 +14,22 @@ class Powerpoints extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Powerpoint',
+              'Slides',
               style: Theme.of(context).textTheme.subtitle1,
             ),
             ElevatedButton.icon(
-                onPressed: () {},
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return ListenableProvider<PdfProvider>(
+                          create: (context) => PdfProvider(),
+                          child: DropZone(),
+                        );
+                      });
+                },
                 icon: Icon(Icons.add),
-                label: Text('Add powerpoint'))
+                label: Text('Add Slide'))
           ],
         ),
         const SizedBox(

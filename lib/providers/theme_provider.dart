@@ -7,6 +7,7 @@ class ThemeProvider extends ChangeNotifier {
   ThemeData light = ThemeData(
       primaryColor: Colors.blueAccent,
       iconTheme: const IconThemeData(color: Colors.black),
+      dialogBackgroundColor: const Color(0xFFFEFEFE),
       elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all<Color>(Colors.blueAccent),
@@ -33,6 +34,7 @@ class ThemeProvider extends ChangeNotifier {
 
   ThemeData dark = ThemeData(
       primaryColor: Colors.blueAccent,
+      dialogBackgroundColor: const Color(0xFF212332),
       iconTheme: const IconThemeData(color: Colors.white54),
       elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(

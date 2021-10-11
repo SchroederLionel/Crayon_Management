@@ -1,3 +1,5 @@
+import 'package:crayon_management/providers/login_registration_provider/login_provider.dart';
+import 'package:crayon_management/providers/login_registration_provider/registration_provider.dart';
 import 'package:crayon_management/providers/theme_provider.dart';
 import 'package:crayon_management/screens/login_registration/components/sign_in.dart';
 import 'package:crayon_management/screens/login_registration/components/sign_up.dart';
@@ -25,7 +27,9 @@ class LoginScreen extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      const LanguageWidget(),
+                      const LanguageWidget(
+                        forStartingPage: true,
+                      ),
                       IconButton(
                           onPressed: () => themeProvider.swapTheme(),
                           icon: const Icon(
@@ -48,9 +52,15 @@ class LoginScreen extends StatelessWidget {
                   key: cardKey,
                   flipOnTouch: false,
                   direction: FlipDirection.HORIZONTAL,
-                  front: SignIn(),
-                  back: SignUp(
-                    cardKey: cardKey,
+                  front: Provider<LoginProvider>(
+                    child: SignIn(),
+                    create: (context) => LoginProvider(),
+                  ),
+                  back: Provider<RegistrationProvider>(
+                    child: SignUp(
+                      cardKey: cardKey,
+                    ),
+                    create: (context) => RegistrationProvider(),
                   ),
                 ),
               ),

@@ -1,0 +1,169 @@
+import 'package:crayon_management/datamodels/dropped_file.dart';
+import 'package:crayon_management/providers/pdf_provider.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_dropzone/flutter_dropzone.dart';
+import 'package:provider/provider.dart';
+import 'package:validators/validators.dart';
+
+class DropZone extends StatefulWidget {
+  const DropZone({Key? key}) : super(key: key);
+
+  @override
+  _DropZoneState createState() => _DropZoneState();
+}
+
+class _DropZoneState extends State<DropZone> {
+  late TextEditingController _titleController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _titleController = TextEditingController(text: '');
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    super.dispose();
+  }
+
+  late DropzoneViewController controller;
+  DroppedFile? file;
+  @override
+  Widget build(BuildContext context) {
+    final pdfProvider = Provider.of<PdfProvider>(context, listen: false);
+    return AlertDialog(
+      actions: [
+        ElevatedButton(
+            style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all<Color>(Colors.black26)),
+            onPressed: () => Navigator.pop(context),
+            child: Text('Cancel')),
+        ElevatedButton(
+            onPressed: () => Navigator.pop(context), child: Text('Upload'))
+      ],
+      content: Builder(
+        builder: (context) {
+          return Container(
+              height: 630,
+              width: 500,
+              color: Theme.of(context).scaffoldBackgroundColor,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text(
+                    'Add slide',
+                    style: Theme.of(context).textTheme.headline1,
+                  ),
+                  Form(
+                    autovalidateMode: AutovalidateMode.always,
+                    child: SizedBox(
+                      width: 350,
+                      child: TextFormField(
+                        validator: (val) => !isByteLength(val!, 4)
+                            ? "Title has to have at least 4 characters"
+                            : null,
+                        onChanged: (String text) => pdfProvider.title(text),
+                        controller: _titleController,
+                        style: Theme.of(context).textTheme.bodyText1,
+                        decoration: const InputDecoration(
+                            prefixIcon: Icon(
+                              Icons.book_rounded,
+                              size: 18,
+                            ),
+                            border: UnderlineInputBorder(),
+                            labelText: 'PDF title'),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 14,
+                  ),
+                  Consumer<PdfProvider>(
+                    builder: (context, pdf, child) {
+                      return Container(
+                        height: 500,
+                        width: 460,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: pdf.currentColor)),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            DropzoneView(
+                                onCreated: (controller) =>
+                                    this.controller = controller,
+                                onDrop: acceptFile),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.cloud_upload,
+                                  size: 80,
+                                  color: pdf.currentColor,
+                                ),
+                                const SizedBox(
+                                  height: 14,
+                                ),
+                                ElevatedButton.icon(
+                                  icon: const Icon(
+                                    Icons.search,
+                                  ),
+                                  label: Text('Choose File',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1),
+                                  onPressed: () async {
+                                    final events = await controller.pickFiles();
+                                    if (events.isEmpty) return;
+                                    acceptFile(events.first);
+                                  },
+                                ),
+                                const SizedBox(
+                                  height: 14,
+                                ),
+                                Text(
+                                  'Drop File here',
+                                  style: Theme.of(context).textTheme.subtitle1,
+                                ),
+                                const SizedBox(
+                                  height: 14,
+                                ),
+                                Consumer<PdfProvider>(
+                                  builder: (context, pdf, child) {
+                                    return Text(pdf.getTitle,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1);
+                                  },
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                      );
+                    },
+                  )
+                ],
+              ));
+        },
+      ),
+    );
+  }
+
+  Future acceptFile(dynamic event) async {
+    final pdfProvider = Provider.of<PdfProvider>(context, listen: false);
+
+    final name = event.name;
+    final mime = await controller.getFileMIME(event);
+    final bytes = await controller.getFileSize(event);
+    final url = await controller.createFileUrl(event);
+    pdfProvider.fileURL(url);
+    pdfProvider.updateValues(mime, url, name);
+
+    //final droppedFile =
+    //    DroppedFile(url: url, name: name, mime: mime, bytes: bytes);
+  }
+}

@@ -1,6 +1,7 @@
 import 'package:crayon_management/datamodels/lecture.dart';
 import 'package:crayon_management/responsive.dart';
 import 'package:crayon_management/screens/dashboard/components/lecture_info_card.dart';
+import 'package:crayon_management/screens/dashboard/components/time_picker.dart';
 import 'package:flutter/material.dart';
 
 class Lectures extends StatelessWidget {
@@ -25,7 +26,48 @@ class Lectures extends StatelessWidget {
                         horizontal: 14.0,
                         vertical:
                             14.0 / (Responsive.isMobile(context) ? 2 : 1))),
-                onPressed: () {},
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text(
+                            'Add Lecture',
+                            style: Theme.of(context).textTheme.subtitle1,
+                          ),
+                          content: Column(
+                            children: [
+                              Form(
+                                  child: Column(
+                                children: [
+                                  TextField(
+                                      style:
+                                          Theme.of(context).textTheme.bodyText1,
+                                      decoration: const InputDecoration(
+                                          prefixIcon: Icon(
+                                            Icons.email,
+                                            size: 18,
+                                          ),
+                                          border: UnderlineInputBorder(),
+                                          labelText: 'Title')),
+                                  TextField(
+                                      style:
+                                          Theme.of(context).textTheme.bodyText1,
+                                      decoration: const InputDecoration(
+                                          prefixIcon: Icon(
+                                            Icons.email,
+                                            size: 18,
+                                          ),
+                                          border: UnderlineInputBorder(),
+                                          labelText: 'Day ex.Monday')),
+                                  CustomTimePicker(),
+                                ],
+                              ))
+                            ],
+                          ),
+                        );
+                      });
+                },
                 icon: Icon(Icons.add),
                 label: Text('Add Lecture')),
           ],

@@ -1,4 +1,6 @@
+import 'package:crayon_management/datamodels/confirmation_dialog_data.dart';
 import 'package:crayon_management/datamodels/lecture.dart';
+import 'package:crayon_management/widgets/confirmation_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:crayon_management/route/route.dart' as route;
 
@@ -105,7 +107,17 @@ class LectureInfoCard extends StatelessWidget {
                       style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all<Color>(
                               Colors.redAccent)),
-                      onPressed: () {},
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) => ConfirmationDialog(
+                                confirmationDialogData: ConfirmationDialogData(
+                                    title: 'Deletion',
+                                    cancelTitle: 'Cancel',
+                                    description:
+                                        'Are you sure you want to delete ${lecture.title}.',
+                                    acceptTitle: 'Yes')));
+                      },
                       icon: Icon(Icons.delete),
                       label: Text('Delete'))
                 ],

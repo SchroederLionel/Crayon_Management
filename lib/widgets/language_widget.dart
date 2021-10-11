@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class LanguageWidget extends StatelessWidget {
-  const LanguageWidget({Key? key}) : super(key: key);
+  final bool forStartingPage;
+  const LanguageWidget({required this.forStartingPage, Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

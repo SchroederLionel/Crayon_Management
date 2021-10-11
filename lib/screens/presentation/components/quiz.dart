@@ -1,3 +1,5 @@
+import 'package:crayon_management/datamodels/confirmation_dialog_data.dart';
+import 'package:crayon_management/widgets/confirmation_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -43,9 +45,25 @@ class Quiz extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Question 1'),
+                          Text(
+                            'Question 1',
+                            style: Theme.of(context).textTheme.subtitle1,
+                          ),
                           IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext
+                                            context) =>
+                                        ConfirmationDialog(
+                                            confirmationDialogData:
+                                                ConfirmationDialogData(
+                                                    title: 'Deletion',
+                                                    cancelTitle: 'Cancel',
+                                                    description:
+                                                        'Are you sure you want to delete _________.',
+                                                    acceptTitle: 'Yes')));
+                              },
                               icon: const Icon(
                                 Icons.delete,
                                 color: Colors.redAccent,

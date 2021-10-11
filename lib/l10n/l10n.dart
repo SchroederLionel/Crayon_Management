@@ -18,4 +18,17 @@ class L10n {
         return '🇺🇸';
     }
   }
+
+  static String getText(String localeCode) {
+    switch (localeCode) {
+      case 'de':
+        return 'german';
+      case 'en':
+        return 'english';
+      case 'fr':
+        return 'french';
+      default:
+        return 'english';
+    }
+  }
 }
