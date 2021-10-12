@@ -111,10 +111,9 @@ class _DropZoneState extends State<DropZone> {
                                   icon: const Icon(
                                     Icons.search,
                                   ),
-                                  label: Text('Choose File',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1),
+                                  label: const Text(
+                                    'Choose File',
+                                  ),
                                   onPressed: () async {
                                     final events = await controller.pickFiles();
                                     if (events.isEmpty) return;
@@ -131,14 +130,9 @@ class _DropZoneState extends State<DropZone> {
                                 const SizedBox(
                                   height: 14,
                                 ),
-                                Consumer<PdfProvider>(
-                                  builder: (context, pdf, child) {
-                                    return Text(pdf.getTitle,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1);
-                                  },
-                                )
+                                Text(pdf.getTitle,
+                                    style:
+                                        Theme.of(context).textTheme.bodyText1)
                               ],
                             )
                           ],

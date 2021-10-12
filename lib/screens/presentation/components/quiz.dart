@@ -1,7 +1,10 @@
 import 'package:crayon_management/datamodels/confirmation_dialog_data.dart';
+import 'package:crayon_management/providers/quiz_provider.dart';
+import 'package:crayon_management/screens/presentation/components/quiz_dialog.dart';
 import 'package:crayon_management/widgets/confirmation_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:provider/provider.dart';
 
 class Quiz extends StatelessWidget {
   const Quiz({Key? key}) : super(key: key);
@@ -21,7 +24,16 @@ class Quiz extends StatelessWidget {
               style: Theme.of(context).textTheme.subtitle1,
             ),
             ElevatedButton.icon(
-                onPressed: () {},
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return ListenableProvider<QuizProvider>(
+                          create: (context) => QuizProvider(),
+                          child: QuizDialog(),
+                        );
+                      });
+                },
                 icon: Icon(Icons.add),
                 label: Text('Add question'))
           ],
@@ -88,34 +100,3 @@ class Quiz extends StatelessWidget {
     );
   }
 }
-/**
- *    
-  ListView.builder(
-          scrollDirection: ScrollDirection.h,
-          itemCount: 6,
-          itemBuilder: (context, index) {
-            return Card(
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Text('Question 1'),
-                      IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.delete,
-                            color: Colors.redAccent,
-                          ))
-                    ],
-                  ),
-                  ListView.builder(
-                      itemCount: 4,
-                      itemBuilder: (context, index) {
-                        return Text('question1');
-                      })
-                ],
-              ),
-            );
-          },
-        ),
- */

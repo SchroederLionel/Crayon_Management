@@ -1,9 +1,11 @@
 import 'package:crayon_management/datamodels/lecture.dart';
+import 'package:crayon_management/providers/quiz_provider.dart';
 import 'package:crayon_management/screens/presentation/components/controls.dart';
 import 'package:crayon_management/screens/presentation/components/powerpoints.dart';
 import 'package:crayon_management/screens/presentation/components/quiz.dart';
 import 'package:flutter/material.dart';
-import 'package:pdf_render/pdf_render_widgets.dart';
+
+import 'package:provider/provider.dart';
 
 class PresentationScreen extends StatelessWidget {
   final Lecture lecture;
@@ -28,7 +30,7 @@ class PresentationScreen extends StatelessWidget {
                   ),
                   IconButton(
                       onPressed: () => Navigator.pop(context),
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.close,
                         size: 24,
                         color: Colors.redAccent,
@@ -42,7 +44,7 @@ class PresentationScreen extends StatelessWidget {
               SizedBox(
                 height: 14,
               ),
-              Quiz(),
+              const Quiz(),
               SizedBox(
                 height: 14,
               ),
