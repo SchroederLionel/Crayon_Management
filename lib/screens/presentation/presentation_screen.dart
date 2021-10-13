@@ -1,4 +1,5 @@
 import 'package:crayon_management/datamodels/lecture.dart';
+import 'package:crayon_management/providers/pdf_list_provider.dart';
 import 'package:crayon_management/providers/quiz_list_provider.dart';
 import 'package:crayon_management/providers/quiz_provider.dart';
 import 'package:crayon_management/screens/presentation/components/controls.dart';
@@ -38,21 +39,23 @@ class PresentationScreen extends StatelessWidget {
                       ))
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 14,
               ),
               Controls(),
-              SizedBox(
+              const SizedBox(
                 height: 14,
               ),
-              ListenableProvider(
+              ListenableProvider<QuizListProvider>(
                 create: (context) => QuizListProvider(),
-                child: Quiz(),
+                child: const Quiz(),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 14,
               ),
-              Powerpoints(),
+              ListenableProvider<PdfListProvider>(
+                  create: (context) => PdfListProvider(),
+                  child: const Powerpoints())
             ],
           ),
         ),

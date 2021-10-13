@@ -1,4 +1,5 @@
 import 'package:crayon_management/datamodels/confirmation_dialog_data.dart';
+import 'package:crayon_management/providers/pdf_list_provider.dart';
 import 'package:crayon_management/providers/pdf_provider.dart';
 import 'package:crayon_management/screens/presentation/components/drop_zone.dart';
 import 'package:crayon_management/widgets/confirmation_dialog.dart';
@@ -10,7 +11,11 @@ class Powerpoints extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final pdfListProvider =
+        Provider.of<PdfListProvider>(context, listen: false);
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -28,7 +33,11 @@ class Powerpoints extends StatelessWidget {
                           create: (context) => PdfProvider(),
                           child: DropZone(),
                         );
-                      });
+                      }).then((value) {
+                    if (value != null) {
+                      pdfListProvider.add(value);
+                    }
+                  });
                 },
                 icon: Icon(Icons.add),
                 label: Text('Add Slide'))
@@ -38,53 +47,44 @@ class Powerpoints extends StatelessWidget {
           height: 14,
         ),
         Container(
-          height: 150,
-          child: ListView.builder(
-            shrinkWrap: true,
-            scrollDirection: Axis.horizontal,
-            itemCount: 30,
-            itemBuilder: (context, index) {
-              return Container(
-                height: 150,
-                width: 300,
-                child: Card(
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('PDF $index'),
-                          IconButton(
-                              onPressed: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext
-                                            context) =>
-                                        ConfirmationDialog(
-                                            confirmationDialogData:
-                                                ConfirmationDialogData(
-                                                    title: 'Deletion',
-                                                    cancelTitle: 'Cancel',
-                                                    description:
-                                                        'Are you sure you want to delete _________.',
-                                                    acceptTitle: 'Yes')));
-                              },
-                              icon: const Icon(
-                                Icons.delete,
-                                color: Colors.redAccent,
-                              ))
-                        ],
-                      ),
-                      Expanded(
-                        child: ListView.builder(
-                            itemCount: 4,
-                            itemBuilder: (context, index) {
-                              return Text('Introduction');
-                            }),
-                      )
-                    ],
-                  ),
-                ),
+          height: 50,
+          child: Consumer<PdfListProvider>(
+            builder: (context, pdfs, child) {
+              return ListView.builder(
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                itemCount: pdfs.getPdfsLength,
+                itemBuilder: (context, index) {
+                  return Card(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(pdfs.getPdfProvider(index).getTitle),
+                        const SizedBox(
+                          width: 30,
+                        ),
+                        IconButton(
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      ConfirmationDialog(
+                                          confirmationDialogData:
+                                              ConfirmationDialogData(
+                                                  title: 'Deletion',
+                                                  cancelTitle: 'Cancel',
+                                                  description:
+                                                      'Are you sure you want to delete _________.',
+                                                  acceptTitle: 'Yes')));
+                            },
+                            icon: const Icon(
+                              Icons.delete,
+                              color: Colors.redAccent,
+                            ))
+                      ],
+                    ),
+                  );
+                },
               );
             },
           ),

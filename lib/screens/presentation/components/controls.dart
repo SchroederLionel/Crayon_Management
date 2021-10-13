@@ -28,7 +28,7 @@ class Controls extends StatelessWidget {
                     documentBuilder: (context, pdfDocument, pageCount) =>
                         ScrollablePositionedList.builder(
                             minCacheExtent: 4,
-                            physics: NeverScrollableScrollPhysics(),
+                            physics: const NeverScrollableScrollPhysics(),
                             scrollDirection: Axis.horizontal,
                             itemScrollController: _scrollController,
                             itemCount: pageCount,
@@ -62,7 +62,7 @@ class Controls extends StatelessWidget {
                                   index: 1,
                                   duration: Duration(milliseconds: 200));
                             },
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.arrow_left,
                               color: Colors.black,
                               size: 24,
@@ -73,7 +73,7 @@ class Controls extends StatelessWidget {
                                   index: 2,
                                   duration: Duration(milliseconds: 200));
                             },
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.arrow_right,
                               color: Colors.black,
                               size: 24,

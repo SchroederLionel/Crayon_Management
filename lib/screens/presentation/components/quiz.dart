@@ -33,14 +33,11 @@ class Quiz extends StatelessWidget {
                       builder: (BuildContext context) {
                         return ListenableProvider<QuizProvider>(
                           create: (context) => QuizProvider(),
-                          child: QuizDialog(),
+                          child: const QuizDialog(),
                         );
                       }).then((value) {
                     if (value != null) {
                       quizListProvider.add(value);
-                      print(value);
-                    } else {
-                      print(value);
                     }
                   });
                 },
@@ -64,53 +61,56 @@ class Quiz extends StatelessWidget {
                     height: 350,
                     width: 300,
                     child: Card(
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                questions.getQuizOnIndex(index).getQuestion,
-                                style: Theme.of(context).textTheme.subtitle1,
-                              ),
-                              IconButton(
-                                  onPressed: () {
-                                    showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) =>
-                                            ConfirmationDialog(
-                                                confirmationDialogData:
-                                                    ConfirmationDialogData(
-                                                        title: 'Deletion',
-                                                        cancelTitle: 'Cancel',
-                                                        description:
-                                                            'Are you sure you want to delete _________.',
-                                                        acceptTitle: 'Yes')));
-                                  },
-                                  icon: const Icon(
-                                    Icons.delete,
-                                    color: Colors.redAccent,
-                                  ))
-                            ],
-                          ),
-                          Expanded(
-                            child: ListView.builder(
-                                itemCount: questions
-                                    .getQuizOnIndex(index)
-                                    .getQuestions
-                                    .length,
-                                itemBuilder: (context, index2) {
-                                  return Text(
-                                    questions
-                                        .getQuizOnIndex(index)
-                                        .getQuestions[index2]
-                                        .getResponse,
-                                    style:
-                                        Theme.of(context).textTheme.bodyText1,
-                                  );
-                                }),
-                          )
-                        ],
+                      child: Padding(
+                        padding: const EdgeInsets.all(14.0),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  questions.getQuizOnIndex(index).getQuestion,
+                                  style: Theme.of(context).textTheme.subtitle1,
+                                ),
+                                IconButton(
+                                    onPressed: () {
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) =>
+                                              ConfirmationDialog(
+                                                  confirmationDialogData:
+                                                      ConfirmationDialogData(
+                                                          title: 'Deletion',
+                                                          cancelTitle: 'Cancel',
+                                                          description:
+                                                              'Are you sure you want to delete _________.',
+                                                          acceptTitle: 'Yes')));
+                                    },
+                                    icon: const Icon(
+                                      Icons.delete,
+                                      color: Colors.redAccent,
+                                    ))
+                              ],
+                            ),
+                            Expanded(
+                              child: ListView.builder(
+                                  itemCount: questions
+                                      .getQuizOnIndex(index)
+                                      .getQuestions
+                                      .length,
+                                  itemBuilder: (context, index2) {
+                                    return Text(
+                                      questions
+                                          .getQuizOnIndex(index)
+                                          .getQuestions[index2]
+                                          .getResponse,
+                                      style:
+                                          Theme.of(context).textTheme.bodyText1,
+                                    );
+                                  }),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   );

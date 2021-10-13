@@ -18,7 +18,6 @@ class _DropZoneState extends State<DropZone> {
   @override
   void initState() {
     super.initState();
-
     _titleController = TextEditingController(text: '');
   }
 
@@ -42,7 +41,12 @@ class _DropZoneState extends State<DropZone> {
             onPressed: () => Navigator.pop(context),
             child: Text('Cancel')),
         ElevatedButton(
-            onPressed: () => Navigator.pop(context), child: Text('Upload'))
+            onPressed: () {
+              if (pdfProvider.getTitle.length >= 4 &&
+                  pdfProvider.getDroppedFile != null)
+                Navigator.pop(context, pdfProvider);
+            },
+            child: Text('Upload'))
       ],
       content: Builder(
         builder: (context) {
@@ -152,10 +156,11 @@ class _DropZoneState extends State<DropZone> {
 
     final name = event.name;
     final mime = await controller.getFileMIME(event);
-    final bytes = await controller.getFileSize(event);
+
     final url = await controller.createFileUrl(event);
+    final file = await controller.getFileData(event);
     pdfProvider.fileURL(url);
-    pdfProvider.updateValues(mime, url, name);
+    pdfProvider.updateValues(mime, url, name, file);
 
     //final droppedFile =
     //    DroppedFile(url: url, name: name, mime: mime, bytes: bytes);
