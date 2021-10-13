@@ -1,3 +1,4 @@
+import 'package:crayon_management/providers/quiz_list_provider.dart';
 import 'package:crayon_management/providers/quiz_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -31,16 +32,23 @@ class _QuizDialogState extends State<QuizDialog> {
   @override
   Widget build(BuildContext context) {
     final quizProvider = Provider.of<QuizProvider>(context, listen: false);
+    String errorMessage = '';
     return AlertDialog(
       actions: [
         ElevatedButton(
             style: ButtonStyle(
                 backgroundColor:
                     MaterialStateProperty.all<Color>(Colors.black26)),
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(context, null),
             child: Text('Cancel')),
         ElevatedButton(
-            onPressed: () => Navigator.pop(context), child: Text('Upload'))
+            onPressed: () {
+              if (_questionController.text.length >= 4 &&
+                  quizProvider.getQuestions.length >= 2) {
+                Navigator.pop(context, quizProvider);
+              }
+            },
+            child: Text('Upload'))
       ],
       content: Builder(
         builder: (context) {
@@ -103,8 +111,8 @@ class _QuizDialogState extends State<QuizDialog> {
                             IconButton(
                                 onPressed: () {
                                   Response respone = Response(
-                                      question: _responseController.text,
-                                      isQuestionRight: response);
+                                      response: _responseController.text,
+                                      isResponseRight: response);
                                   quizProvider.add(respone);
                                 },
                                 icon: Icon(Icons.add))
@@ -130,7 +138,7 @@ class _QuizDialogState extends State<QuizDialog> {
                                         title: Text(
                                           quizProvider
                                               .getResponse(index)
-                                              .getQuestion,
+                                              .getResponse,
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodyText1,
@@ -158,6 +166,12 @@ class _QuizDialogState extends State<QuizDialog> {
                                   }),
                             );
                           },
+                        ),
+                        Spacer(),
+                        Text(
+                          errorMessage,
+                          style:
+                              TextStyle(color: Colors.redAccent, fontSize: 18),
                         )
                       ],
                     ),

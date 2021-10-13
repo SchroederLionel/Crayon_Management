@@ -1,4 +1,5 @@
 import 'package:crayon_management/datamodels/confirmation_dialog_data.dart';
+import 'package:crayon_management/providers/quiz_list_provider.dart';
 import 'package:crayon_management/providers/quiz_provider.dart';
 import 'package:crayon_management/screens/presentation/components/quiz_dialog.dart';
 import 'package:crayon_management/widgets/confirmation_dialog.dart';
@@ -11,6 +12,8 @@ class Quiz extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final quizListProvider =
+        Provider.of<QuizListProvider>(context, listen: false);
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -32,7 +35,14 @@ class Quiz extends StatelessWidget {
                           create: (context) => QuizProvider(),
                           child: QuizDialog(),
                         );
-                      });
+                      }).then((value) {
+                    if (value != null) {
+                      quizListProvider.add(value);
+                      print(value);
+                    } else {
+                      print(value);
+                    }
+                  });
                 },
                 icon: Icon(Icons.add),
                 label: Text('Add question'))
@@ -42,60 +52,71 @@ class Quiz extends StatelessWidget {
           height: 14,
         ),
         Container(
-          height: 300,
-          child: ListView.builder(
-            shrinkWrap: true,
-            scrollDirection: Axis.horizontal,
-            itemCount: 30,
-            itemBuilder: (context, index) {
-              return Container(
-                height: 350,
-                width: 300,
-                child: Card(
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            height: 300,
+            child: Consumer<QuizListProvider>(
+                builder: (context, questions, child) {
+              return ListView.builder(
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                itemCount: questions.getQuestionLength,
+                itemBuilder: (context, index) {
+                  return Container(
+                    height: 350,
+                    width: 300,
+                    child: Card(
+                      child: Column(
                         children: [
-                          Text(
-                            'Question 1',
-                            style: Theme.of(context).textTheme.subtitle1,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                questions.getQuizOnIndex(index).getQuestion,
+                                style: Theme.of(context).textTheme.subtitle1,
+                              ),
+                              IconButton(
+                                  onPressed: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) =>
+                                            ConfirmationDialog(
+                                                confirmationDialogData:
+                                                    ConfirmationDialogData(
+                                                        title: 'Deletion',
+                                                        cancelTitle: 'Cancel',
+                                                        description:
+                                                            'Are you sure you want to delete _________.',
+                                                        acceptTitle: 'Yes')));
+                                  },
+                                  icon: const Icon(
+                                    Icons.delete,
+                                    color: Colors.redAccent,
+                                  ))
+                            ],
                           ),
-                          IconButton(
-                              onPressed: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext
-                                            context) =>
-                                        ConfirmationDialog(
-                                            confirmationDialogData:
-                                                ConfirmationDialogData(
-                                                    title: 'Deletion',
-                                                    cancelTitle: 'Cancel',
-                                                    description:
-                                                        'Are you sure you want to delete _________.',
-                                                    acceptTitle: 'Yes')));
-                              },
-                              icon: const Icon(
-                                Icons.delete,
-                                color: Colors.redAccent,
-                              ))
+                          Expanded(
+                            child: ListView.builder(
+                                itemCount: questions
+                                    .getQuizOnIndex(index)
+                                    .getQuestions
+                                    .length,
+                                itemBuilder: (context, index2) {
+                                  return Text(
+                                    questions
+                                        .getQuizOnIndex(index)
+                                        .getQuestions[index2]
+                                        .getResponse,
+                                    style:
+                                        Theme.of(context).textTheme.bodyText1,
+                                  );
+                                }),
+                          )
                         ],
                       ),
-                      Expanded(
-                        child: ListView.builder(
-                            itemCount: 4,
-                            itemBuilder: (context, index) {
-                              return Text('S');
-                            }),
-                      )
-                    ],
-                  ),
-                ),
+                    ),
+                  );
+                },
               );
-            },
-          ),
-        ),
+            })),
       ],
     );
   }

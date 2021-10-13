@@ -1,4 +1,5 @@
 import 'package:crayon_management/datamodels/lecture.dart';
+import 'package:crayon_management/providers/quiz_list_provider.dart';
 import 'package:crayon_management/providers/quiz_provider.dart';
 import 'package:crayon_management/screens/presentation/components/controls.dart';
 import 'package:crayon_management/screens/presentation/components/powerpoints.dart';
@@ -44,7 +45,10 @@ class PresentationScreen extends StatelessWidget {
               SizedBox(
                 height: 14,
               ),
-              const Quiz(),
+              ListenableProvider(
+                create: (context) => QuizListProvider(),
+                child: Quiz(),
+              ),
               SizedBox(
                 height: 14,
               ),

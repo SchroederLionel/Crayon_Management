@@ -2,30 +2,30 @@ import 'package:flutter/cupertino.dart';
 
 class QuizProvider extends ChangeNotifier {
   String _question = '';
-  List<Response> _questions = [];
+  final List<Response> _responses = [];
   void setQuestion(String question) => _question = question;
 
   String get getQuestion => _question;
-  Response getResponse(int index) => _questions[index];
-  List<Response> get getQuestions => _questions;
+  Response getResponse(int index) => _responses[index];
+  List<Response> get getQuestions => _responses;
 
   void add(Response question) {
-    _questions.add(question);
+    _responses.add(question);
     notifyListeners();
   }
 
-  bool responseFromIndex(int index) => getResponse(index).isQuestionRight;
+  bool responseFromIndex(int index) => getResponse(index).isResponseRight;
   void remove(Response question) {
-    _questions.remove(question);
+    _responses.remove(question);
     notifyListeners();
   }
 }
 
 class Response {
-  late String question;
-  late bool isQuestionRight;
-  Response({required this.question, required this.isQuestionRight});
+  late String response;
+  late bool isResponseRight;
+  Response({required this.response, required this.isResponseRight});
 
-  String get getQuestion => question;
-  bool get getQuestionRight => isQuestionRight;
+  String get getResponse => response;
+  bool get getResponseRight => isResponseRight;
 }
