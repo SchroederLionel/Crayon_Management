@@ -8,6 +8,7 @@ class PdfListProvider extends ChangeNotifier {
 
   PdfProvider getPdfProvider(int index) => pdfProviders[index];
 
+  List<PdfProvider> get getPdfs => pdfProviders;
   void remove(PdfProvider pdfProvider) {
     pdfProviders.remove(pdfProvider);
     notifyListeners();
