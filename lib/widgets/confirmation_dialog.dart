@@ -13,9 +13,22 @@ class ConfirmationDialog extends StatelessWidget {
         confirmationDialogData.title,
         style: Theme.of(context).textTheme.subtitle1,
       ),
-      content: Text(
-        confirmationDialogData.description,
-        style: Theme.of(context).textTheme.bodyText1,
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            confirmationDialogData.description,
+            style: Theme.of(context).textTheme.bodyText1,
+          ),
+          Center(
+            child: Text(
+              confirmationDialogData.itemTitle,
+              style: Theme.of(context).textTheme.headline6,
+            ),
+          ),
+        ],
       ),
       actions: [
         ElevatedButton(

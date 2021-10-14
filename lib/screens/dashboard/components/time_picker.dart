@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class CustomTimePicker extends StatefulWidget {
-  const CustomTimePicker({Key? key}) : super(key: key);
+  String timeText;
+  CustomTimePicker({required this.timeText, Key? key}) : super(key: key);
 
   @override
   _CustomTimePickerState createState() => _CustomTimePickerState();
@@ -10,12 +11,13 @@ class CustomTimePicker extends StatefulWidget {
 class _CustomTimePickerState extends State<CustomTimePicker> {
   late TimeOfDay time;
   late TimeOfDay? picked;
+  late String timeText;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     time = TimeOfDay.now();
+    timeText = widget.timeText;
   }
 
   Future selectTime(BuildContext context) async {
@@ -30,19 +32,28 @@ class _CustomTimePickerState extends State<CustomTimePicker> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        children: [
-          IconButton(
-            icon: Icon(Icons.alarm),
-            onPressed: () {
-              selectTime(context);
-              print(time);
-            },
-          ),
-          Text('Time ${time.hour}:${time.minute}')
-        ],
-      ),
+    return Row(
+      children: [
+        IconButton(
+          icon: const Icon(Icons.alarm),
+          onPressed: () {
+            selectTime(context);
+            print(time);
+          },
+        ),
+        Text(
+          '$timeText: ${getConvertedTime(time.hour)}: ${getConvertedTime(time.minute)}',
+          style: Theme.of(context).textTheme.bodyText1,
+        )
+      ],
     );
+  }
+
+  String getConvertedTime(int time) {
+    if (time < 10) {
+      return '0$time';
+    } else {
+      return '$time';
+    }
   }
 }

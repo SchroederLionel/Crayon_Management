@@ -1,6 +1,5 @@
 {
-    "helloWorld": "Francais!",
-    "@helloWorld": {
-      "description": "The conventional newborn programmer greeting"
-    }
+    "quiz": "Quiz",
+    "addQuestion":"Ajouter question"
+    
 }

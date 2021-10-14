@@ -10,7 +10,7 @@ class Lectures extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // final Size _size = MediaQuery.of(context).size;
-
+    String currentValue = 'monday';
     return Column(
       children: [
         Row(
@@ -31,39 +31,132 @@ class Lectures extends StatelessWidget {
                       context: context,
                       builder: (context) {
                         return AlertDialog(
-                          title: Text(
-                            'Add Lecture',
-                            style: Theme.of(context).textTheme.subtitle1,
-                          ),
-                          content: Column(
-                            children: [
-                              Form(
-                                  child: Column(
-                                children: [
-                                  TextField(
+                          actions: [
+                            ElevatedButton(
+                                style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                            Colors.black26)),
+                                onPressed: () => Navigator.pop(context),
+                                child: Text('Cancel')),
+                            ElevatedButton(
+                                onPressed: () {}, child: Text('Upload'))
+                          ],
+                          content: Builder(
+                            builder: (context) {
+                              return Container(
+                                height: 630,
+                                width: 550,
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      'Add Lecture',
                                       style:
-                                          Theme.of(context).textTheme.bodyText1,
-                                      decoration: const InputDecoration(
-                                          prefixIcon: Icon(
-                                            Icons.email,
-                                            size: 18,
-                                          ),
-                                          border: UnderlineInputBorder(),
-                                          labelText: 'Title')),
-                                  TextField(
-                                      style:
-                                          Theme.of(context).textTheme.bodyText1,
-                                      decoration: const InputDecoration(
-                                          prefixIcon: Icon(
-                                            Icons.email,
-                                            size: 18,
-                                          ),
-                                          border: UnderlineInputBorder(),
-                                          labelText: 'Day ex.Monday')),
-                                  CustomTimePicker(),
-                                ],
-                              ))
-                            ],
+                                          Theme.of(context).textTheme.headline1,
+                                    ),
+                                    Form(
+                                        child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        TextField(
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1,
+                                            decoration: const InputDecoration(
+                                                prefixIcon: Icon(
+                                                  Icons.title,
+                                                  size: 18,
+                                                ),
+                                                border: UnderlineInputBorder(),
+                                                labelText: 'Title')),
+                                        const SizedBox(
+                                          height: 14,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            DropdownButton<String>(
+                                                onChanged: (String? e) {
+                                                  currentValue = e!;
+                                                },
+                                                value: currentValue,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1,
+                                                underline: Container(
+                                                  height: 2,
+                                                  color: Colors.blueAccent,
+                                                ),
+                                                icon: const Icon(
+                                                    Icons.arrow_drop_down),
+                                                iconSize: 18,
+                                                items: <String>[
+                                                  'monday',
+                                                  'tuesday',
+                                                  'wednesday',
+                                                  'thursday',
+                                                  'friday',
+                                                  'saturday',
+                                                  'sunday'
+                                                ].map<DropdownMenuItem<String>>(
+                                                    (String value) {
+                                                  return DropdownMenuItem<
+                                                      String>(
+                                                    value: value,
+                                                    child: Text(value),
+                                                  );
+                                                }).toList()),
+                                            DropdownButton<String>(
+                                                value: 'lecture',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1,
+                                                underline: Container(
+                                                  height: 2,
+                                                  color: Colors.blueAccent,
+                                                ),
+                                                icon: const Icon(
+                                                    Icons.arrow_drop_down),
+                                                iconSize: 18,
+                                                items: <String>[
+                                                  'lecture',
+                                                  'exercise',
+                                                  'other',
+                                                ].map<DropdownMenuItem<String>>(
+                                                    (String value) {
+                                                  return DropdownMenuItem<
+                                                      String>(
+                                                    value: value,
+                                                    child: Text(value),
+                                                  );
+                                                }).toList()),
+                                            CustomTimePicker(
+                                              timeText: 'Start',
+                                            ),
+                                            CustomTimePicker(
+                                              timeText: 'End',
+                                            ),
+                                            IconButton(
+                                                onPressed: () {},
+                                                icon: Icon(
+                                                  Icons.add,
+                                                  size: 16,
+                                                ))
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          height: 14,
+                                        ),
+                                      ],
+                                    ))
+                                  ],
+                                ),
+                              );
+                            },
                           ),
                         );
                       });

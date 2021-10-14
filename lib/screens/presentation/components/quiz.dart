@@ -82,6 +82,10 @@ class Quiz extends StatelessWidget {
                                                       ConfirmationDialogData(
                                                           title: 'Deletion',
                                                           cancelTitle: 'Cancel',
+                                                          itemTitle: questions
+                                                              .getQuizOnIndex(
+                                                                  index)
+                                                              .getQuestion,
                                                           description:
                                                               'Are you sure you want to delete _________.',
                                                           acceptTitle: 'Yes')));

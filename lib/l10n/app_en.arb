@@ -1,3 +1,7 @@
 {
-    "helloWorld": "English!"
+    "quiz": "Quiz",
+    "addQuestion":"Add quesiton",
+    "delete":"Delte",
+    "cancel":"Cancel",
+    "confirmationDeletion":"Are you sure you want to delete"
 }

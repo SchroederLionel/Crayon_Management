@@ -59,7 +59,10 @@ class Powerpoints extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(pdfs.getPdfProvider(index).getTitle),
+                        Text(
+                          pdfs.getPdfProvider(index).getTitle,
+                          style: Theme.of(context).textTheme.bodyText1,
+                        ),
                         const SizedBox(
                           width: 30,
                         ),
@@ -72,9 +75,12 @@ class Powerpoints extends StatelessWidget {
                                           confirmationDialogData:
                                               ConfirmationDialogData(
                                                   title: 'Deletion',
+                                                  itemTitle: pdfs
+                                                      .getPdfProvider(index)
+                                                      .getTitle,
                                                   cancelTitle: 'Cancel',
                                                   description:
-                                                      'Are you sure you want to delete _________.',
+                                                      'Are you sure you want to delete',
                                                   acceptTitle: 'Yes')));
                             },
                             icon: const Icon(

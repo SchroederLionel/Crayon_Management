@@ -18,19 +18,22 @@ class ThemeProvider extends ChangeNotifier {
       canvasColor: Colors.white,
       cardColor: const Color(0xFFF2F2F2),
       textTheme: TextTheme(
-        headline1: GoogleFonts.lato(
-            fontSize: 32.0, fontWeight: FontWeight.bold, color: Colors.black),
-        headline2: GoogleFonts.lato(
-            fontSize: 24.0, fontWeight: FontWeight.bold, color: Colors.black54),
-        subtitle1: GoogleFonts.lato(
-            fontSize: 21.0,
-            fontWeight: FontWeight.bold,
-            color: Colors.blueAccent),
-        bodyText1: GoogleFonts.lato(
-            fontSize: 18, color: Colors.black, fontWeight: FontWeight.normal),
-        bodyText2: GoogleFonts.lato(
-            fontSize: 18, color: Colors.white, fontWeight: FontWeight.normal),
-      ));
+          headline1: GoogleFonts.lato(
+              fontSize: 32.0, fontWeight: FontWeight.bold, color: Colors.black),
+          headline2: GoogleFonts.lato(
+              fontSize: 24.0,
+              fontWeight: FontWeight.bold,
+              color: Colors.black54),
+          subtitle1: GoogleFonts.lato(
+              fontSize: 21.0,
+              fontWeight: FontWeight.bold,
+              color: Colors.blueAccent),
+          bodyText1: GoogleFonts.lato(
+              fontSize: 18, color: Colors.black, fontWeight: FontWeight.normal),
+          bodyText2: GoogleFonts.lato(
+              fontSize: 18, color: Colors.white, fontWeight: FontWeight.normal),
+          headline6: GoogleFonts.lato(
+              fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold)));
 
   ThemeData dark = ThemeData(
       primaryColor: Colors.blueAccent,
@@ -61,7 +64,9 @@ class ThemeProvider extends ChangeNotifier {
           bodyText2: GoogleFonts.lato(
               fontSize: 18,
               color: Colors.white54,
-              fontWeight: FontWeight.normal)));
+              fontWeight: FontWeight.normal),
+          headline6: GoogleFonts.lato(
+              fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold)));
 
   ThemeProvider({required bool isDarkMode}) {
     _selectedTheme = isDarkMode ? dark : light;

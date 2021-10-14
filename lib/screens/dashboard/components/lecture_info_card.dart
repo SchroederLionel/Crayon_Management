@@ -114,8 +114,9 @@ class LectureInfoCard extends StatelessWidget {
                                 confirmationDialogData: ConfirmationDialogData(
                                     title: 'Deletion',
                                     cancelTitle: 'Cancel',
+                                    itemTitle: lecture.title,
                                     description:
-                                        'Are you sure you want to delete ${lecture.title}.',
+                                        'Are you sure you want to delete ',
                                     acceptTitle: 'Yes')));
                       },
                       icon: Icon(Icons.delete),
