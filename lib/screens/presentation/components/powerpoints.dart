@@ -3,6 +3,7 @@ import 'package:crayon_management/providers/pdf_list_provider.dart';
 import 'package:crayon_management/providers/pdf_provider.dart';
 import 'package:crayon_management/screens/presentation/components/drop_zone.dart';
 import 'package:crayon_management/widgets/confirmation_dialog.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,6 +12,7 @@ class Powerpoints extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var translation = AppLocalizations.of(context);
     final pdfListProvider =
         Provider.of<PdfListProvider>(context, listen: false);
     return Column(
@@ -21,7 +23,7 @@ class Powerpoints extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Slides',
+              translation!.slides,
               style: Theme.of(context).textTheme.subtitle1,
             ),
             ElevatedButton.icon(
@@ -40,7 +42,7 @@ class Powerpoints extends StatelessWidget {
                   });
                 },
                 icon: Icon(Icons.add),
-                label: Text('Add Slide'))
+                label: Text(AppLocalizations.of(context)!.addSlide))
           ],
         ),
         const SizedBox(
@@ -74,14 +76,24 @@ class Powerpoints extends StatelessWidget {
                                       ConfirmationDialog(
                                           confirmationDialogData:
                                               ConfirmationDialogData(
-                                                  title: 'Deletion',
-                                                  itemTitle: pdfs
-                                                      .getPdfProvider(index)
-                                                      .getTitle,
-                                                  cancelTitle: 'Cancel',
-                                                  description:
-                                                      'Are you sure you want to delete',
-                                                  acceptTitle: 'Yes')));
+                                                  title:
+                                                      AppLocalizations
+                                                              .of(context)!
+                                                          .delete,
+                                                  itemTitle:
+                                                      pdfs
+                                                          .getPdfProvider(index)
+                                                          .getTitle,
+                                                  cancelTitle:
+                                                      AppLocalizations.of(
+                                                              context)!
+                                                          .cancel,
+                                                  description: translation
+                                                      .confirmationDeletion,
+                                                  acceptTitle:
+                                                      AppLocalizations.of(
+                                                              context)!
+                                                          .yes)));
                             },
                             icon: const Icon(
                               Icons.delete,

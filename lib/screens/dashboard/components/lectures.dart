@@ -3,13 +3,14 @@ import 'package:crayon_management/responsive.dart';
 import 'package:crayon_management/screens/dashboard/components/lecture_info_card.dart';
 import 'package:crayon_management/screens/dashboard/components/time_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Lectures extends StatelessWidget {
   const Lectures({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // final Size _size = MediaQuery.of(context).size;
+    var translation = AppLocalizations.of(context);
     String currentValue = 'monday';
     return Column(
       children: [
@@ -17,7 +18,7 @@ class Lectures extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'My Lectures',
+              translation!.myLectures,
               style: Theme.of(context).textTheme.headline2,
             ),
             ElevatedButton.icon(
@@ -38,9 +39,10 @@ class Lectures extends StatelessWidget {
                                         MaterialStateProperty.all<Color>(
                                             Colors.black26)),
                                 onPressed: () => Navigator.pop(context),
-                                child: Text('Cancel')),
+                                child: Text(translation.cancel)),
                             ElevatedButton(
-                                onPressed: () {}, child: Text('Upload'))
+                                onPressed: () {},
+                                child: Text(translation.upload))
                           ],
                           content: Builder(
                             builder: (context) {
@@ -50,7 +52,7 @@ class Lectures extends StatelessWidget {
                                 child: Column(
                                   children: [
                                     Text(
-                                      'Add Lecture',
+                                      translation.addLecture,
                                       style:
                                           Theme.of(context).textTheme.headline1,
                                     ),
@@ -65,13 +67,13 @@ class Lectures extends StatelessWidget {
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .bodyText1,
-                                            decoration: const InputDecoration(
+                                            decoration: InputDecoration(
                                                 prefixIcon: Icon(
                                                   Icons.title,
                                                   size: 18,
                                                 ),
                                                 border: UnderlineInputBorder(),
-                                                labelText: 'Title')),
+                                                labelText: translation.title)),
                                         const SizedBox(
                                           height: 14,
                                         ),
@@ -135,10 +137,10 @@ class Lectures extends StatelessWidget {
                                                   );
                                                 }).toList()),
                                             CustomTimePicker(
-                                              timeText: 'Start',
+                                              timeText: translation.starts,
                                             ),
                                             CustomTimePicker(
-                                              timeText: 'End',
+                                              timeText: translation.ends,
                                             ),
                                             IconButton(
                                                 onPressed: () {},
@@ -162,7 +164,7 @@ class Lectures extends StatelessWidget {
                       });
                 },
                 icon: Icon(Icons.add),
-                label: Text('Add Lecture')),
+                label: Text(translation.addLecture)),
           ],
         ),
       ],

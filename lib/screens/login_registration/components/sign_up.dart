@@ -3,6 +3,7 @@ import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:validators/validators.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SignUp extends StatefulWidget {
   final GlobalKey<FlipCardState> cardKey;
@@ -41,6 +42,7 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
+    var translation = AppLocalizations.of(context);
     final RegistrationProvider registrationProvider =
         Provider.of<RegistrationProvider>(context, listen: false);
     return Center(
@@ -56,7 +58,7 @@ class _SignUpState extends State<SignUp> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Registration',
+                    translation!.registration,
                     style: Theme.of(context).textTheme.headline1,
                   ),
                   IconButton(
@@ -81,57 +83,57 @@ class _SignUpState extends State<SignUp> {
                     children: [
                       TextFormField(
                         validator: (val) =>
-                            !isEmail(val!) ? "Invalid Email" : null,
+                            !isEmail(val!) ? translation.invalidEmail : null,
                         controller: _emailController,
                         onChanged: (String text) =>
                             registrationProvider.setEmail(text),
                         style: Theme.of(context).textTheme.bodyText1,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                             prefixIcon: Icon(
                               Icons.email,
                               size: 18,
                             ),
                             border: UnderlineInputBorder(),
-                            labelText: 'Email'),
+                            labelText: translation.email),
                       ),
                       TextFormField(
                         validator: (val) => !isByteLength(val!, 2)
-                            ? "First Name cannot be empty"
+                            ? translation.firstNameEmpty
                             : null,
                         onChanged: (String text) =>
                             registrationProvider.setFirstName(text),
                         controller: _firstNameController,
                         style: Theme.of(context).textTheme.bodyText1,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                             prefixIcon: Icon(
                               Icons.person,
                               size: 18,
                             ),
                             border: UnderlineInputBorder(),
-                            labelText: 'Firstname'),
+                            labelText: translation.firstName),
                       ),
                       TextFormField(
                         validator: (val) => !isByteLength(val!, 2)
-                            ? "Last Name cannot be empty"
+                            ? translation.lastNameEmpty
                             : null,
                         onChanged: (String text) =>
                             registrationProvider.setLastName(text),
                         style: Theme.of(context).textTheme.bodyText1,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                             prefixIcon: Icon(
                               Icons.person,
                               size: 18,
                             ),
                             border: UnderlineInputBorder(),
-                            labelText: 'Lastname'),
+                            labelText: translation.lastName),
                       ),
                       TextFormField(
                           validator: (value) {
                             if (value!.trim().isEmpty) {
-                              return 'This field is required';
+                              return translation.required;
                             }
                             if (value.trim().length < 8) {
-                              return 'Password must be at least 8 characters in length';
+                              return translation.passwordCheck;
                             }
                             // Return null if the entered password is valid
                             return null;
@@ -140,24 +142,24 @@ class _SignUpState extends State<SignUp> {
                               registrationProvider.setPassword(text),
                           style: Theme.of(context).textTheme.bodyText1,
                           obscureText: true,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                               prefixIcon: Icon(
                                 Icons.password,
                                 size: 18,
                               ),
                               border: UnderlineInputBorder(),
-                              labelText: 'Password')),
+                              labelText: translation.password)),
                       TextFormField(
                           validator: (value) {
                             if (value!.trim().isEmpty) {
-                              return 'This field is required';
+                              return translation.required;
                             }
                             if (value.trim().length < 8) {
-                              return 'Password must be at least 8 characters in length';
+                              return translation.passwordCheck;
                             }
 
                             if (value == _passwordController.text) {
-                              return 'Passwords do not match.';
+                              return translation.passwordMatch;
                             }
 
                             return null;
@@ -166,20 +168,20 @@ class _SignUpState extends State<SignUp> {
                               .setVerificationPassword(text),
                           style: Theme.of(context).textTheme.bodyText1,
                           obscureText: true,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                               prefixIcon: Icon(
                                 Icons.password,
                                 size: 18,
                               ),
                               border: UnderlineInputBorder(),
-                              labelText: 'Password')),
+                              labelText: translation.password)),
                       ElevatedButton.icon(
                           style: TextButton.styleFrom(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 14.0, vertical: 14.0)),
                           onPressed: () {},
                           icon: Icon(Icons.login),
-                          label: Text('Register'))
+                          label: Text(translation.register))
                     ],
                   ),
                 ),
@@ -197,60 +199,61 @@ class RegistrationFields extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var translation = AppLocalizations.of(context);
     return Column(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         TextFormField(
           style: Theme.of(context).textTheme.bodyText1,
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
               prefixIcon: Icon(
                 Icons.email,
                 size: 18,
               ),
               border: UnderlineInputBorder(),
-              labelText: 'Email'),
+              labelText: translation!.email),
         ),
         TextFormField(
           style: Theme.of(context).textTheme.bodyText1,
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
               prefixIcon: Icon(
                 Icons.person,
                 size: 18,
               ),
               border: UnderlineInputBorder(),
-              labelText: 'Firstname'),
+              labelText: translation.firstName),
         ),
         TextFormField(
           style: Theme.of(context).textTheme.bodyText1,
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
               prefixIcon: Icon(
                 Icons.person,
                 size: 18,
               ),
               border: UnderlineInputBorder(),
-              labelText: 'Lastname'),
+              labelText: translation.lastName),
         ),
         TextFormField(
             style: Theme.of(context).textTheme.bodyText1,
             obscureText: true,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
                 prefixIcon: Icon(
                   Icons.password,
                   size: 18,
                 ),
                 border: UnderlineInputBorder(),
-                labelText: 'Password')),
+                labelText: translation.password)),
         TextFormField(
             style: Theme.of(context).textTheme.bodyText1,
             obscureText: true,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
                 prefixIcon: Icon(
                   Icons.password,
                   size: 18,
                 ),
                 border: UnderlineInputBorder(),
-                labelText: 'Password')),
+                labelText: translation.password)),
       ],
     );
   }

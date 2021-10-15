@@ -1,7 +1,6 @@
 import 'package:crayon_management/datamodels/lecture.dart';
 import 'package:crayon_management/providers/pdf_list_provider.dart';
 import 'package:crayon_management/providers/quiz_list_provider.dart';
-import 'package:crayon_management/providers/quiz_provider.dart';
 import 'package:crayon_management/screens/presentation/components/controls.dart';
 import 'package:crayon_management/screens/presentation/components/powerpoints.dart';
 import 'package:crayon_management/screens/presentation/components/quiz.dart';

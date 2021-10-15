@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProfileCard extends StatelessWidget {
   const ProfileCard({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var translation = AppLocalizations.of(context);
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 14,
@@ -62,7 +64,7 @@ class ProfileCard extends StatelessWidget {
                     ),
                     SizedBox(width: 5.0),
                     Text(
-                      'Logout',
+                      translation!.logout,
                       style: Theme.of(context).textTheme.bodyText1,
                     )
                   ],

@@ -1,8 +1,8 @@
-import 'package:crayon_management/providers/quiz_list_provider.dart';
 import 'package:crayon_management/providers/quiz_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:validators/validators.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class QuizDialog extends StatefulWidget {
   const QuizDialog({Key? key}) : super(key: key);
@@ -31,6 +31,7 @@ class _QuizDialogState extends State<QuizDialog> {
 
   @override
   Widget build(BuildContext context) {
+    var translation = AppLocalizations.of(context);
     final quizProvider = Provider.of<QuizProvider>(context, listen: false);
     String errorMessage = '';
     return AlertDialog(
@@ -40,7 +41,7 @@ class _QuizDialogState extends State<QuizDialog> {
                 backgroundColor:
                     MaterialStateProperty.all<Color>(Colors.black26)),
             onPressed: () => Navigator.pop(context, null),
-            child: Text('Cancel')),
+            child: Text(translation!.cancel)),
         ElevatedButton(
             onPressed: () {
               if (_questionController.text.length >= 4 &&
@@ -48,7 +49,7 @@ class _QuizDialogState extends State<QuizDialog> {
                 Navigator.pop(context, quizProvider);
               }
             },
-            child: Text('Upload'))
+            child: Text(translation.upload))
       ],
       content: Builder(
         builder: (context) {
@@ -61,7 +62,7 @@ class _QuizDialogState extends State<QuizDialog> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Text(
-                  'Add Question',
+                  translation.addQuestion,
                   style: Theme.of(context).textTheme.headline1,
                 ),
                 Form(
@@ -71,19 +72,19 @@ class _QuizDialogState extends State<QuizDialog> {
                       children: [
                         TextFormField(
                             validator: (val) => !isByteLength(val!, 4)
-                                ? "Question has to have at least 4 characters"
+                                ? translation.questionHasToHaveAtLeast4Chars
                                 : null,
                             onChanged: (String text) =>
                                 quizProvider.setQuestion(text),
                             controller: _questionController,
                             style: Theme.of(context).textTheme.bodyText1,
-                            decoration: const InputDecoration(
-                                prefixIcon: Icon(
+                            decoration: InputDecoration(
+                                prefixIcon: const Icon(
                                   Icons.book_rounded,
                                   size: 18,
                                 ),
-                                border: UnderlineInputBorder(),
-                                labelText: 'Question')),
+                                border: const UnderlineInputBorder(),
+                                labelText: translation.response)),
                         Row(
                           children: [
                             Checkbox(
@@ -96,17 +97,18 @@ class _QuizDialogState extends State<QuizDialog> {
                             Flexible(
                               child: TextFormField(
                                   validator: (val) => !isByteLength(val!, 4)
-                                      ? "Response has to have at least 4 characters"
+                                      ? translation
+                                          .responseHasToHaveAtLeast4Chars
                                       : null,
                                   controller: _responseController,
                                   style: Theme.of(context).textTheme.bodyText1,
-                                  decoration: const InputDecoration(
-                                      prefixIcon: Icon(
+                                  decoration: InputDecoration(
+                                      prefixIcon: const Icon(
                                         Icons.question_answer_rounded,
                                         size: 18,
                                       ),
-                                      border: UnderlineInputBorder(),
-                                      labelText: 'Response')),
+                                      border: const UnderlineInputBorder(),
+                                      labelText: translation.response)),
                             ),
                             IconButton(
                                 onPressed: () {
@@ -115,7 +117,7 @@ class _QuizDialogState extends State<QuizDialog> {
                                       isResponseRight: response);
                                   quizProvider.add(respone);
                                 },
-                                icon: Icon(Icons.add))
+                                icon: const Icon(Icons.add))
                           ],
                         ),
                         const SizedBox(
@@ -167,11 +169,11 @@ class _QuizDialogState extends State<QuizDialog> {
                             );
                           },
                         ),
-                        Spacer(),
+                        const Spacer(),
                         Text(
                           errorMessage,
-                          style:
-                              TextStyle(color: Colors.redAccent, fontSize: 18),
+                          style: const TextStyle(
+                              color: Colors.redAccent, fontSize: 18),
                         )
                       ],
                     ),

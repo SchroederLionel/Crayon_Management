@@ -16,7 +16,6 @@ Route<dynamic> controller(RouteSettings routerSettings) {
   switch (routerSettings.name) {
     case loginScreen:
       return MaterialPageRoute(builder: (context) => const LoginScreen());
-
     case dashboard:
       return MaterialPageRoute(builder: (context) => const Dashboard());
     case presentation:

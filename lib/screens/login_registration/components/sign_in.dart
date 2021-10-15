@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:crayon_management/route/route.dart' as route;
 import 'package:provider/provider.dart';
 import 'package:validators/validators.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);
@@ -31,6 +32,7 @@ class _SignInState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context) {
+    var translation = AppLocalizations.of(context);
     final LoginProvider loginProvider =
         Provider.of<LoginProvider>(context, listen: false);
     return Center(
@@ -66,26 +68,26 @@ class _SignInState extends State<SignIn> {
                     children: [
                       TextFormField(
                         validator: (val) =>
-                            !isEmail(val!) ? "Invalid Email" : null,
+                            !isEmail(val!) ? translation!.invalidEmail : null,
                         controller: _emailController,
                         onChanged: (String text) =>
                             loginProvider.setEmail(text),
                         style: Theme.of(context).textTheme.bodyText1,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                             prefixIcon: Icon(
                               Icons.email,
                               size: 18,
                             ),
                             border: UnderlineInputBorder(),
-                            labelText: 'Email'),
+                            labelText: translation!.email),
                       ),
                       TextFormField(
                           validator: (value) {
                             if (value!.trim().isEmpty) {
-                              return 'This field is required';
+                              return translation.required;
                             }
                             if (value.trim().length < 8) {
-                              return 'Password must be at least 8 characters in length';
+                              return translation.passwordCheck;
                             }
                             // Return null if the entered password is valid
                             return null;
@@ -95,13 +97,13 @@ class _SignInState extends State<SignIn> {
                               loginProvider.setPassword(text),
                           obscureText: true,
                           style: Theme.of(context).textTheme.bodyText1,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                               prefixIcon: Icon(
                                 Icons.password,
                                 size: 18,
                               ),
                               border: UnderlineInputBorder(),
-                              labelText: 'Password')),
+                              labelText: translation.password)),
                       ElevatedButton.icon(
                           style: TextButton.styleFrom(
                               padding: const EdgeInsets.symmetric(
@@ -110,7 +112,7 @@ class _SignInState extends State<SignIn> {
                             Navigator.pushNamed(context, route.dashboard);
                           },
                           icon: Icon(Icons.login),
-                          label: Text('Sign in'))
+                          label: Text(translation.signIn))
                     ],
                   ),
                 ),

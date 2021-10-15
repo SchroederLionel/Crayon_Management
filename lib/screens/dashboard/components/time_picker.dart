@@ -38,7 +38,6 @@ class _CustomTimePickerState extends State<CustomTimePicker> {
           icon: const Icon(Icons.alarm),
           onPressed: () {
             selectTime(context);
-            print(time);
           },
         ),
         Text(

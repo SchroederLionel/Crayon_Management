@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dropzone/flutter_dropzone.dart';
 import 'package:provider/provider.dart';
 import 'package:validators/validators.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DropZone extends StatefulWidget {
   const DropZone({Key? key}) : super(key: key);
@@ -32,6 +33,7 @@ class _DropZoneState extends State<DropZone> {
   @override
   Widget build(BuildContext context) {
     final pdfProvider = Provider.of<PdfProvider>(context, listen: false);
+    var translation = AppLocalizations.of(context);
     return AlertDialog(
       actions: [
         ElevatedButton(
@@ -39,14 +41,14 @@ class _DropZoneState extends State<DropZone> {
                 backgroundColor:
                     MaterialStateProperty.all<Color>(Colors.black26)),
             onPressed: () => Navigator.pop(context),
-            child: Text('Cancel')),
+            child: Text(translation!.cancel)),
         ElevatedButton(
             onPressed: () {
               if (pdfProvider.getTitle.length >= 4 &&
                   pdfProvider.getDroppedFile != null)
                 Navigator.pop(context, pdfProvider);
             },
-            child: Text('Upload'))
+            child: Text(translation.upload))
       ],
       content: Builder(
         builder: (context) {
@@ -59,7 +61,7 @@ class _DropZoneState extends State<DropZone> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Text(
-                    'Add slide',
+                    translation.addSlide,
                     style: Theme.of(context).textTheme.headline1,
                   ),
                   Form(
@@ -68,18 +70,18 @@ class _DropZoneState extends State<DropZone> {
                       width: 350,
                       child: TextFormField(
                         validator: (val) => !isByteLength(val!, 4)
-                            ? "Title has to have at least 4 characters"
+                            ? translation.titleHasToHaveAtLeast4Chars
                             : null,
                         onChanged: (String text) => pdfProvider.title(text),
                         controller: _titleController,
                         style: Theme.of(context).textTheme.bodyText1,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                             prefixIcon: Icon(
                               Icons.book_rounded,
                               size: 18,
                             ),
                             border: UnderlineInputBorder(),
-                            labelText: 'PDF title'),
+                            labelText: translation.pdfTitle),
                       ),
                     ),
                   ),
@@ -115,8 +117,8 @@ class _DropZoneState extends State<DropZone> {
                                   icon: const Icon(
                                     Icons.search,
                                   ),
-                                  label: const Text(
-                                    'Choose File',
+                                  label: Text(
+                                    translation.chooseFile,
                                   ),
                                   onPressed: () async {
                                     final events = await controller.pickFiles();
@@ -128,7 +130,7 @@ class _DropZoneState extends State<DropZone> {
                                   height: 14,
                                 ),
                                 Text(
-                                  'Drop File here',
+                                  translation.dropFileHere,
                                   style: Theme.of(context).textTheme.subtitle1,
                                 ),
                                 const SizedBox(

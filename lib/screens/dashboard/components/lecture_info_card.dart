@@ -3,6 +3,7 @@ import 'package:crayon_management/datamodels/lecture.dart';
 import 'package:crayon_management/widgets/confirmation_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:crayon_management/route/route.dart' as route;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LectureInfoCard extends StatelessWidget {
   final Lecture lecture;
@@ -10,6 +11,7 @@ class LectureInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var translation = AppLocalizations.of(context);
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(5.0),
@@ -30,7 +32,7 @@ class LectureInfoCard extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  'Last Powerpoint:',
+                  translation!.lastSlide,
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
                 Text(
@@ -43,7 +45,7 @@ class LectureInfoCard extends StatelessWidget {
               height: 14.0,
             ),
             Text(
-              'Dates:',
+              translation.dates,
               style: Theme.of(context).textTheme.bodyText1,
             ),
             const SizedBox(
@@ -81,7 +83,7 @@ class LectureInfoCard extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.all(2.0),
                     child: Text(
-                      getlectureType(lecture.dates[index].type),
+                      getLectureType(lecture.dates[index].type, translation),
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
@@ -102,7 +104,7 @@ class LectureInfoCard extends StatelessWidget {
                             arguments: lecture);
                       },
                       icon: Icon(Icons.open_in_browser),
-                      label: Text('Open')),
+                      label: Text(translation.open)),
                   ElevatedButton.icon(
                       style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all<Color>(
@@ -110,17 +112,19 @@ class LectureInfoCard extends StatelessWidget {
                       onPressed: () {
                         showDialog(
                             context: context,
-                            builder: (BuildContext context) => ConfirmationDialog(
-                                confirmationDialogData: ConfirmationDialogData(
-                                    title: 'Deletion',
-                                    cancelTitle: 'Cancel',
-                                    itemTitle: lecture.title,
-                                    description:
-                                        'Are you sure you want to delete ',
-                                    acceptTitle: 'Yes')));
+                            builder: (BuildContext context) =>
+                                ConfirmationDialog(
+                                    confirmationDialogData:
+                                        ConfirmationDialogData(
+                                            title: translation.delete,
+                                            cancelTitle: translation.cancel,
+                                            itemTitle: lecture.title,
+                                            description: translation
+                                                .confirmationDeletion,
+                                            acceptTitle: translation.yes)));
                       },
                       icon: Icon(Icons.delete),
-                      label: Text('Delete'))
+                      label: Text(translation.delete))
                 ],
               ),
             )
@@ -130,11 +134,11 @@ class LectureInfoCard extends StatelessWidget {
     );
   }
 
-  String getlectureType(LectureType type) {
+  String getLectureType(LectureType type, AppLocalizations localizations) {
     if (type == LectureType.exercise) {
-      return 'Excercise';
+      return localizations.exercise;
     } else {
-      return 'Lecture';
+      return localizations.lecture;
     }
   }
 }

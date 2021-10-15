@@ -3,6 +3,7 @@ import 'package:crayon_management/providers/quiz_list_provider.dart';
 import 'package:crayon_management/providers/quiz_provider.dart';
 import 'package:crayon_management/screens/presentation/components/quiz_dialog.dart';
 import 'package:crayon_management/widgets/confirmation_dialog.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +13,7 @@ class Quiz extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var translation = AppLocalizations.of(context);
     final quizListProvider =
         Provider.of<QuizListProvider>(context, listen: false);
     return Column(
@@ -23,7 +25,7 @@ class Quiz extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Quiz',
+              translation!.quiz,
               style: Theme.of(context).textTheme.subtitle1,
             ),
             ElevatedButton.icon(
@@ -42,7 +44,9 @@ class Quiz extends StatelessWidget {
                   });
                 },
                 icon: Icon(Icons.add),
-                label: Text('Add question'))
+                label: Text(
+                  translation.addQuestion,
+                ))
           ],
         ),
         const SizedBox(
@@ -80,15 +84,20 @@ class Quiz extends StatelessWidget {
                                               ConfirmationDialog(
                                                   confirmationDialogData:
                                                       ConfirmationDialogData(
-                                                          title: 'Deletion',
-                                                          cancelTitle: 'Cancel',
+                                                          title: translation
+                                                              .delete,
+                                                          cancelTitle:
+                                                              translation
+                                                                  .cancel,
                                                           itemTitle: questions
                                                               .getQuizOnIndex(
                                                                   index)
                                                               .getQuestion,
-                                                          description:
-                                                              'Are you sure you want to delete _________.',
-                                                          acceptTitle: 'Yes')));
+                                                          description: translation
+                                                              .confirmationDeletion,
+                                                          acceptTitle:
+                                                              translation
+                                                                  .yes)));
                                     },
                                     icon: const Icon(
                                       Icons.delete,

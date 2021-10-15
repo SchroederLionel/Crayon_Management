@@ -7,6 +7,7 @@ import 'package:crayon_management/widgets/language_widget.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -15,7 +16,7 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
     GlobalKey<FlipCardState> cardKey = GlobalKey<FlipCardState>();
-
+    var translation = AppLocalizations.of(context);
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -44,7 +45,7 @@ class LoginScreen extends StatelessWidget {
                       onPressed: () {
                         cardKey.currentState!.toggleCard();
                       },
-                      child: Text('SignUp'))
+                      child: Text(translation!.signUp))
                 ],
               ),
               Expanded(
@@ -71,5 +72,3 @@ class LoginScreen extends StatelessWidget {
     );
   }
 }
-
-/// AppLocalizations.of(context)!.helloWorld

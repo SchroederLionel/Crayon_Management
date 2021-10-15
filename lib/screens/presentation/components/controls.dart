@@ -1,10 +1,7 @@
-import 'dart:convert';
-import 'dart:typed_data';
-
 import 'package:crayon_management/providers/pdf_list_provider.dart';
 import 'package:crayon_management/providers/pdf_provider.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pdf_render/pdf_render_widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -95,6 +92,7 @@ class Controls extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var translation = AppLocalizations.of(context);
     bool isScreenWide = MediaQuery.of(context).size.width >= 650;
     PdfProvider? currentSelectedProvider;
     return Flex(
@@ -118,7 +116,6 @@ class Controls extends StatelessWidget {
                     ),
                     onChanged: (PdfProvider? file) {
                       currentSelectedProvider = file!;
-                      print(currentSelectedProvider!.getTitle);
                     },
                     items: pdfs.getPdfs.map<DropdownMenuItem<PdfProvider>>(
                         (PdfProvider singlePdf) {
@@ -134,7 +131,7 @@ class Controls extends StatelessWidget {
                     onPressed: () =>
                         _launchURL(context, currentSelectedProvider!),
                     icon: const Icon(Icons.open_in_browser),
-                    label: const Text('Open Powerpoint')),
+                    label: Text(translation!.openSlide)),
               ],
             );
           } else {
