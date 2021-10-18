@@ -1,4 +1,6 @@
+import 'package:crayon_management/providers/time_picker_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CustomTimePicker extends StatefulWidget {
   String timeText;
@@ -12,12 +14,15 @@ class _CustomTimePickerState extends State<CustomTimePicker> {
   late TimeOfDay time;
   late TimeOfDay? picked;
   late String timeText;
+  late TimePickerProvider timePickerProvider;
 
   @override
   void initState() {
     super.initState();
     time = TimeOfDay.now();
     timeText = widget.timeText;
+    timePickerProvider =
+        Provider.of<TimePickerProvider>(context, listen: false);
   }
 
   Future selectTime(BuildContext context) async {
@@ -26,6 +31,7 @@ class _CustomTimePickerState extends State<CustomTimePicker> {
     if (picked != null) {
       setState(() {
         time = picked!;
+        timePickerProvider.changeTime(timeText, time);
       });
     }
   }

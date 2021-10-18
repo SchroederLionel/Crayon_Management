@@ -29,23 +29,11 @@ class LectureInfoCard extends StatelessWidget {
             const SizedBox(
               height: 14.0,
             ),
-            Row(
-              children: [
-                Text(
-                  translation!.lastSlide,
-                  style: Theme.of(context).textTheme.bodyText1,
-                ),
-                Text(
-                  lecture.lastPowerPointTitle,
-                  style: Theme.of(context).textTheme.bodyText1,
-                ),
-              ],
-            ),
             const SizedBox(
               height: 14.0,
             ),
             Text(
-              translation.dates,
+              translation!.dates,
               style: Theme.of(context).textTheme.bodyText1,
             ),
             const SizedBox(
@@ -83,7 +71,7 @@ class LectureInfoCard extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.all(2.0),
                     child: Text(
-                      getLectureType(lecture.dates[index].type, translation),
+                      lecture.dates[index].type,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
@@ -132,14 +120,6 @@ class LectureInfoCard extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  String getLectureType(LectureType type, AppLocalizations localizations) {
-    if (type == LectureType.exercise) {
-      return localizations.exercise;
-    } else {
-      return localizations.lecture;
-    }
   }
 }
 
