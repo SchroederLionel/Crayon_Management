@@ -57,7 +57,7 @@ class LectureInfoCardGridView extends StatelessWidget {
       : super(key: key);
 
   final lectures = [
-    Lecture(id: '1', pid: 'PID', title: 'Operating Systems', dates: [
+    Lecture(id: '1', title: 'Operating Systems', lectures: [
       LectureDate(
           room: 'B112',
           day: 'monday',
@@ -71,25 +71,21 @@ class LectureInfoCardGridView extends StatelessWidget {
           ending_time: '15:00',
           type: 'lecture')
     ]),
-    Lecture(
-        id: '2',
-        pid: 'PID',
-        title: 'Hardwarenahe Softwareentwicklung',
-        dates: [
-          LectureDate(
-              room: 'B112',
-              day: 'Tuesday',
-              starting_time: '10:30',
-              ending_time: '12:00',
-              type: 'exercise'),
-          LectureDate(
-              room: 'B112',
-              day: 'friday',
-              starting_time: '12:30',
-              ending_time: '15:00',
-              type: 'exercise')
-        ]),
-    Lecture(id: '3', pid: 'PID', title: 'Programming', dates: [
+    Lecture(id: '2', title: 'Hardwarenahe Softwareentwicklung', lectures: [
+      LectureDate(
+          room: 'B112',
+          day: 'Tuesday',
+          starting_time: '10:30',
+          ending_time: '12:00',
+          type: 'exercise'),
+      LectureDate(
+          room: 'B112',
+          day: 'friday',
+          starting_time: '12:30',
+          ending_time: '15:00',
+          type: 'exercise')
+    ]),
+    Lecture(id: '3', title: 'Programming', lectures: [
       LectureDate(
           room: 'B112',
           day: 'Tuesday',
@@ -103,7 +99,7 @@ class LectureInfoCardGridView extends StatelessWidget {
           ending_time: '15:00',
           type: 'lecture')
     ]),
-    Lecture(id: '3', pid: 'PID', title: 'Programming', dates: [
+    Lecture(id: '3', title: 'Programming', lectures: [
       LectureDate(
           room: 'B112',
           day: 'Tuesday',
@@ -117,7 +113,7 @@ class LectureInfoCardGridView extends StatelessWidget {
           ending_time: '15:00',
           type: 'exercise')
     ]),
-    Lecture(id: '3', pid: 'PID', title: 'Programming', dates: [
+    Lecture(id: '3', title: 'Programming', lectures: [
       LectureDate(
           room: 'B112',
           day: 'Tuesday',
@@ -131,7 +127,7 @@ class LectureInfoCardGridView extends StatelessWidget {
           ending_time: '15:00',
           type: 'exercise')
     ]),
-    Lecture(id: '3', pid: 'PID', title: 'Programming', dates: [
+    Lecture(id: '3', title: 'Programming', lectures: [
       LectureDate(
           room: 'B112',
           day: 'Tuesday',

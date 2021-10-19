@@ -1,12 +1,10 @@
-import 'package:flutter/material.dart';
+import 'package:crayon_management/datamodels/user_data.dart';
 
-class LoginProvider {
-  late String _email;
-  late String _password;
-
-  setEmail(String email) => _email = email;
-  setPassword(String password) => _password = password;
-
-  String get getEmail => _email;
-  String get getPassword => _password;
+class UserProvider {
+  late UserData _user;
+  setUserData(UserData userData) => _user = userData;
+  String get getEmail => _user.email;
+  String get getFirstName => _user.firstName;
+  String get getLastName => _user.lastName;
+  String get getFirstAndLastName => '${_user.firstName} ${_user.lastName}';
 }

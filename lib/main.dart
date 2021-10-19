@@ -1,7 +1,11 @@
+import 'package:crayon_management/providers/login_registration_provider/login_provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+
 import 'package:crayon_management/Custom_scroll_behavior.dart';
 import 'package:crayon_management/providers/locale_provider.dart';
 import 'package:crayon_management/providers/menu_provider.dart';
 import 'package:crayon_management/providers/presentation_provider.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -10,9 +14,14 @@ import 'package:crayon_management/providers/theme_provider.dart';
 import 'route/route.dart' as route;
 import 'package:url_strategy/url_strategy.dart';
 
-void main() {
+void main() async {
   // Removes # from url.
-  setPathUrlStrategy();
+  // setPathUrlStrategy();
+
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  // Initialize Firebase
+
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider<MenuProvider>(create: (context) => MenuProvider()),
@@ -25,14 +34,16 @@ void main() {
       ChangeNotifierProvider<PresentationProvider>(
         create: (BuildContext context) => PresentationProvider(),
       ),
+      Provider(create: (BuildContext context) => UserProvider())
     ],
-    child: const MyApp(),
+    child: MyApp(),
   ));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
+  final Future<FirebaseApp> _initilaization = Firebase.initializeApp();
+  MyApp({Key? key}) : super(key: key);
+  //var app = Firebase.initializeApp();
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {

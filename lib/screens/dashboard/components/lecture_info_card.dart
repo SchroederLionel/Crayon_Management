@@ -42,12 +42,12 @@ class LectureInfoCard extends StatelessWidget {
             Table(
               border: TableBorder.all(color: Theme.of(context).primaryColor),
               children:
-                  List<TableRow>.generate(lecture.dates.length, (int index) {
+                  List<TableRow>.generate(lecture.lectures.length, (int index) {
                 return TableRow(children: [
                   Padding(
                     padding: EdgeInsets.all(2.0),
                     child: Text(
-                      lecture.dates[index].room,
+                      lecture.lectures[index].room,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
@@ -55,7 +55,7 @@ class LectureInfoCard extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.all(2.0),
                     child: Text(
-                      lecture.dates[index].starting_time,
+                      lecture.lectures[index].starting_time,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
@@ -63,7 +63,7 @@ class LectureInfoCard extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.all(2.0),
                     child: Text(
-                      lecture.dates[index].ending_time,
+                      lecture.lectures[index].ending_time,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
@@ -71,7 +71,7 @@ class LectureInfoCard extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.all(2.0),
                     child: Text(
-                      lecture.dates[index].type,
+                      lecture.lectures[index].type,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyText1,
                     ),

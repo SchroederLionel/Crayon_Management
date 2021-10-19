@@ -1,5 +1,8 @@
+import 'package:crayon_management/providers/login_registration_provider/login_provider.dart';
+import 'package:crayon_management/utils/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 class ProfileCard extends StatelessWidget {
   const ProfileCard({Key? key}) : super(key: key);
@@ -7,6 +10,8 @@ class ProfileCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var translation = AppLocalizations.of(context);
+    final UserProvider userProvider =
+        Provider.of<UserProvider>(context, listen: false);
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 14,
@@ -17,7 +22,7 @@ class ProfileCard extends StatelessWidget {
         border: Border.all(color: Colors.blueAccent),
       ),
       child: DropdownButton(
-          value: 'Lionel Schroeder',
+          value: userProvider.getFirstAndLastName,
           icon: Container(
             margin: const EdgeInsets.only(left: 5),
             child: const Icon(
@@ -31,7 +36,7 @@ class ProfileCard extends StatelessWidget {
           items: [
             DropdownMenuItem(
                 onTap: () {},
-                value: 'Lionel Schroeder',
+                value: userProvider.getFirstAndLastName,
                 child: Row(
                   children: [
                     Container(
@@ -51,6 +56,7 @@ class ProfileCard extends StatelessWidget {
             DropdownMenuItem(
                 value: 'logout',
                 onTap: () {
+                  signOut();
                   Navigator.pop(context);
                 },
                 child: Row(

@@ -1,4 +1,5 @@
 import 'package:crayon_management/providers/login_registration_provider/login_provider.dart';
+import 'package:crayon_management/utils/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:crayon_management/route/route.dart' as route;
 import 'package:provider/provider.dart';
@@ -33,8 +34,8 @@ class _SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
     var translation = AppLocalizations.of(context);
-    final LoginProvider loginProvider =
-        Provider.of<LoginProvider>(context, listen: false);
+    final UserProvider userProvider =
+        Provider.of<UserProvider>(context, listen: false);
     return Center(
         child: SizedBox(
       height: 500,
@@ -70,8 +71,6 @@ class _SignInState extends State<SignIn> {
                         validator: (val) =>
                             !isEmail(val!) ? translation!.invalidEmail : null,
                         controller: _emailController,
-                        onChanged: (String text) =>
-                            loginProvider.setEmail(text),
                         style: Theme.of(context).textTheme.bodyText1,
                         decoration: InputDecoration(
                             prefixIcon: Icon(
@@ -93,8 +92,6 @@ class _SignInState extends State<SignIn> {
                             return null;
                           },
                           controller: _passwordController,
-                          onChanged: (String text) =>
-                              loginProvider.setPassword(text),
                           obscureText: true,
                           style: Theme.of(context).textTheme.bodyText1,
                           decoration: InputDecoration(
@@ -108,8 +105,18 @@ class _SignInState extends State<SignIn> {
                           style: TextButton.styleFrom(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 14.0, vertical: 14.0)),
-                          onPressed: () {
-                            Navigator.pushNamed(context, route.dashboard);
+                          onPressed: () async {
+                            await signInWithEmailPassword(_emailController.text,
+                                    _passwordController.text)
+                                .then((result) {
+                              if (result != null) {
+                                print('You are logged In');
+                                userProvider.setUserData(result);
+                                Navigator.pushNamed(context, route.dashboard);
+                              }
+                            }).catchError((error) {
+                              print('Login Error: $error');
+                            });
                           },
                           icon: Icon(Icons.login),
                           label: Text(translation.signIn))

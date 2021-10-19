@@ -1,4 +1,5 @@
 import 'package:crayon_management/providers/login_registration_provider/registration_provider.dart';
+import 'package:crayon_management/utils/authentication.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -113,6 +114,7 @@ class _SignUpState extends State<SignUp> {
                             labelText: translation.firstName),
                       ),
                       TextFormField(
+                        controller: _lastNameController,
                         validator: (val) => !isByteLength(val!, 2)
                             ? translation.lastNameEmpty
                             : null,
@@ -128,6 +130,7 @@ class _SignUpState extends State<SignUp> {
                             labelText: translation.lastName),
                       ),
                       TextFormField(
+                          controller: _passwordController,
                           validator: (value) {
                             if (value!.trim().isEmpty) {
                               return translation.required;
@@ -158,28 +161,68 @@ class _SignUpState extends State<SignUp> {
                               return translation.passwordCheck;
                             }
 
-                            if (value == _passwordController.text) {
+                            if (_verificationPasswordController.text !=
+                                _passwordController.text) {
                               return translation.passwordMatch;
                             }
 
                             return null;
                           },
+                          controller: _verificationPasswordController,
                           onChanged: (String text) => registrationProvider
                               .setVerificationPassword(text),
                           style: Theme.of(context).textTheme.bodyText1,
                           obscureText: true,
                           decoration: InputDecoration(
-                              prefixIcon: Icon(
+                              prefixIcon: const Icon(
                                 Icons.password,
                                 size: 18,
                               ),
-                              border: UnderlineInputBorder(),
+                              border: const UnderlineInputBorder(),
                               labelText: translation.password)),
                       ElevatedButton.icon(
                           style: TextButton.styleFrom(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 14.0, vertical: 14.0)),
-                          onPressed: () {},
+                          onPressed: () async {
+                            await registerWithEmailPassword(
+                              _emailController.text,
+                              registrationProvider.getPassword,
+                              _firstNameController.text,
+                              _lastNameController.text,
+                            ).then((result) {
+                              if (result != null) {
+                                widget.cardKey.currentState!.toggleCard();
+                                final snackBar = SnackBar(
+                                    content: const Text('Account created!'),
+                                    action: SnackBarAction(
+                                      label: 'Undo',
+                                      onPressed: () {
+                                        // Some code to undo the change.
+                                      },
+                                    ));
+
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackBar);
+                              } else {
+                                final snackBar = SnackBar(
+                                    content:
+                                        const Text('Account alreadExists!'),
+                                    action: SnackBarAction(
+                                      label: 'Undo',
+                                      onPressed: () {
+                                        // Some code to undo the change.
+                                      },
+                                    ));
+
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackBar);
+                              }
+                            }).catchError((error) {
+                              print(error);
+                              print('error while registrting');
+                            });
+                          },
                           icon: Icon(Icons.login),
                           label: Text(translation.register))
                     ],

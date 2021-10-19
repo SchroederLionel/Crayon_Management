@@ -4,6 +4,7 @@ import 'package:crayon_management/providers/theme_provider.dart';
 import 'package:crayon_management/screens/login_registration/components/sign_in.dart';
 import 'package:crayon_management/screens/login_registration/components/sign_up.dart';
 import 'package:crayon_management/widgets/language_widget.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -53,10 +54,7 @@ class LoginScreen extends StatelessWidget {
                   key: cardKey,
                   flipOnTouch: false,
                   direction: FlipDirection.HORIZONTAL,
-                  front: Provider<LoginProvider>(
-                    child: SignIn(),
-                    create: (context) => LoginProvider(),
-                  ),
+                  front: SignIn(),
                   back: Provider<RegistrationProvider>(
                     child: SignUp(
                       cardKey: cardKey,
