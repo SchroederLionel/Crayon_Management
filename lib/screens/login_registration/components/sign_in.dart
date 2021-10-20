@@ -1,5 +1,5 @@
 import 'package:crayon_management/providers/login_registration_provider/login_provider.dart';
-import 'package:crayon_management/utils/authentication.dart';
+import 'package:crayon_management/services/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:crayon_management/route/route.dart' as route;
 import 'package:provider/provider.dart';
@@ -110,7 +110,6 @@ class _SignInState extends State<SignIn> {
                                     _passwordController.text)
                                 .then((result) {
                               if (result != null) {
-                                print('You are logged In');
                                 userProvider.setUserData(result);
                                 Navigator.pushNamed(context, route.dashboard);
                               }

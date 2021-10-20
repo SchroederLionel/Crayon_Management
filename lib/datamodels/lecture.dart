@@ -1,25 +1,50 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:uuid/uuid.dart';
+
 class Lecture {
   final String path = 'lectures';
-  String id;
-  String title;
+  final String id;
+  final String title;
+  String? uid;
+  final List<LectureDate> lectureDates;
 
-  List<LectureDate> lectures;
+  Lecture(
+      {this.uid,
+      required this.id,
+      required this.title,
+      required this.lectureDates});
 
-  factory Lecture.fromJson(Map<String, dynamic> json) => Lecture(
-        id: json['id'],
-        title: json['title'],
-        lectures: List<LectureDate>.from(json["lectures"]
-            .map((singleLecture) => LectureDate.fromJson(singleLecture))),
-      );
+  factory Lecture.fromJson(Map<String, dynamic> json) {
+    final id = json['id'] as String;
+    final title = json['title'] as String;
+    // Cast to a nullable list as the lectureDates may be missing.
+    final lectureDates = json['lectureDates'] as List<dynamic>?;
+    // if the lecture dates are not missing
 
+    final lectures = lectureDates != null
+        ? lectureDates
+            .map((lectureDate) => LectureDate.fromJson(lectureDate))
+            .toList()
+        : <LectureDate>[];
+
+    return Lecture(id: id, title: title, lectureDates: lectures);
+  }
   Map<String, dynamic> toJson() => {
+        "uid": uid,
         "id": id,
         "title": title,
-        "lectures": List<LectureDate>.from(
-            lectures.map((LectureDate singleLecture) => singleLecture.toJson()))
+        "lectureDates":
+            lectureDates.map((lectureDate) => lectureDate.toJson()).toList()
       };
 
-  Lecture({required this.id, required this.title, required this.lectures});
+  Map<String, dynamic> toJsonForUser() => {
+        "id": id,
+        "title": title,
+        "lectureDates":
+            lectureDates.map((lectureDate) => lectureDate.toJson()).toList()
+      };
+
+  void setUid(String uid) => this.uid = uid;
 }
 
 class LectureDate {
@@ -36,12 +61,20 @@ class LectureDate {
       required this.ending_time,
       required this.type});
 
-  LectureDate.fromJson(Map<String, dynamic>? json)
-      : room = json!['room'],
-        day = json['day'],
-        starting_time = json['starting_time'],
-        ending_time = json['ending_time'],
-        type = json['type'];
+  factory LectureDate.fromJson(Map<String, dynamic>? json) {
+    final room = json!['room'];
+    final day = json['day'];
+    final starting_time = json['startingTime'];
+    final ending_time = json['endingTime'];
+    final type = json['type'];
+
+    return LectureDate(
+        room: room,
+        day: day,
+        starting_time: starting_time,
+        ending_time: ending_time,
+        type: type);
+  }
 
   Map<String, dynamic> toJson() => {
         'room': room,

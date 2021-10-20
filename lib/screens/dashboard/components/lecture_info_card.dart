@@ -19,12 +19,10 @@ class LectureInfoCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
           children: [
-            Container(
-              child: Text(
-                lecture.title,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.subtitle1,
-              ),
+            Text(
+              lecture.title,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.subtitle1,
             ),
             const SizedBox(
               height: 14.0,
@@ -41,13 +39,13 @@ class LectureInfoCard extends StatelessWidget {
             ),
             Table(
               border: TableBorder.all(color: Theme.of(context).primaryColor),
-              children:
-                  List<TableRow>.generate(lecture.lectures.length, (int index) {
+              children: List<TableRow>.generate(lecture.lectureDates.length,
+                  (int index) {
                 return TableRow(children: [
                   Padding(
                     padding: EdgeInsets.all(2.0),
                     child: Text(
-                      lecture.lectures[index].room,
+                      lecture.lectureDates[index].room,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
@@ -55,7 +53,7 @@ class LectureInfoCard extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.all(2.0),
                     child: Text(
-                      lecture.lectures[index].starting_time,
+                      lecture.lectureDates[index].starting_time,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
@@ -63,7 +61,7 @@ class LectureInfoCard extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.all(2.0),
                     child: Text(
-                      lecture.lectures[index].ending_time,
+                      lecture.lectureDates[index].ending_time,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
@@ -71,7 +69,7 @@ class LectureInfoCard extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.all(2.0),
                     child: Text(
-                      lecture.lectures[index].type,
+                      lecture.lectureDates[index].type,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyText1,
                     ),

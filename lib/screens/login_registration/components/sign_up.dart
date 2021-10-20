@@ -1,5 +1,5 @@
 import 'package:crayon_management/providers/login_registration_provider/registration_provider.dart';
-import 'package:crayon_management/utils/authentication.dart';
+import 'package:crayon_management/services/authentication.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

@@ -1,6 +1,8 @@
 import 'package:crayon_management/datamodels/lecture.dart';
 import 'package:crayon_management/providers/lecture_provider.dart';
+import 'package:crayon_management/providers/login_registration_provider/login_provider.dart';
 import 'package:crayon_management/providers/time_picker_provider.dart';
+import 'package:crayon_management/services/lecture_service.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:crayon_management/screens/dashboard/components/time_picker.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +40,7 @@ class _AddLectureDialogState extends State<AddLectureDialog> {
     var translation = AppLocalizations.of(context);
     final lectureProvider =
         Provider.of<LectureProvider>(context, listen: false);
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
     return AlertDialog(
         actions: [
           ElevatedButton(
@@ -46,7 +49,13 @@ class _AddLectureDialogState extends State<AddLectureDialog> {
                       MaterialStateProperty.all<Color>(Colors.black26)),
               onPressed: () => Navigator.pop(context),
               child: Text(translation!.cancel)),
-          ElevatedButton(onPressed: () {}, child: Text(translation.upload))
+          ElevatedButton(
+              onPressed: () {
+                LectureService.postLecture(userProvider.getUserId,
+                    _titleController.text, lectureProvider.getLectureDates);
+                Navigator.pop(context);
+              },
+              child: Text(translation.upload))
         ],
         content: Provider<TimePickerProvider>(
           create: (context) => TimePickerProvider(),
