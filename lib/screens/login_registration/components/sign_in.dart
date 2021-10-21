@@ -1,4 +1,5 @@
-import 'package:crayon_management/providers/login_registration_provider/login_provider.dart';
+import 'package:crayon_management/providers/login_registration_provider/user_provider.dart';
+
 import 'package:crayon_management/services/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:crayon_management/route/route.dart' as route;

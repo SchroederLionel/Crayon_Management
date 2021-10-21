@@ -1,4 +1,4 @@
-import 'package:crayon_management/providers/login_registration_provider/login_provider.dart';
+import 'package:crayon_management/providers/login_registration_provider/user_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'package:crayon_management/Custom_scroll_behavior.dart';
@@ -12,7 +12,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:crayon_management/providers/theme_provider.dart';
 import 'route/route.dart' as route;
-import 'package:url_strategy/url_strategy.dart';
 
 void main() async {
   // Removes # from url.
@@ -34,7 +33,7 @@ void main() async {
       ChangeNotifierProvider<PresentationProvider>(
         create: (BuildContext context) => PresentationProvider(),
       ),
-      Provider(create: (BuildContext context) => UserProvider())
+      ChangeNotifierProvider(create: (BuildContext context) => UserProvider())
     ],
     child: MyApp(),
   ));

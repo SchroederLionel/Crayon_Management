@@ -1,27 +1,32 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crayon_management/datamodels/lecture.dart';
-import 'package:uuid/uuid.dart';
 
 class LectureService {
-  static void postLecture(
-      String uid, String title, List<LectureDate> lectureDates) async {
-    String fileUid = const Uuid().v4();
-    Lecture lecture =
-        Lecture(id: fileUid, title: title, lectureDates: lectureDates);
-
-    lecture.setUid(uid);
+  static void postLecture(Lecture lecture) async {
     await FirebaseFirestore.instance
         .collection('lectures')
-        .doc(fileUid)
+        .doc(lecture.id)
         .set(lecture.toJson());
 
     List<Map> list = [];
     list.add(lecture.toJsonForUser());
     await FirebaseFirestore.instance
         .collection('users')
-        .doc(uid)
+        .doc(lecture.uid)
         .update({'myLectures': FieldValue.arrayUnion(list)});
   }
 
-  static void deleteService(Lecture lecture) {}
+  static void deleteService(Lecture lecture) async {
+    await FirebaseFirestore.instance
+        .collection('lectures')
+        .doc(lecture.id)
+        .delete();
+
+    List<Map> list = [];
+    list.add(lecture.toJsonForUser());
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(lecture.uid)
+        .update({'myLectures': FieldValue.arrayRemove(list)});
+  }
 }

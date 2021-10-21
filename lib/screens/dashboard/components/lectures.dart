@@ -1,10 +1,11 @@
 import 'package:crayon_management/datamodels/lecture.dart';
 import 'package:crayon_management/providers/lecture_provider.dart';
-import 'package:crayon_management/providers/login_registration_provider/login_provider.dart';
+import 'package:crayon_management/providers/login_registration_provider/user_provider.dart';
+
 import 'package:crayon_management/responsive.dart';
 import 'package:crayon_management/screens/dashboard/components/add_lecture_dialog.dart';
 import 'package:crayon_management/screens/dashboard/components/lecture_info_card.dart';
-import 'package:crayon_management/screens/dashboard/components/time_picker.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';

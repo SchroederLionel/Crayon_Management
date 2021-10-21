@@ -35,10 +35,10 @@ class ConfirmationDialog extends StatelessWidget {
             style: ButtonStyle(
                 backgroundColor:
                     MaterialStateProperty.all<Color>(Colors.black26)),
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(context, false),
             child: Text(confirmationDialogData.cancelTitle)),
         ElevatedButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(context, true),
             child: Text(confirmationDialogData.acceptTitle))
       ],
     );

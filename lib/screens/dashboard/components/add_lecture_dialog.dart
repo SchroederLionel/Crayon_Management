@@ -1,12 +1,14 @@
 import 'package:crayon_management/datamodels/lecture.dart';
 import 'package:crayon_management/providers/lecture_provider.dart';
-import 'package:crayon_management/providers/login_registration_provider/login_provider.dart';
+import 'package:crayon_management/providers/login_registration_provider/user_provider.dart';
+
 import 'package:crayon_management/providers/time_picker_provider.dart';
 import 'package:crayon_management/services/lecture_service.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:crayon_management/screens/dashboard/components/time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 class AddLectureDialog extends StatefulWidget {
   const AddLectureDialog({Key? key}) : super(key: key);
@@ -51,8 +53,14 @@ class _AddLectureDialogState extends State<AddLectureDialog> {
               child: Text(translation!.cancel)),
           ElevatedButton(
               onPressed: () {
-                LectureService.postLecture(userProvider.getUserId,
-                    _titleController.text, lectureProvider.getLectureDates);
+                String fileUid = const Uuid().v4();
+                final lecture = Lecture(
+                    id: fileUid,
+                    uid: userProvider.getUserId,
+                    title: _titleController.text,
+                    lectureDates: lectureProvider.getLectureDates);
+                LectureService.postLecture(lecture);
+                userProvider.addLecture(lecture);
                 Navigator.pop(context);
               },
               child: Text(translation.upload))

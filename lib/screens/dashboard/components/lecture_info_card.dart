@@ -1,9 +1,13 @@
 import 'package:crayon_management/datamodels/confirmation_dialog_data.dart';
 import 'package:crayon_management/datamodels/lecture.dart';
+import 'package:crayon_management/providers/login_registration_provider/user_provider.dart';
+
+import 'package:crayon_management/services/lecture_service.dart';
 import 'package:crayon_management/widgets/confirmation_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:crayon_management/route/route.dart' as route;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 class LectureInfoCard extends StatelessWidget {
   final Lecture lecture;
@@ -37,82 +41,112 @@ class LectureInfoCard extends StatelessWidget {
             const SizedBox(
               height: 10.0,
             ),
-            Table(
-              border: TableBorder.all(color: Theme.of(context).primaryColor),
-              children: List<TableRow>.generate(lecture.lectureDates.length,
-                  (int index) {
-                return TableRow(children: [
-                  Padding(
-                    padding: EdgeInsets.all(2.0),
-                    child: Text(
-                      lecture.lectureDates[index].room,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodyText1,
+            Expanded(
+              child: ListView.builder(
+                padding: const EdgeInsets.only(bottom: 15),
+                itemCount: lecture.lectureDates.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(),
+                      color: Theme.of(context).scaffoldBackgroundColor,
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(2.0),
-                    child: Text(
-                      lecture.lectureDates[index].starting_time,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodyText1,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.all(2.0),
+                          child: Text(
+                            lecture.lectureDates[index].room,
+                            style: Theme.of(context).textTheme.bodyText1,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(2.0),
+                          child: Text(
+                            lecture.lectureDates[index].day,
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.bodyText1,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(2.0),
+                          child: Text(
+                            lecture.lectureDates[index].starting_time,
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.bodyText1,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(2.0),
+                          child: Text(
+                            lecture.lectureDates[index].ending_time,
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.bodyText1,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(2.0),
+                          child: Container(
+                            width: 100,
+                            child: Text(
+                              lecture.lectureDates[index].type,
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context).textTheme.bodyText1,
+                            ),
+                          ),
+                        )
+                      ],
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(2.0),
-                    child: Text(
-                      lecture.lectureDates[index].ending_time,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(2.0),
-                    child: Text(
-                      lecture.lectureDates[index].type,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
-                  )
-                ]);
-              }),
+                  );
+                },
+              ),
             ),
             const Spacer(),
-            Container(
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ElevatedButton.icon(
-                      onPressed: () {
-                        Navigator.pushNamed(context, route.presentation,
-                            arguments: lecture);
-                      },
-                      icon: Icon(Icons.open_in_browser),
-                      label: Text(translation.open)),
-                  ElevatedButton.icon(
-                      style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                              Colors.redAccent)),
-                      onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) =>
-                                ConfirmationDialog(
-                                    confirmationDialogData:
-                                        ConfirmationDialogData(
-                                            title: translation.delete,
-                                            cancelTitle: translation.cancel,
-                                            itemTitle: lecture.title,
-                                            description: translation
-                                                .confirmationDeletion,
-                                            acceptTitle: translation.yes)));
-                      },
-                      icon: Icon(Icons.delete),
-                      label: Text(translation.delete))
-                ],
-              ),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.pushNamed(context, route.presentation,
+                          arguments: lecture);
+                    },
+                    icon: Icon(Icons.open_in_browser),
+                    label: Text(translation.open)),
+                ElevatedButton.icon(
+                    style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.redAccent)),
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) => ConfirmationDialog(
+                              confirmationDialogData: ConfirmationDialogData(
+                                  title: translation.delete,
+                                  cancelTitle: translation.cancel,
+                                  itemTitle: lecture.title,
+                                  description: translation.confirmationDeletion,
+                                  acceptTitle: translation.yes))).then((value) {
+                        print(value);
+                        if (value == true) {
+                          print('Start to delete');
+                          final userProvider =
+                              Provider.of<UserProvider>(context, listen: false);
+                          lecture.setUid(userProvider.getUserId);
+                          LectureService.deleteService(lecture);
+
+                          userProvider.removeLecture(lecture);
+                          print('End deletion');
+                        }
+                      });
+                    },
+                    icon: Icon(Icons.delete),
+                    label: Text(translation.delete))
+              ],
             )
           ],
         ),
@@ -124,18 +158,37 @@ class LectureInfoCard extends StatelessWidget {
 /**
  * 
  * 
- * Container(
-                child: ListView.builder(
-                    itemCount: lecture.dates.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Text(lecture.dates[index].room),
-                          Text(lecture.dates[index].starting_time),
-                          Text(lecture.dates[index].ending_time),
-                        ],
-                      );
-                    }),
-              )
+ * 
+ * const Spacer(),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.pushNamed(context, route.presentation,
+                          arguments: lecture);
+                    },
+                    icon: Icon(Icons.open_in_browser),
+                    label: Text(translation.open)),
+                ElevatedButton.icon(
+                    style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.redAccent)),
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) => ConfirmationDialog(
+                              confirmationDialogData: ConfirmationDialogData(
+                                  title: translation.delete,
+                                  cancelTitle: translation.cancel,
+                                  itemTitle: lecture.title,
+                                  description: translation.confirmationDeletion,
+                                  acceptTitle: translation.yes)));
+                    },
+                    icon: Icon(Icons.delete),
+                    label: Text(translation.delete))
+              ],
+            )
  */

@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-
 class RegistrationProvider {
   late String _email;
   late String _firstName;
