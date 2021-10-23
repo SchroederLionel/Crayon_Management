@@ -1,3 +1,4 @@
+import 'package:crayon_management/datamodels/response.dart';
 import 'package:flutter/cupertino.dart';
 
 class QuizProvider extends ChangeNotifier {
@@ -19,13 +20,4 @@ class QuizProvider extends ChangeNotifier {
     _responses.remove(question);
     notifyListeners();
   }
-}
-
-class Response {
-  late String response;
-  late bool isResponseRight;
-  Response({required this.response, required this.isResponseRight});
-
-  String get getResponse => response;
-  bool get getResponseRight => isResponseRight;
 }

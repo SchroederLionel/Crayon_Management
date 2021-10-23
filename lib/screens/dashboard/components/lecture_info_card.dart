@@ -24,7 +24,7 @@ class LectureInfoCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           children: [
             Text(
-              lecture.title,
+              lecture.title ?? '',
               overflow: TextOverflow.ellipsis,
               style: Theme.of(context).textTheme.subtitle1,
             ),
@@ -128,7 +128,7 @@ class LectureInfoCard extends StatelessWidget {
                               confirmationDialogData: ConfirmationDialogData(
                                   title: translation.delete,
                                   cancelTitle: translation.cancel,
-                                  itemTitle: lecture.title,
+                                  itemTitle: lecture.title ?? '',
                                   description: translation.confirmationDeletion,
                                   acceptTitle: translation.yes))).then((value) {
                         print(value);

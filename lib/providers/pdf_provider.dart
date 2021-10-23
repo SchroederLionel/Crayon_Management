@@ -1,35 +1,31 @@
+import 'dart:html';
 import 'dart:typed_data';
 
-import 'package:crayon_management/datamodels/dropped_file.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class PdfProvider extends ChangeNotifier {
-  late Uint8List _droppedFile;
   late String _title = '';
   late String _fileName = '';
   late String _fileURL = '';
+  late File _file;
 
   Color _currentColor = Colors.blueAccent;
 
   String get getTitle => _title;
   String get getFileUrl => _fileURL;
-  Uint8List get getDroppedFile => _droppedFile;
+  File get getDroppedFile => _file;
   Color get currentColor => _currentColor;
 
-  void updateValues(String mime, String url, String fileName, Uint8List file) {
-    String fileType = mime;
-    print(mime);
+  void updateValues(String title, File file, String fileType, String fileName) {
     if (fileType.toUpperCase().contains('PDF')) {
       _fileName = fileName;
-      _fileURL = url;
       _currentColor = Colors.greenAccent;
-      _droppedFile = file;
+      _file = file;
     } else {
       _title = 'Only PDF file type is accepted';
       _currentColor = Colors.redAccent;
     }
-
     notifyListeners();
   }
 

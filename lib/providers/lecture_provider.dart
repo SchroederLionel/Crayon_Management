@@ -9,7 +9,6 @@ class LectureListProvider extends ChangeNotifier {
 
 class LectureProvider extends ChangeNotifier {
   List<LectureDate> _lecture = [];
-
   int get getLectureLength => _lecture.length;
   LectureDate getLectureDate(int index) => _lecture[index];
   List<LectureDate> get getLectureDates => _lecture;

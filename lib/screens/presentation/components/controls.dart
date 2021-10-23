@@ -1,4 +1,6 @@
-import 'package:crayon_management/providers/pdf_list_provider.dart';
+import 'dart:typed_data';
+
+import 'package:crayon_management/providers/slides_provider.dart';
 import 'package:crayon_management/providers/pdf_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -13,7 +15,6 @@ class Controls extends StatelessWidget {
     ItemScrollController _scrollController = ItemScrollController();
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    Size size = new Size(width, height);
 
     showGeneralDialog(
         barrierColor: Colors.black,
@@ -22,33 +23,7 @@ class Controls extends StatelessWidget {
           return Material(
             child: Stack(
               children: [
-                Flexible(
-                  child: PdfDocumentLoader.openData(
-                    currentSelectedPDF.getDroppedFile,
-                    documentBuilder: (context, pdfDocument, pageCount) =>
-                        ScrollablePositionedList.builder(
-                            minCacheExtent: 4,
-                            physics: const NeverScrollableScrollPhysics(),
-                            scrollDirection: Axis.horizontal,
-                            itemScrollController: _scrollController,
-                            itemCount: pageCount,
-                            itemBuilder: (context, index) => SizedBox(
-                                  width: width,
-                                  child: PdfPageView(
-                                    pageBuilder: (context,
-                                        PdfPageTextureBuilder textureBuilder,
-                                        pageSize) {
-                                      return textureBuilder();
-                                    },
-                                    //pdfDocument: pdfDocument,
-                                    pageNumber: index + 1,
-                                  ),
-                                )),
-                    onError: (err) {
-                      print(err);
-                    },
-                  ),
-                ),
+                Flexible(child: Container()),
                 Center(
                   child: Container(
                     color: Colors.blue,
@@ -95,7 +70,40 @@ class Controls extends StatelessWidget {
     var translation = AppLocalizations.of(context);
     bool isScreenWide = MediaQuery.of(context).size.width >= 650;
     PdfProvider? currentSelectedProvider;
-    return Flex(
+    return Container();
+  }
+}
+
+
+
+/**
+ * 
+ PdfDocumentLoader.openData(
+                    Uint8List(),
+                    documentBuilder: (context, pdfDocument, pageCount) =>
+                        ScrollablePositionedList.builder(
+                            minCacheExtent: 4,
+                            physics: const NeverScrollableScrollPhysics(),
+                            scrollDirection: Axis.horizontal,
+                            itemScrollController: _scrollController,
+                            itemCount: pageCount,
+                            itemBuilder: (context, index) => SizedBox(
+                                  width: width,
+                                  child: PdfPageView(
+                                    pageBuilder: (context,
+                                        PdfPageTextureBuilder textureBuilder,
+                                        pageSize) {
+                                      return textureBuilder();
+                                    },
+                                    //pdfDocument: pdfDocument,
+                                    pageNumber: index + 1,
+                                  ),
+                                )),
+                    onError: (err) {
+                      print(err);
+                    },
+                  ),
+  return Flex(
       direction: isScreenWide ? Axis.horizontal : Axis.vertical,
       children: [
         Consumer<PdfListProvider>(
@@ -140,5 +148,6 @@ class Controls extends StatelessWidget {
         }),
       ],
     );
-  }
-}
+
+
+ */

@@ -55,10 +55,11 @@ class _AddLectureDialogState extends State<AddLectureDialog> {
               onPressed: () {
                 String fileUid = const Uuid().v4();
                 final lecture = Lecture(
-                    id: fileUid,
-                    uid: userProvider.getUserId,
-                    title: _titleController.text,
-                    lectureDates: lectureProvider.getLectureDates);
+                  id: fileUid,
+                  uid: userProvider.getUserId,
+                  title: _titleController.text,
+                );
+                lecture.setLectureDates(lectureProvider.getLectureDates);
                 LectureService.postLecture(lecture);
                 userProvider.addLecture(lecture);
                 Navigator.pop(context);

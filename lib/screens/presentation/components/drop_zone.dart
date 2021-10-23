@@ -1,5 +1,8 @@
+import 'dart:html';
+
 import 'package:crayon_management/datamodels/dropped_file.dart';
 import 'package:crayon_management/providers/pdf_provider.dart';
+import 'package:crayon_management/services/lecture_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dropzone/flutter_dropzone.dart';
 import 'package:provider/provider.dart';
@@ -76,7 +79,7 @@ class _DropZoneState extends State<DropZone> {
                         controller: _titleController,
                         style: Theme.of(context).textTheme.bodyText1,
                         decoration: InputDecoration(
-                            prefixIcon: Icon(
+                            prefixIcon: const Icon(
                               Icons.book_rounded,
                               size: 18,
                             ),
@@ -153,18 +156,16 @@ class _DropZoneState extends State<DropZone> {
     );
   }
 
-  Future acceptFile(dynamic event) async {
+  Future acceptFile(event) async {
     final pdfProvider = Provider.of<PdfProvider>(context, listen: false);
-
-    final name = event.name;
     final mime = await controller.getFileMIME(event);
-
+    final String fileName = await controller.getFilename(event);
     final url = await controller.createFileUrl(event);
-    final file = await controller.getFileData(event);
-    pdfProvider.fileURL(url);
-    pdfProvider.updateValues(mime, url, name, file);
-
-    //final droppedFile =
-    //    DroppedFile(url: url, name: name, mime: mime, bytes: bytes);
+    print('-----------------------------------------------');
+    print(mime);
+    print(event);
+    print(event.name);
+    print('-----------------------------------------------');
+    pdfProvider.updateValues(_titleController.text, event, mime, fileName);
   }
 }

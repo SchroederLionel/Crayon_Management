@@ -1,20 +1,37 @@
 import 'package:crayon_management/datamodels/confirmation_dialog_data.dart';
-import 'package:crayon_management/providers/pdf_list_provider.dart';
+import 'package:crayon_management/datamodels/lecture.dart';
+import 'package:crayon_management/providers/detailed_lecture_provider.dart';
+
 import 'package:crayon_management/providers/pdf_provider.dart';
+
 import 'package:crayon_management/screens/presentation/components/drop_zone.dart';
 import 'package:crayon_management/widgets/confirmation_dialog.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class Powerpoints extends StatelessWidget {
-  const Powerpoints({Key? key}) : super(key: key);
+class Powerpoints extends StatefulWidget {
+  final Lecture lecture;
+  const Powerpoints({required this.lecture, Key? key}) : super(key: key);
+
+  @override
+  State<Powerpoints> createState() => _PowerpointsState();
+}
+
+class _PowerpointsState extends State<Powerpoints> {
+  late Lecture lecture;
+
+  @override
+  void initState() {
+    super.initState();
+    lecture = widget.lecture;
+  }
 
   @override
   Widget build(BuildContext context) {
     var translation = AppLocalizations.of(context);
-    final pdfListProvider =
-        Provider.of<PdfListProvider>(context, listen: false);
+    final detailLectureProvider =
+        Provider.of<DetailedLectureProvider>(context, listen: false);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -33,80 +50,81 @@ class Powerpoints extends StatelessWidget {
                       builder: (BuildContext context) {
                         return ListenableProvider<PdfProvider>(
                           create: (context) => PdfProvider(),
-                          child: DropZone(),
+                          child: const DropZone(),
                         );
                       }).then((value) {
                     if (value != null) {
-                      pdfListProvider.add(value);
+                      detailLectureProvider.addSlide(lecture.id ?? '',
+                          value.getTitle, value.getDroppedFile);
                     }
                   });
                 },
-                icon: Icon(Icons.add),
+                icon: const Icon(Icons.add),
                 label: Text(AppLocalizations.of(context)!.addSlide))
           ],
         ),
         const SizedBox(
           height: 14,
         ),
-        Container(
-          height: 50,
-          child: Consumer<PdfListProvider>(
-            builder: (context, pdfs, child) {
-              return ListView.builder(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                itemCount: pdfs.getPdfsLength,
-                itemBuilder: (context, index) {
-                  return Card(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          pdfs.getPdfProvider(index).getTitle,
-                          style: Theme.of(context).textTheme.bodyText1,
-                        ),
-                        const SizedBox(
-                          width: 30,
-                        ),
-                        IconButton(
-                            onPressed: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) =>
-                                      ConfirmationDialog(
-                                          confirmationDialogData:
-                                              ConfirmationDialogData(
-                                                  title:
-                                                      AppLocalizations
-                                                              .of(context)!
-                                                          .delete,
-                                                  itemTitle:
-                                                      pdfs
-                                                          .getPdfProvider(index)
-                                                          .getTitle,
-                                                  cancelTitle:
-                                                      AppLocalizations.of(
-                                                              context)!
-                                                          .cancel,
-                                                  description: translation
-                                                      .confirmationDeletion,
-                                                  acceptTitle:
-                                                      AppLocalizations.of(
-                                                              context)!
-                                                          .yes)));
-                            },
-                            icon: const Icon(
-                              Icons.delete,
-                              color: Colors.redAccent,
-                            ))
-                      ],
-                    ),
-                  );
-                },
-              );
-            },
-          ),
-        ),
+        SizedBox(
+            height: 50,
+            child: ListView.builder(
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              itemCount: lecture.slides.length,
+              itemBuilder: (context, index) {
+                return Card(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        lecture.slides[index].title,
+                        style: Theme.of(context).textTheme.bodyText1,
+                      ),
+                      const SizedBox(
+                        width: 30,
+                      ),
+                      IconButton(
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) =>
+                                    ConfirmationDialog(
+                                        confirmationDialogData:
+                                            ConfirmationDialogData(
+                                                title: AppLocalizations.of(
+                                                        context)!
+                                                    .delete,
+                                                itemTitle: detailLectureProvider
+                                                    .lecture!
+                                                    .slides[index]
+                                                    .title,
+                                                cancelTitle: AppLocalizations
+                                                        .of(context)!
+                                                    .cancel,
+                                                description: translation
+                                                    .confirmationDeletion,
+                                                acceptTitle:
+                                                    AppLocalizations.of(
+                                                            context)!
+                                                        .yes))).then((value) {
+                              if (value == true) {
+                                detailLectureProvider.removeSlide(
+                                    lecture.id ?? '',
+                                    detailLectureProvider
+                                        .lecture!.slides[index]);
+                              }
+                            });
+                          },
+                          icon: const Icon(
+                            Icons.delete,
+                            color: Colors.redAccent,
+                          ))
+                    ],
+                  ),
+                );
+              },
+            )),
       ],
     );
   }

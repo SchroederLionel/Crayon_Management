@@ -1,22 +1,30 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:uuid/uuid.dart';
-
 class Lecture {
-  final String path = 'lectures';
-  final String id;
-  final String title;
-  String? uid;
-  final List<LectureDate> lectureDates;
+  late final String path = 'lectures';
+  late final String? id;
+  late final String? title;
+  late String? uid;
+  List<LectureDate> lectureDates = <LectureDate>[];
+  List<Slide> slides = <Slide>[];
 
-  Lecture(
-      {this.uid,
-      required this.id,
-      required this.title,
-      required this.lectureDates});
+  Lecture({
+    this.uid,
+    this.id,
+    this.title,
+  });
 
-  factory Lecture.fromJson(Map<String, dynamic> json) {
-    final id = json['id'] as String;
+  setSlides(List<Slide> slides) => this.slides = slides;
+  setLectureDates(List<LectureDate> lectureDates) =>
+      this.lectureDates = lectureDates;
+
+  factory Lecture.fromJson(Map<String, dynamic>? json) {
+    final id = json!['id'] as String;
     final title = json['title'] as String;
+
+    final slidesData = json['slides'] as List<dynamic>?;
+    final slides = slidesData != null
+        ? slidesData.map((slide) => Slide.fromJson(slide)).toList()
+        : <Slide>[];
+
     // Cast to a nullable list as the lectureDates may be missing.
     final lectureDates = json['lectureDates'] as List<dynamic>?;
     // if the lecture dates are not missing
@@ -27,14 +35,18 @@ class Lecture {
             .toList()
         : <LectureDate>[];
 
-    return Lecture(id: id, title: title, lectureDates: lectures);
+    Lecture currentLecture = Lecture(id: id, title: title);
+    currentLecture.setSlides(slides);
+    currentLecture.setLectureDates(lectures);
+    return currentLecture;
   }
   Map<String, dynamic> toJson() => {
         "uid": uid,
         "id": id,
         "title": title,
         "lectureDates":
-            lectureDates.map((lectureDate) => lectureDate.toJson()).toList()
+            lectureDates.map((lectureDate) => lectureDate.toJson()).toList(),
+        "slides": slides.map((slide) => slide.toJson()).toList()
       };
 
   Map<String, dynamic> toJsonForUser() => {
@@ -82,5 +94,26 @@ class LectureDate {
         'startingTime': starting_time,
         'endingTime': ending_time,
         'type': type
+      };
+}
+
+class Slide {
+  final String title;
+  final String fileId;
+  Slide({required this.title, required this.fileId});
+
+  factory Slide.fromJson(Map<String, dynamic>? json) {
+    final title = json!['title'];
+    final fileId = json['fileId'];
+
+    return Slide(
+      title: title,
+      fileId: fileId,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'title': title,
+        'fileId': fileId,
       };
 }
