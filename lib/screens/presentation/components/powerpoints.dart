@@ -1,5 +1,6 @@
 import 'package:crayon_management/datamodels/confirmation_dialog_data.dart';
-import 'package:crayon_management/datamodels/lecture.dart';
+import 'package:crayon_management/datamodels/lecture/lecture.dart';
+
 import 'package:crayon_management/providers/detailed_lecture_provider.dart';
 
 import 'package:crayon_management/providers/pdf_provider.dart';
@@ -54,8 +55,8 @@ class _PowerpointsState extends State<Powerpoints> {
                         );
                       }).then((value) {
                     if (value != null) {
-                      detailLectureProvider.addSlide(lecture.id ?? '',
-                          value.getTitle, value.getDroppedFile);
+                      detailLectureProvider.addSlide(
+                          lecture.id, value.getTitle, value.getDroppedFile);
                     }
                   });
                 },
@@ -110,7 +111,7 @@ class _PowerpointsState extends State<Powerpoints> {
                                                         .yes))).then((value) {
                               if (value == true) {
                                 detailLectureProvider.removeSlide(
-                                    lecture.id ?? '',
+                                    lecture.id,
                                     detailLectureProvider
                                         .lecture!.slides[index]);
                               }

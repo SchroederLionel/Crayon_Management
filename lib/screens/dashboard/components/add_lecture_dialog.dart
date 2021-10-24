@@ -1,4 +1,5 @@
-import 'package:crayon_management/datamodels/lecture.dart';
+import 'package:crayon_management/datamodels/lecture/lecture.dart';
+import 'package:crayon_management/datamodels/lecture/lecture_date.dart';
 import 'package:crayon_management/providers/lecture_provider.dart';
 import 'package:crayon_management/providers/login_registration_provider/user_provider.dart';
 
@@ -54,13 +55,16 @@ class _AddLectureDialogState extends State<AddLectureDialog> {
           ElevatedButton(
               onPressed: () {
                 String fileUid = const Uuid().v4();
+                print('---------------------------');
+                print(userProvider.getUserId);
+                print('---------------------------');
                 final lecture = Lecture(
                   id: fileUid,
                   uid: userProvider.getUserId,
                   title: _titleController.text,
                 );
                 lecture.setLectureDates(lectureProvider.getLectureDates);
-                LectureService.postLecture(lecture);
+                LectureService.addLecture(lecture);
                 userProvider.addLecture(lecture);
                 Navigator.pop(context);
               },
@@ -205,9 +209,9 @@ class _AddLectureDialogState extends State<AddLectureDialog> {
                           LectureDate date = LectureDate(
                               room: _roomController.text,
                               day: currentValueDay,
-                              starting_time:
+                              startingTime:
                                   timePickerProvider.getStartingTimeInString(),
-                              ending_time:
+                              endingTime:
                                   timePickerProvider.getEndingTimeInString(),
                               type: currentLectureType);
                           lectureProvider.add(date);
@@ -232,10 +236,10 @@ class _AddLectureDialogState extends State<AddLectureDialog> {
                                         lecture_info.getLectureDate(index).day),
                                     Text(lecture_info
                                         .getLectureDate(index)
-                                        .starting_time),
+                                        .startingTime),
                                     Text(lecture_info
                                         .getLectureDate(index)
-                                        .ending_time),
+                                        .endingTime),
                                     Text(lecture_info
                                         .getLectureDate(index)
                                         .type

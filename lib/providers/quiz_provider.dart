@@ -1,4 +1,4 @@
-import 'package:crayon_management/datamodels/response.dart';
+import 'package:crayon_management/datamodels/quiz/response.dart';
 import 'package:flutter/cupertino.dart';
 
 class QuizProvider extends ChangeNotifier {

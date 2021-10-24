@@ -1,4 +1,4 @@
-import 'package:crayon_management/datamodels/lecture.dart';
+import 'package:crayon_management/datamodels/lecture/lecture.dart';
 import 'package:crayon_management/providers/detailed_lecture_provider.dart';
 import 'package:crayon_management/screens/presentation/presentation_screen.dart';
 import 'package:flutter/material.dart';

@@ -1,4 +1,4 @@
-import 'package:crayon_management/datamodels/response.dart';
+import 'package:crayon_management/datamodels/quiz/response.dart';
 import 'package:crayon_management/providers/quiz_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

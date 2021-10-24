@@ -1,5 +1,7 @@
 import 'package:crayon_management/datamodels/confirmation_dialog_data.dart';
-import 'package:crayon_management/datamodels/lecture.dart';
+
+import 'package:crayon_management/datamodels/lecture/lecture_snipped.dart';
+
 import 'package:crayon_management/providers/login_registration_provider/user_provider.dart';
 
 import 'package:crayon_management/services/lecture_service.dart';
@@ -10,7 +12,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 class LectureInfoCard extends StatelessWidget {
-  final Lecture lecture;
+  final LectureSnipped lecture;
   const LectureInfoCard({required this.lecture, Key? key}) : super(key: key);
 
   @override
@@ -24,7 +26,7 @@ class LectureInfoCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           children: [
             Text(
-              lecture.title ?? '',
+              lecture.title,
               overflow: TextOverflow.ellipsis,
               style: Theme.of(context).textTheme.subtitle1,
             ),
@@ -74,7 +76,7 @@ class LectureInfoCard extends StatelessWidget {
                         Padding(
                           padding: EdgeInsets.all(2.0),
                           child: Text(
-                            lecture.lectureDates[index].starting_time,
+                            lecture.lectureDates[index].startingTime,
                             textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.bodyText1,
                           ),
@@ -82,7 +84,7 @@ class LectureInfoCard extends StatelessWidget {
                         Padding(
                           padding: EdgeInsets.all(2.0),
                           child: Text(
-                            lecture.lectureDates[index].ending_time,
+                            lecture.lectureDates[index].endingTime,
                             textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.bodyText1,
                           ),
@@ -128,19 +130,16 @@ class LectureInfoCard extends StatelessWidget {
                               confirmationDialogData: ConfirmationDialogData(
                                   title: translation.delete,
                                   cancelTitle: translation.cancel,
-                                  itemTitle: lecture.title ?? '',
+                                  itemTitle: lecture.title,
                                   description: translation.confirmationDeletion,
                                   acceptTitle: translation.yes))).then((value) {
                         print(value);
                         if (value == true) {
-                          print('Start to delete');
                           final userProvider =
                               Provider.of<UserProvider>(context, listen: false);
-                          lecture.setUid(userProvider.getUserId);
-                          LectureService.deleteService(lecture);
-
+                          LectureService.deleteLecture(
+                              lecture, userProvider.getUserId);
                           userProvider.removeLecture(lecture);
-                          print('End deletion');
                         }
                       });
                     },

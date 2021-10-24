@@ -1,8 +1,8 @@
-import 'package:crayon_management/datamodels/lecture.dart';
+import 'package:crayon_management/datamodels/lecture/lecture.dart';
 import 'package:crayon_management/providers/detailed_lecture_provider.dart';
-import 'package:crayon_management/providers/slides_provider.dart';
+
 import 'package:crayon_management/providers/quiz_list_provider.dart';
-import 'package:crayon_management/screens/presentation/components/controls.dart';
+
 import 'package:crayon_management/screens/presentation/components/powerpoints.dart';
 import 'package:crayon_management/screens/presentation/components/quiz.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +24,7 @@ class _PresentationScreenState extends State<PresentationScreen> {
     super.initState();
     final lectureProvider =
         Provider.of<DetailedLectureProvider>(context, listen: false);
-    lectureProvider.getLectureData(widget.lecture.id ?? '');
+    lectureProvider.getLectureData(widget.lecture.id);
   }
 
   @override
@@ -41,7 +41,7 @@ class _PresentationScreenState extends State<PresentationScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    widget.lecture.title ?? '',
+                    widget.lecture.title,
                     style: Theme.of(context).textTheme.headline1,
                   ),
                   IconButton(

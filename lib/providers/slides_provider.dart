@@ -1,6 +1,7 @@
 import 'dart:html';
 
-import 'package:crayon_management/datamodels/lecture.dart';
+import 'package:crayon_management/datamodels/lecture/lecture.dart';
+import 'package:crayon_management/datamodels/lecture/slide.dart';
 import 'package:crayon_management/services/lecture_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:uuid/uuid.dart';

@@ -1,4 +1,4 @@
-import 'package:crayon_management/datamodels/lecture.dart';
+import 'package:crayon_management/datamodels/lecture/lecture_date.dart';
 import 'package:flutter/cupertino.dart';
 
 class LectureListProvider extends ChangeNotifier {

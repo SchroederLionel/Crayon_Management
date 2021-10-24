@@ -2,35 +2,40 @@
 import 'dart:html';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:crayon_management/datamodels/lecture.dart';
+
+import 'package:crayon_management/datamodels/lecture/lecture.dart';
+import 'package:crayon_management/datamodels/lecture/lecture_snipped.dart';
+import 'package:crayon_management/datamodels/lecture/slide.dart';
+
 import 'package:firebase_storage/firebase_storage.dart';
 
 class LectureService {
-  static void postLecture(Lecture lecture) async {
+  static void addLecture(Lecture lecture) async {
     await FirebaseFirestore.instance
         .collection('lectures')
         .doc(lecture.id)
         .set(lecture.toJson());
 
     List<Map> list = [];
-    list.add(lecture.toJsonForUser());
+    list.add(lecture.getLectureSnipped.toJson());
     await FirebaseFirestore.instance
         .collection('users')
         .doc(lecture.uid)
         .update({'myLectures': FieldValue.arrayUnion(list)});
   }
 
-  static void deleteService(Lecture lecture) async {
+  static void deleteLecture(
+      LectureSnipped lectureSnipped, String userID) async {
     await FirebaseFirestore.instance
         .collection('lectures')
-        .doc(lecture.id)
+        .doc(lectureSnipped.id)
         .delete();
 
     List<Map> list = [];
-    list.add(lecture.toJsonForUser());
+    list.add(lectureSnipped.toJson());
     await FirebaseFirestore.instance
         .collection('users')
-        .doc(lecture.uid)
+        .doc(userID)
         .update({'myLectures': FieldValue.arrayRemove(list)});
   }
 
@@ -51,6 +56,7 @@ class LectureService {
   }
 
   static Future<Lecture?> getLecture(String lectureId) async {
+    print('Get one Lecture');
     Lecture? lecture;
 
     var lectureDocument = await FirebaseFirestore.instance

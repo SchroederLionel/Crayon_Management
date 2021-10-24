@@ -1,4 +1,3 @@
-import 'package:crayon_management/datamodels/lecture.dart';
 import 'package:crayon_management/providers/lecture_provider.dart';
 import 'package:crayon_management/providers/login_registration_provider/user_provider.dart';
 

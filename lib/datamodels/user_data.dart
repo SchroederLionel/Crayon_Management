@@ -1,4 +1,4 @@
-import 'package:crayon_management/datamodels/lecture.dart';
+import 'package:crayon_management/datamodels/lecture/lecture_snipped.dart';
 
 class UserData {
   final String path = 'users';
@@ -7,7 +7,7 @@ class UserData {
   String email; // non-nullable
   String firstName; // non-nullable
   String lastName; // non-nullable
-  List<Lecture>? myLectures; //nullable
+  List<LectureSnipped>? myLectures; //nullable
 
   UserData(
       {required this.uid,
@@ -26,8 +26,10 @@ class UserData {
 
     // if the lecture dates are not missing
     final lectures = lecturesData != null
-        ? lecturesData.map((lecture) => Lecture.fromJson(lecture)).toList()
-        : <Lecture>[];
+        ? lecturesData
+            .map((lecture) => LectureSnipped.fromJson(lecture))
+            .toList()
+        : <LectureSnipped>[];
 
     return UserData(
         uid: uid,
