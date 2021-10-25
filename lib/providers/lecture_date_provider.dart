@@ -1,13 +1,7 @@
 import 'package:crayon_management/datamodels/lecture/lecture_date.dart';
 import 'package:flutter/cupertino.dart';
 
-class LectureListProvider extends ChangeNotifier {
-  List<LectureProvider> lectures = [];
-
-  void add(LectureProvider lectureProvider) {}
-}
-
-class LectureProvider extends ChangeNotifier {
+class LectureDateProvider extends ChangeNotifier {
   List<LectureDate> _lecture = [];
   int get getLectureLength => _lecture.length;
   LectureDate getLectureDate(int index) => _lecture[index];

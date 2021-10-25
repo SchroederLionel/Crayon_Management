@@ -1,7 +1,7 @@
-import 'package:crayon_management/datamodels/confirmation_dialog_data.dart';
+import 'package:crayon_management/datamodels/confirmation_dialog/confirmation_dialog_data.dart';
 import 'package:crayon_management/providers/quiz_list_provider.dart';
 import 'package:crayon_management/providers/quiz_provider.dart';
-import 'package:crayon_management/screens/presentation/components/quiz_dialog.dart';
+import 'package:crayon_management/screens/presentation/components/add_quiz/quiz_dialog.dart';
 import 'package:crayon_management/widgets/confirmation_dialog.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';

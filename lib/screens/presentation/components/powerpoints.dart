@@ -1,11 +1,11 @@
-import 'package:crayon_management/datamodels/confirmation_dialog_data.dart';
+import 'package:crayon_management/datamodels/confirmation_dialog/confirmation_dialog_data.dart';
 import 'package:crayon_management/datamodels/lecture/lecture.dart';
 
 import 'package:crayon_management/providers/detailed_lecture_provider.dart';
 
-import 'package:crayon_management/providers/pdf_provider.dart';
+import 'package:crayon_management/providers/slide_data_provider.dart';
 
-import 'package:crayon_management/screens/presentation/components/drop_zone.dart';
+import 'package:crayon_management/screens/presentation/components/add_slide/drop_zone.dart';
 import 'package:crayon_management/widgets/confirmation_dialog.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -49,8 +49,8 @@ class _PowerpointsState extends State<Powerpoints> {
                   showDialog(
                       context: context,
                       builder: (BuildContext context) {
-                        return ListenableProvider<PdfProvider>(
-                          create: (context) => PdfProvider(),
+                        return ListenableProvider<SlideDataProvider>(
+                          create: (context) => SlideDataProvider(),
                           child: const DropZone(),
                         );
                       }).then((value) {

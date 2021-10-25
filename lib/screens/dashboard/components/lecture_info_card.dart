@@ -1,4 +1,4 @@
-import 'package:crayon_management/datamodels/confirmation_dialog_data.dart';
+import 'package:crayon_management/datamodels/confirmation_dialog/confirmation_dialog_data.dart';
 
 import 'package:crayon_management/datamodels/lecture/lecture_snipped.dart';
 
@@ -59,14 +59,14 @@ class LectureInfoCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Padding(
-                          padding: EdgeInsets.all(2.0),
+                          padding: const EdgeInsets.all(2.0),
                           child: Text(
                             lecture.lectureDates[index].room,
                             style: Theme.of(context).textTheme.bodyText1,
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.all(2.0),
+                          padding: const EdgeInsets.all(2.0),
                           child: Text(
                             lecture.lectureDates[index].day,
                             textAlign: TextAlign.center,
@@ -74,7 +74,7 @@ class LectureInfoCard extends StatelessWidget {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.all(2.0),
+                          padding: const EdgeInsets.all(2.0),
                           child: Text(
                             lecture.lectureDates[index].startingTime,
                             textAlign: TextAlign.center,
@@ -82,7 +82,7 @@ class LectureInfoCard extends StatelessWidget {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.all(2.0),
+                          padding: const EdgeInsets.all(2.0),
                           child: Text(
                             lecture.lectureDates[index].endingTime,
                             textAlign: TextAlign.center,
@@ -117,7 +117,7 @@ class LectureInfoCard extends StatelessWidget {
                       Navigator.pushNamed(context, route.presentation,
                           arguments: lecture);
                     },
-                    icon: Icon(Icons.open_in_browser),
+                    icon: const Icon(Icons.open_in_browser),
                     label: Text(translation.open)),
                 ElevatedButton.icon(
                     style: ButtonStyle(
@@ -133,7 +133,6 @@ class LectureInfoCard extends StatelessWidget {
                                   itemTitle: lecture.title,
                                   description: translation.confirmationDeletion,
                                   acceptTitle: translation.yes))).then((value) {
-                        print(value);
                         if (value == true) {
                           final userProvider =
                               Provider.of<UserProvider>(context, listen: false);
@@ -143,7 +142,7 @@ class LectureInfoCard extends StatelessWidget {
                         }
                       });
                     },
-                    icon: Icon(Icons.delete),
+                    icon: const Icon(Icons.delete),
                     label: Text(translation.delete))
               ],
             )

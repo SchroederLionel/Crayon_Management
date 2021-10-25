@@ -1,6 +1,6 @@
 import 'package:crayon_management/datamodels/lecture/lecture.dart';
 import 'package:crayon_management/datamodels/lecture/lecture_date.dart';
-import 'package:crayon_management/providers/lecture_provider.dart';
+import 'package:crayon_management/providers/lecture_date_provider.dart';
 import 'package:crayon_management/providers/login_registration_provider/user_provider.dart';
 
 import 'package:crayon_management/providers/time_picker_provider.dart';
@@ -42,7 +42,7 @@ class _AddLectureDialogState extends State<AddLectureDialog> {
   Widget build(BuildContext context) {
     var translation = AppLocalizations.of(context);
     final lectureProvider =
-        Provider.of<LectureProvider>(context, listen: false);
+        Provider.of<LectureDateProvider>(context, listen: false);
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     return AlertDialog(
         actions: [
@@ -55,9 +55,7 @@ class _AddLectureDialogState extends State<AddLectureDialog> {
           ElevatedButton(
               onPressed: () {
                 String fileUid = const Uuid().v4();
-                print('---------------------------');
-                print(userProvider.getUserId);
-                print('---------------------------');
+
                 final lecture = Lecture(
                   id: fileUid,
                   uid: userProvider.getUserId,
@@ -219,7 +217,7 @@ class _AddLectureDialogState extends State<AddLectureDialog> {
                         icon: Icon(Icons.add),
                         label: Text('Add time interval')),
                     Flexible(
-                      child: Consumer<LectureProvider>(
+                      child: Consumer<LectureDateProvider>(
                         builder: (context, lecture_info, child) {
                           if (lecture_info.getLectureLength != 0) {
                             return ListView.builder(

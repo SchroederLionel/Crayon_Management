@@ -1,7 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:crayon_management/datamodels/lecture/lecture_snipped.dart';
-import 'package:crayon_management/datamodels/user_data.dart';
+import 'package:crayon_management/datamodels/user/user_data.dart';
 import 'package:flutter/cupertino.dart';
 
 class UserProvider extends ChangeNotifier {

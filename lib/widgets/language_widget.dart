@@ -1,5 +1,5 @@
 import 'package:crayon_management/l10n/l10n.dart';
-import 'package:crayon_management/providers/locale_provider.dart';
+import 'package:crayon_management/providers/util_providers/locale_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

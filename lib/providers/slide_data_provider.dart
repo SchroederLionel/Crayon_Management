@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class PdfProvider extends ChangeNotifier {
+class SlideDataProvider extends ChangeNotifier {
   late String _title = '';
   late String _fileName = '';
   late String _fileURL = '';

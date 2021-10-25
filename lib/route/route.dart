@@ -1,4 +1,5 @@
 import 'package:crayon_management/datamodels/lecture/lecture.dart';
+import 'package:crayon_management/datamodels/lecture/lecture_snipped.dart';
 import 'package:crayon_management/providers/detailed_lecture_provider.dart';
 import 'package:crayon_management/screens/presentation/presentation_screen.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,7 @@ Route<dynamic> controller(RouteSettings routerSettings) {
           builder: (context) => ListenableProvider(
                 create: (context) => DetailedLectureProvider(),
                 child: PresentationScreen(
-                  lecture: routerSettings.arguments as Lecture,
+                  lecture: routerSettings.arguments as LectureSnipped,
                 ),
               ));
     default:

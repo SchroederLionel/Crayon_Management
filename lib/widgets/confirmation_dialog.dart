@@ -1,4 +1,4 @@
-import 'package:crayon_management/datamodels/confirmation_dialog_data.dart';
+import 'package:crayon_management/datamodels/confirmation_dialog/confirmation_dialog_data.dart';
 import 'package:flutter/material.dart';
 
 class ConfirmationDialog extends StatelessWidget {

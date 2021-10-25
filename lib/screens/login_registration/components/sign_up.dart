@@ -1,5 +1,6 @@
 import 'package:crayon_management/providers/login_registration_provider/registration_provider.dart';
 import 'package:crayon_management/services/authentication.dart';
+import 'package:crayon_management/widgets/custom_text_form_field.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -76,157 +77,146 @@ class _SignUpState extends State<SignUp> {
                 height: 10,
               ),
               Expanded(
-                child: Form(
-                  autovalidateMode: AutovalidateMode.always,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      TextFormField(
-                        validator: (val) =>
-                            !isEmail(val!) ? translation.invalidEmail : null,
-                        controller: _emailController,
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CustomTextFormField(
+                        isPassword: false,
+                        validator: (val) {
+                          if (!isEmail(val!)) {
+                            return translation.invalidEmail;
+                          } else {
+                            return null;
+                          }
+                        },
                         onChanged: (String text) =>
                             registrationProvider.setEmail(text),
-                        style: Theme.of(context).textTheme.bodyText1,
-                        decoration: InputDecoration(
-                            prefixIcon: Icon(
-                              Icons.email,
-                              size: 18,
-                            ),
-                            border: UnderlineInputBorder(),
-                            labelText: translation.email),
-                      ),
-                      TextFormField(
-                        validator: (val) => !isByteLength(val!, 2)
-                            ? translation.firstNameEmpty
-                            : null,
+                        controller: _emailController,
+                        icon: Icons.email,
+                        labelText: translation.email),
+                    CustomTextFormField(
+                        isPassword: false,
+                        validator: (val) {
+                          if (!isByteLength(val!, 2)) {
+                            return translation.firstNameEmpty;
+                          } else {
+                            return null;
+                          }
+                        },
                         onChanged: (String text) =>
                             registrationProvider.setFirstName(text),
                         controller: _firstNameController,
-                        style: Theme.of(context).textTheme.bodyText1,
-                        decoration: InputDecoration(
-                            prefixIcon: Icon(
-                              Icons.person,
-                              size: 18,
-                            ),
-                            border: UnderlineInputBorder(),
-                            labelText: translation.firstName),
-                      ),
-                      TextFormField(
-                        controller: _lastNameController,
-                        validator: (val) => !isByteLength(val!, 2)
-                            ? translation.lastNameEmpty
-                            : null,
+                        icon: Icons.person,
+                        labelText: translation.firstName),
+                    CustomTextFormField(
+                        isPassword: false,
+                        validator: (val) {
+                          if (!isByteLength(val!, 2)) {
+                            return translation.firstNameEmpty;
+                          } else {
+                            return null;
+                          }
+                        },
                         onChanged: (String text) =>
                             registrationProvider.setLastName(text),
-                        style: Theme.of(context).textTheme.bodyText1,
-                        decoration: InputDecoration(
-                            prefixIcon: Icon(
-                              Icons.person,
-                              size: 18,
-                            ),
-                            border: UnderlineInputBorder(),
-                            labelText: translation.lastName),
-                      ),
-                      TextFormField(
-                          controller: _passwordController,
-                          validator: (value) {
-                            if (value!.trim().isEmpty) {
-                              return translation.required;
-                            }
-                            if (value.trim().length < 8) {
-                              return translation.passwordCheck;
-                            }
-                            // Return null if the entered password is valid
-                            return null;
-                          },
-                          onChanged: (String text) =>
-                              registrationProvider.setPassword(text),
-                          style: Theme.of(context).textTheme.bodyText1,
-                          obscureText: true,
-                          decoration: InputDecoration(
-                              prefixIcon: Icon(
-                                Icons.password,
-                                size: 18,
-                              ),
-                              border: UnderlineInputBorder(),
-                              labelText: translation.password)),
-                      TextFormField(
-                          validator: (value) {
-                            if (value!.trim().isEmpty) {
-                              return translation.required;
-                            }
-                            if (value.trim().length < 8) {
-                              return translation.passwordCheck;
-                            }
+                        controller: _lastNameController,
+                        icon: Icons.person,
+                        labelText: translation.lastName),
+                    CustomTextFormField(
+                        isPassword: true,
+                        validator: (value) {
+                          if (value!.trim().isEmpty) {
+                            return translation.required;
+                          }
+                          if (value.trim().length < 8) {
+                            return translation.passwordCheck;
+                          }
+                          // Return null if the entered password is valid
 
-                            if (_verificationPasswordController.text !=
-                                _passwordController.text) {
-                              return translation.passwordMatch;
-                            }
+                          return null;
+                        },
+                        onChanged: (String text) =>
+                            registrationProvider.setPassword(text),
+                        controller: _passwordController,
+                        icon: Icons.password,
+                        labelText: translation.password),
+                    CustomTextFormField(
+                        isPassword: true,
+                        validator: (value) {
+                          if (value!.trim().isEmpty) {
+                            return translation.required;
+                          }
+                          if (value.trim().length < 8) {
+                            return translation.passwordCheck;
+                          }
+                          if (_verificationPasswordController.text !=
+                              _passwordController.text) {
+                            return translation.passwordMatch;
+                          }
 
-                            return null;
-                          },
-                          controller: _verificationPasswordController,
-                          onChanged: (String text) => registrationProvider
-                              .setVerificationPassword(text),
-                          style: Theme.of(context).textTheme.bodyText1,
-                          obscureText: true,
-                          decoration: InputDecoration(
-                              prefixIcon: const Icon(
-                                Icons.password,
-                                size: 18,
-                              ),
-                              border: const UnderlineInputBorder(),
-                              labelText: translation.password)),
-                      ElevatedButton.icon(
-                          style: TextButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 14.0, vertical: 14.0)),
-                          onPressed: () async {
-                            await registerWithEmailPassword(
-                              _emailController.text,
-                              registrationProvider.getPassword,
-                              _firstNameController.text,
-                              _lastNameController.text,
-                            ).then((result) {
-                              if (result != null) {
-                                widget.cardKey.currentState!.toggleCard();
-                                final snackBar = SnackBar(
-                                    content: const Text('Account created!'),
-                                    action: SnackBarAction(
-                                      label: 'Undo',
-                                      onPressed: () {
-                                        // Some code to undo the change.
-                                      },
-                                    ));
+                          // Return null if the entered password is valid
+                          return null;
+                        },
+                        onChanged: (String text) =>
+                            registrationProvider.setVerificationPassword(text),
+                        controller: _verificationPasswordController,
+                        icon: Icons.password,
+                        labelText: translation.password),
+                    Consumer<RegistrationProvider>(
+                        builder: (context, regiProv, child) =>
+                            ElevatedButton.icon(
+                                style: TextButton.styleFrom(
+                                    backgroundColor:
+                                        registrationProvider.getColor(),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 14.0, vertical: 14.0)),
+                                onPressed: () async {
+                                  if (regiProv.getIsValid) {
+                                    await registerWithEmailPassword(
+                                      _emailController.text,
+                                      registrationProvider.getPassword,
+                                      _firstNameController.text,
+                                      _lastNameController.text,
+                                    ).then((result) {
+                                      if (result != null) {
+                                        widget.cardKey.currentState!
+                                            .toggleCard();
+                                        final snackBar = SnackBar(
+                                            content:
+                                                const Text('Account created!'),
+                                            action: SnackBarAction(
+                                              label: 'Undo',
+                                              onPressed: () {
+                                                // Some code to undo the change.
+                                              },
+                                            ));
 
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackBar);
-                              } else {
-                                final snackBar = SnackBar(
-                                    content:
-                                        const Text('Account alreadExists!'),
-                                    action: SnackBarAction(
-                                      label: 'Undo',
-                                      onPressed: () {
-                                        // Some code to undo the change.
-                                      },
-                                    ));
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackBar);
+                                      } else {
+                                        final snackBar = SnackBar(
+                                            content: const Text(
+                                                'Account alreadExists!'),
+                                            action: SnackBarAction(
+                                              label: 'Undo',
+                                              onPressed: () {
+                                                // Some code to undo the change.
+                                              },
+                                            ));
 
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackBar);
-                              }
-                            }).catchError((error) {
-                              print(error);
-                              print('error while registrting');
-                            });
-                          },
-                          icon: Icon(Icons.login),
-                          label: Text(translation.register))
-                    ],
-                  ),
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackBar);
+                                      }
+                                    }).catchError((error) {
+                                      print(error);
+                                      print('error while registrting');
+                                    });
+                                  }
+                                },
+                                icon: const Icon(Icons.login),
+                                label: Text(translation.register)))
+                  ],
                 ),
               ),
             ],
@@ -234,70 +224,5 @@ class _SignUpState extends State<SignUp> {
         ),
       ),
     ));
-  }
-}
-
-class RegistrationFields extends StatelessWidget {
-  const RegistrationFields({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    var translation = AppLocalizations.of(context);
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        TextFormField(
-          style: Theme.of(context).textTheme.bodyText1,
-          decoration: InputDecoration(
-              prefixIcon: Icon(
-                Icons.email,
-                size: 18,
-              ),
-              border: UnderlineInputBorder(),
-              labelText: translation!.email),
-        ),
-        TextFormField(
-          style: Theme.of(context).textTheme.bodyText1,
-          decoration: InputDecoration(
-              prefixIcon: Icon(
-                Icons.person,
-                size: 18,
-              ),
-              border: UnderlineInputBorder(),
-              labelText: translation.firstName),
-        ),
-        TextFormField(
-          style: Theme.of(context).textTheme.bodyText1,
-          decoration: InputDecoration(
-              prefixIcon: Icon(
-                Icons.person,
-                size: 18,
-              ),
-              border: UnderlineInputBorder(),
-              labelText: translation.lastName),
-        ),
-        TextFormField(
-            style: Theme.of(context).textTheme.bodyText1,
-            obscureText: true,
-            decoration: InputDecoration(
-                prefixIcon: Icon(
-                  Icons.password,
-                  size: 18,
-                ),
-                border: UnderlineInputBorder(),
-                labelText: translation.password)),
-        TextFormField(
-            style: Theme.of(context).textTheme.bodyText1,
-            obscureText: true,
-            decoration: InputDecoration(
-                prefixIcon: Icon(
-                  Icons.password,
-                  size: 18,
-                ),
-                border: UnderlineInputBorder(),
-                labelText: translation.password)),
-      ],
-    );
   }
 }

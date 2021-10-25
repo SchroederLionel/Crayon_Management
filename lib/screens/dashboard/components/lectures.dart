@@ -1,4 +1,4 @@
-import 'package:crayon_management/providers/lecture_provider.dart';
+import 'package:crayon_management/providers/lecture_date_provider.dart';
 import 'package:crayon_management/providers/login_registration_provider/user_provider.dart';
 
 import 'package:crayon_management/responsive.dart';
@@ -35,12 +35,12 @@ class Lectures extends StatelessWidget {
                   showDialog(
                       context: context,
                       builder: (context) {
-                        return ListenableProvider<LectureProvider>(
-                            create: (context) => LectureProvider(),
-                            child: AddLectureDialog());
+                        return ListenableProvider<LectureDateProvider>(
+                            create: (context) => LectureDateProvider(),
+                            child: const AddLectureDialog());
                       });
                 },
-                icon: Icon(Icons.add),
+                icon: const Icon(Icons.add),
                 label: Text(translation.addLecture)),
           ],
         ),
@@ -53,7 +53,7 @@ class LectureInfoCardGridView extends StatelessWidget {
   final int crossAxisCount;
   final double childAspectRatio;
 
-  LectureInfoCardGridView(
+  const LectureInfoCardGridView(
       {Key? key, this.crossAxisCount = 4, this.childAspectRatio = 1.5})
       : super(key: key);
 
@@ -66,7 +66,7 @@ class LectureInfoCardGridView extends StatelessWidget {
       return Container();
     } else {
       return GridView.builder(
-        physics: NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: crossAxisCount,

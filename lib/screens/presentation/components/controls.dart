@@ -1,17 +1,13 @@
-import 'dart:typed_data';
-
-import 'package:crayon_management/providers/slides_provider.dart';
-import 'package:crayon_management/providers/pdf_provider.dart';
+import 'package:crayon_management/providers/slide_data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:pdf_render/pdf_render_widgets.dart';
-import 'package:provider/provider.dart';
+
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class Controls extends StatelessWidget {
   Controls({Key? key}) : super(key: key);
 
-  _launchURL(BuildContext context, PdfProvider currentSelectedPDF) {
+  _launchURL(BuildContext context, SlideDataProvider currentSelectedPDF) {
     ItemScrollController _scrollController = ItemScrollController();
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
@@ -69,7 +65,7 @@ class Controls extends StatelessWidget {
   Widget build(BuildContext context) {
     var translation = AppLocalizations.of(context);
     bool isScreenWide = MediaQuery.of(context).size.width >= 650;
-    PdfProvider? currentSelectedProvider;
+    SlideDataProvider? currentSelectedProvider;
     return Container();
   }
 }

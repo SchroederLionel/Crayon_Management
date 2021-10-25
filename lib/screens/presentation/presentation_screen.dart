@@ -1,4 +1,5 @@
 import 'package:crayon_management/datamodels/lecture/lecture.dart';
+import 'package:crayon_management/datamodels/lecture/lecture_snipped.dart';
 import 'package:crayon_management/providers/detailed_lecture_provider.dart';
 
 import 'package:crayon_management/providers/quiz_list_provider.dart';
@@ -10,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class PresentationScreen extends StatefulWidget {
-  final Lecture lecture;
+  final LectureSnipped lecture;
   const PresentationScreen({required this.lecture, Key? key}) : super(key: key);
 
   @override

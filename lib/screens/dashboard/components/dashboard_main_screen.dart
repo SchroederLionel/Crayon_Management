@@ -15,7 +15,7 @@ class DashboardMainScreen extends StatelessWidget {
       child: Column(
         children: [
           const Header(),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Row(

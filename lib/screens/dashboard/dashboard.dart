@@ -1,7 +1,7 @@
-import 'package:crayon_management/providers/menu_provider.dart';
+import 'package:crayon_management/providers/util_providers/menu_provider.dart';
 import 'package:crayon_management/responsive.dart';
 import 'package:crayon_management/screens/dashboard/components/dashboard_main_screen.dart';
-import 'package:crayon_management/screens/dashboard/components/side_menu.dart';
+import 'package:crayon_management/screens/dashboard/menu/side_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
