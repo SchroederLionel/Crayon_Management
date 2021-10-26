@@ -98,7 +98,6 @@ class RegistrationProvider extends ChangeNotifier {
     } else {
       isPasswordVerificationValid = true;
     }
-
     setIsValid();
   }
 

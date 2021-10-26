@@ -1,5 +1,6 @@
 import 'package:crayon_management/providers/login_registration_provider/registration_provider.dart';
 import 'package:crayon_management/services/authentication.dart';
+import 'package:crayon_management/services/validator_service.dart';
 import 'package:crayon_management/widgets/custom_text_form_field.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
@@ -83,13 +84,8 @@ class _SignUpState extends State<SignUp> {
                   children: [
                     CustomTextFormField(
                         isPassword: false,
-                        validator: (val) {
-                          if (!isEmail(val!)) {
-                            return translation.invalidEmail;
-                          } else {
-                            return null;
-                          }
-                        },
+                        validator: (email) =>
+                            ValidatorService.checkEmail(email, context),
                         onChanged: (String text) =>
                             registrationProvider.setEmail(text),
                         controller: _emailController,
@@ -97,13 +93,9 @@ class _SignUpState extends State<SignUp> {
                         labelText: translation.email),
                     CustomTextFormField(
                         isPassword: false,
-                        validator: (val) {
-                          if (!isByteLength(val!, 2)) {
-                            return translation.firstNameEmpty;
-                          } else {
-                            return null;
-                          }
-                        },
+                        validator: (text) =>
+                            ValidatorService.isStringLengthAbove2(
+                                text, context),
                         onChanged: (String text) =>
                             registrationProvider.setFirstName(text),
                         controller: _firstNameController,
@@ -111,13 +103,9 @@ class _SignUpState extends State<SignUp> {
                         labelText: translation.firstName),
                     CustomTextFormField(
                         isPassword: false,
-                        validator: (val) {
-                          if (!isByteLength(val!, 2)) {
-                            return translation.firstNameEmpty;
-                          } else {
-                            return null;
-                          }
-                        },
+                        validator: (text) =>
+                            ValidatorService.isStringLengthAbove2(
+                                text, context),
                         onChanged: (String text) =>
                             registrationProvider.setLastName(text),
                         controller: _lastNameController,
@@ -125,17 +113,8 @@ class _SignUpState extends State<SignUp> {
                         labelText: translation.lastName),
                     CustomTextFormField(
                         isPassword: true,
-                        validator: (value) {
-                          if (value!.trim().isEmpty) {
-                            return translation.required;
-                          }
-                          if (value.trim().length < 8) {
-                            return translation.passwordCheck;
-                          }
-                          // Return null if the entered password is valid
-
-                          return null;
-                        },
+                        validator: (password) =>
+                            ValidatorService.checkPassword(password, context),
                         onChanged: (String text) =>
                             registrationProvider.setPassword(text),
                         controller: _passwordController,
@@ -143,21 +122,11 @@ class _SignUpState extends State<SignUp> {
                         labelText: translation.password),
                     CustomTextFormField(
                         isPassword: true,
-                        validator: (value) {
-                          if (value!.trim().isEmpty) {
-                            return translation.required;
-                          }
-                          if (value.trim().length < 8) {
-                            return translation.passwordCheck;
-                          }
-                          if (_verificationPasswordController.text !=
-                              _passwordController.text) {
-                            return translation.passwordMatch;
-                          }
-
-                          // Return null if the entered password is valid
-                          return null;
-                        },
+                        validator: (verificationPassword) =>
+                            ValidatorService.checkVerificationPassword(
+                                _passwordController.text,
+                                verificationPassword,
+                                context),
                         onChanged: (String text) =>
                             registrationProvider.setVerificationPassword(text),
                         controller: _verificationPasswordController,

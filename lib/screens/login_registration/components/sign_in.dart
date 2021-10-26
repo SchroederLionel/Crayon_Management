@@ -1,6 +1,9 @@
+import 'package:crayon_management/providers/login_registration_provider/login_provider.dart';
 import 'package:crayon_management/providers/login_registration_provider/user_provider.dart';
 
 import 'package:crayon_management/services/authentication.dart';
+import 'package:crayon_management/services/validator_service.dart';
+import 'package:crayon_management/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:crayon_management/route/route.dart' as route;
 import 'package:provider/provider.dart';
@@ -35,6 +38,8 @@ class _SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
     var translation = AppLocalizations.of(context);
+    final LoginProvider loginProvider =
+        Provider.of<LoginProvider>(context, listen: false);
     final UserProvider userProvider =
         Provider.of<UserProvider>(context, listen: false);
     return Center(
@@ -62,66 +67,52 @@ class _SignInState extends State<SignIn> {
                 height: 10,
               ),
               Expanded(
-                child: Form(
-                  autovalidateMode: AutovalidateMode.always,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      TextFormField(
-                        validator: (val) =>
-                            !isEmail(val!) ? translation!.invalidEmail : null,
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    CustomTextFormField(
+                        validator: (email) =>
+                            ValidatorService.checkEmail(email, context),
+                        onChanged: (String email) =>
+                            loginProvider.setEmail(email),
                         controller: _emailController,
-                        style: Theme.of(context).textTheme.bodyText1,
-                        decoration: InputDecoration(
-                            prefixIcon: Icon(
-                              Icons.email,
-                              size: 18,
-                            ),
-                            border: UnderlineInputBorder(),
-                            labelText: translation!.email),
-                      ),
-                      TextFormField(
-                          validator: (value) {
-                            if (value!.trim().isEmpty) {
-                              return translation.required;
-                            }
-                            if (value.trim().length < 8) {
-                              return translation.passwordCheck;
-                            }
-                            // Return null if the entered password is valid
-                            return null;
-                          },
-                          controller: _passwordController,
-                          obscureText: true,
-                          style: Theme.of(context).textTheme.bodyText1,
-                          decoration: InputDecoration(
-                              prefixIcon: Icon(
-                                Icons.password,
-                                size: 18,
-                              ),
-                              border: UnderlineInputBorder(),
-                              labelText: translation.password)),
-                      ElevatedButton.icon(
-                          style: TextButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 14.0, vertical: 14.0)),
-                          onPressed: () async {
-                            await signInWithEmailPassword(_emailController.text,
-                                    _passwordController.text)
-                                .then((result) {
-                              if (result != null) {
-                                userProvider.setUserData(result);
-                                Navigator.pushNamed(context, route.dashboard);
-                              }
-                            }).catchError((error) {
-                              print('Login Error: $error');
-                            });
-                          },
-                          icon: Icon(Icons.login),
-                          label: Text(translation.signIn))
-                    ],
-                  ),
+                        icon: Icons.email,
+                        labelText: translation!.email,
+                        isPassword: false),
+                    CustomTextFormField(
+                        validator: (password) =>
+                            ValidatorService.checkPassword(password, context),
+                        onChanged: (String password) =>
+                            loginProvider.setPassword(password),
+                        controller: _passwordController,
+                        icon: Icons.password,
+                        labelText: translation.password,
+                        isPassword: true),
+                    Consumer<LoginProvider>(
+                        builder: (context, loginProvider, child) =>
+                            ElevatedButton.icon(
+                                style: TextButton.styleFrom(
+                                    backgroundColor: loginProvider.getColor(),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 14.0, vertical: 14.0)),
+                                onPressed: () async {
+                                  await signInWithEmailPassword(
+                                          _emailController.text,
+                                          _passwordController.text)
+                                      .then((result) {
+                                    if (result != null) {
+                                      userProvider.setUserData(result);
+                                      Navigator.pushNamed(
+                                          context, route.dashboard);
+                                    }
+                                  }).catchError((error) {
+                                    print('Login Error: $error');
+                                  });
+                                },
+                                icon: const Icon(Icons.login),
+                                label: Text(translation.signIn)))
+                  ],
                 ),
               ),
             ],

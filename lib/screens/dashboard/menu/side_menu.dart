@@ -1,5 +1,6 @@
 import 'package:crayon_management/providers/util_providers/theme_provider.dart';
 import 'package:crayon_management/screens/dashboard/menu/drawer_list_tile.dart';
+import 'package:crayon_management/screens/dashboard/menu/profile_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -34,7 +35,13 @@ class SideMenu extends StatelessWidget {
               DrawerListTile(
                 title: translation.profile,
                 icon: Icons.account_circle,
-                pressed: () {},
+                pressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return ProfileDialog();
+                      });
+                },
               ),
               DrawerListTile(
                 title: translation.brightness,
