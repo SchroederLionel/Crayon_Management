@@ -72,7 +72,7 @@ class _AddLectureDialogState extends State<AddLectureDialog> {
           create: (context) => TimePickerProvider(),
           child: Builder(
             builder: (context) {
-              return Container(
+              return SizedBox(
                 height: 630,
                 width: 550,
                 child: Column(
@@ -91,11 +91,11 @@ class _AddLectureDialogState extends State<AddLectureDialog> {
                                 style: Theme.of(context).textTheme.bodyText1,
                                 controller: _titleController,
                                 decoration: InputDecoration(
-                                    prefixIcon: Icon(
+                                    prefixIcon: const Icon(
                                       Icons.title,
                                       size: 18,
                                     ),
-                                    border: UnderlineInputBorder(),
+                                    border: const UnderlineInputBorder(),
                                     labelText: translation.title))),
                         const SizedBox(
                           height: 14,
@@ -154,7 +154,7 @@ class _AddLectureDialogState extends State<AddLectureDialog> {
                                   }).toList()),
                             ),
                             Container(
-                              margin: EdgeInsets.only(top: 25),
+                              margin: const EdgeInsets.only(top: 25),
                               child: DropdownButton<String>(
                                   value: currentLectureType,
                                   onChanged: (String? type) {
@@ -194,7 +194,7 @@ class _AddLectureDialogState extends State<AddLectureDialog> {
                             ),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 14,
                         ),
                       ],

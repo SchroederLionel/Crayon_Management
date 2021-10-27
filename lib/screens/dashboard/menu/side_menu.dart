@@ -1,4 +1,6 @@
-import 'package:crayon_management/providers/util_providers/theme_provider.dart';
+import 'package:crayon_management/datamodels/user/user_data.dart';
+import 'package:crayon_management/providers/login_registration_provider/user_provider.dart';
+
 import 'package:crayon_management/screens/dashboard/menu/drawer_list_tile.dart';
 import 'package:crayon_management/screens/dashboard/menu/profile_dialog.dart';
 import 'package:crayon_management/screens/dashboard/menu/settings_dialog.dart';
@@ -14,6 +16,7 @@ class SideMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var translation = AppLocalizations.of(context);
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
     return Drawer(
       elevation: 16,
       child: Container(
@@ -39,8 +42,13 @@ class SideMenu extends StatelessWidget {
                   showDialog(
                       context: context,
                       builder: (BuildContext context) {
-                        return ProfileDialog();
-                      });
+                        return const ProfileDialog();
+                      }).then((value) {
+                    if (value is UserData) {
+                      print('KEKW');
+                      userProvider.updateUserData(value);
+                    }
+                  });
                 },
               ),
               DrawerListTile(

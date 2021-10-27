@@ -47,13 +47,34 @@ class UserData {
         phoneNumber: phoneNumber);
   }
 
+  // lectureDates.map((date) => date.toJson()
   Map<String, dynamic> toJson() => {
         'uid': uid,
         'email': email,
         'firstName': firstName,
-        'myLectures': myLectures,
+        'myLectures':
+            myLectures!.map((lectureSnipped) => lectureSnipped.toJson()),
         'lastName': lastName,
         'office': office,
         'phoneNumber': phoneNumber,
       };
+
+  Map<String, dynamic> toJsonWithoutLectures() => {
+        'uid': uid,
+        'email': email,
+        'firstName': firstName,
+        'lastName': lastName,
+        'office': office,
+        'phoneNumber': phoneNumber,
+      };
+
+  @override
+  bool operator ==(other) {
+    return (other is UserData) &&
+        other.email == email &&
+        other.firstName == firstName &&
+        other.lastName == lastName &&
+        other.office == office &&
+        other.phoneNumber == phoneNumber;
+  }
 }

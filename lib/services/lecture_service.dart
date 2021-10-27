@@ -17,7 +17,8 @@ class LectureService {
         .set(lecture.toJson());
 
     List<Map> list = [];
-    list.add(lecture.getLectureSnipped.toJson());
+    LectureSnipped snipped = lecture.getLectureSnipped;
+    list.add(snipped.toJson());
     await FirebaseFirestore.instance
         .collection('users')
         .doc(lecture.uid)
@@ -56,7 +57,6 @@ class LectureService {
   }
 
   static Future<Lecture?> getLecture(String lectureId) async {
-    print('Get one Lecture');
     Lecture? lecture;
 
     var lectureDocument = await FirebaseFirestore.instance

@@ -94,3 +94,7 @@ Future<String> signOut() async {
   userEmail = null;
   return 'User signed out';
 }
+
+Future<String> changePassword() async {
+  return 's';
+}

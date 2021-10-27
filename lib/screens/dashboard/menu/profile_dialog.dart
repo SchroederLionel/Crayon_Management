@@ -1,7 +1,10 @@
+import 'package:crayon_management/datamodels/user/user_data.dart';
+import 'package:crayon_management/providers/login_registration_provider/user_provider.dart';
 import 'package:crayon_management/services/validator_service.dart';
 import 'package:crayon_management/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 class ProfileDialog extends StatefulWidget {
   const ProfileDialog({Key? key}) : super(key: key);
@@ -11,27 +14,32 @@ class ProfileDialog extends StatefulWidget {
 }
 
 class _ProfileDialogState extends State<ProfileDialog> {
+  late UserData currentUserdata;
   late TextEditingController _firstNameController;
   late TextEditingController _lastNameController;
   late TextEditingController _emailController;
   late TextEditingController _personalRoomController;
   late TextEditingController _phoneNumerController;
-  late TextEditingController _currentPassword;
-
-  late TextEditingController _newPassword;
-  late TextEditingController _newVerificationPassword;
+  late TextEditingController _newPasswordController;
+  late TextEditingController _newVerificationPasswordController;
 
   @override
   void initState() {
     super.initState();
-    _firstNameController = TextEditingController();
-    _lastNameController = TextEditingController();
-    _emailController = TextEditingController();
-    _personalRoomController = TextEditingController();
-    _phoneNumerController = TextEditingController();
-    _currentPassword = TextEditingController();
-    _newPassword = TextEditingController();
-    _newVerificationPassword = TextEditingController();
+
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    currentUserdata = userProvider.getUserData;
+    _firstNameController =
+        TextEditingController(text: userProvider.getFirstName);
+    _lastNameController = TextEditingController(text: userProvider.getLastName);
+    _emailController = TextEditingController(text: userProvider.getEmail);
+    _personalRoomController =
+        TextEditingController(text: userProvider.getOffice);
+    _phoneNumerController =
+        TextEditingController(text: userProvider.getPhoneNumber);
+
+    _newPasswordController = TextEditingController();
+    _newVerificationPasswordController = TextEditingController();
   }
 
   @override
@@ -41,9 +49,8 @@ class _ProfileDialogState extends State<ProfileDialog> {
     _emailController.dispose();
     _personalRoomController.dispose();
     _phoneNumerController.dispose();
-    _currentPassword.dispose();
-    _newPassword.dispose();
-    _newVerificationPassword.dispose();
+    _newPasswordController.dispose();
+    _newVerificationPasswordController.dispose();
     super.dispose();
   }
 
@@ -55,27 +62,32 @@ class _ProfileDialogState extends State<ProfileDialog> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       elevation: 0,
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      actions: [
-        ElevatedButton(
-            style: ButtonStyle(
-                backgroundColor:
-                    MaterialStateProperty.all<Color>(Colors.black26)),
-            onPressed: () => Navigator.pop(context),
-            child: Text(translation!.cancel)),
-        ElevatedButton(onPressed: () {}, child: Text(translation.upload))
-      ],
       content: SizedBox(
           width: 550,
           child: Padding(
-            padding: const EdgeInsets.all(24.0),
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  translation.profile,
-                  style: Theme.of(context).textTheme.headline1,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      translation!.profile,
+                      style: Theme.of(context).textTheme.headline1,
+                    ),
+                    IconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        icon: const Icon(
+                          Icons.close,
+                          color: Colors.red,
+                        ))
+                  ],
                 ),
+                const SizedBox(height: 14),
                 CustomTextFormField(
                     validator: (text) =>
                         ValidatorService.isStringLengthAbove2(text, context),
@@ -113,42 +125,75 @@ class _ProfileDialogState extends State<ProfileDialog> {
                         ValidatorService.isStringLengthAbove2(text, context),
                     onChanged: (String text) => () {},
                     controller: _phoneNumerController,
-                    icon: Icons.room,
+                    icon: Icons.phone,
                     labelText: translation.phoneNumber,
                     isPassword: false),
+                const SizedBox(
+                  height: 14,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                        onPressed: () {
+                          UserData newUserData = UserData(
+                              uid: currentUserdata.uid,
+                              email: _emailController.text,
+                              firstName: _firstNameController.text,
+                              lastName: _lastNameController.text,
+                              myLectures: currentUserdata.myLectures,
+                              office: _personalRoomController.text.isEmpty
+                                  ? null
+                                  : _personalRoomController.text,
+                              phoneNumber: _phoneNumerController.text.isEmpty
+                                  ? null
+                                  : _phoneNumerController.text);
+
+                          if (newUserData == currentUserdata) {
+                            Navigator.pop(context);
+                          } else {
+                            Navigator.pop(context, newUserData);
+                          }
+                        },
+                        child: Text(translation.upload))
+                  ],
+                ),
                 Container(
-                    width: 250,
                     height: 25,
+                    width: 250,
                     decoration: BoxDecoration(
                       border: Border(
                           bottom: BorderSide(
-                              width: 2.0,
+                              width: 3.0,
                               color: Theme.of(context).primaryColor)),
                     )),
                 CustomTextFormField(
                     validator: (text) =>
-                        ValidatorService.isStringLengthAbove2(text, context),
+                        ValidatorService.checkPassword(text, context),
                     onChanged: (String text) => () {},
-                    controller: _currentPassword,
-                    icon: Icons.password,
-                    labelText: translation.currentPassword,
-                    isPassword: true),
-                CustomTextFormField(
-                    validator: (text) =>
-                        ValidatorService.isStringLengthAbove2(text, context),
-                    onChanged: (String text) => () {},
-                    controller: _newPassword,
+                    controller: _newPasswordController,
                     icon: Icons.password,
                     labelText: translation.newPassword,
                     isPassword: true),
                 CustomTextFormField(
                     validator: (text) =>
-                        ValidatorService.isStringLengthAbove2(text, context),
+                        ValidatorService.checkVerificationPassword(
+                            text, _newPasswordController.text, context),
                     onChanged: (String text) => () {},
-                    controller: _newPassword,
+                    controller: _newVerificationPasswordController,
                     icon: Icons.password,
                     labelText: translation.newVerificationPass,
                     isPassword: true),
+                const SizedBox(
+                  height: 14,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                        onPressed: () {}, child: Text('Change Password'))
+                  ],
+                ),
               ],
             ),
           )),
