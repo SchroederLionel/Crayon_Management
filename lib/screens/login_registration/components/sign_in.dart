@@ -90,28 +90,38 @@ class _SignInState extends State<SignIn> {
                         labelText: translation.password,
                         isPassword: true),
                     Consumer<LoginProvider>(
-                        builder: (context, loginProvider, child) =>
-                            ElevatedButton.icon(
-                                style: TextButton.styleFrom(
-                                    backgroundColor: loginProvider.getColor(),
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 14.0, vertical: 14.0)),
-                                onPressed: () async {
-                                  await signInWithEmailPassword(
-                                          _emailController.text,
-                                          _passwordController.text)
-                                      .then((result) {
-                                    if (result != null) {
-                                      userProvider.setUserData(result);
-                                      Navigator.pushNamed(
-                                          context, route.dashboard);
-                                    }
-                                  }).catchError((error) {
-                                    print('Login Error: $error');
-                                  });
-                                },
-                                icon: const Icon(Icons.login),
-                                label: Text(translation.signIn)))
+                        builder: (context, loginProvider, child) {
+                      if (!loginProvider.getIsloading) {
+                        return ElevatedButton.icon(
+                            style: TextButton.styleFrom(
+                                backgroundColor: loginProvider.getColor(),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 14.0, vertical: 14.0)),
+                            onPressed: () async {
+                              if (loginProvider.getIsValid) {
+                                loginProvider.changIsLoading();
+                                await signInWithEmailPassword(
+                                        _emailController.text,
+                                        _passwordController.text)
+                                    .then((result) {
+                                  if (result != null) {
+                                    loginProvider.changIsLoading();
+                                    userProvider.setUserData(result);
+                                    Navigator.pushNamed(
+                                        context, route.dashboard);
+                                  }
+                                }).catchError((error) {
+                                  loginProvider.changIsLoading();
+                                  print('Login Error: $error');
+                                });
+                              }
+                            },
+                            icon: const Icon(Icons.login),
+                            label: Text(translation.signIn));
+                      } else {
+                        return const CircularProgressIndicator();
+                      }
+                    })
                   ],
                 ),
               ),

@@ -52,6 +52,12 @@
     "ends":"Prend fin",
     "lastSlide":"Dernière diapositive",
     "dates":"Rendez-vous",
-    "open":"Ouvrir"
+    "open":"Ouvrir",
+    "room":"Bureau",
+    "phoneNumber":"Numéro de téléphone",
+    "currentPassword":"Mot de passe actuel",
+    "newPassword":"Nouveau mot de passe",
+    "newVerificationPass":"Mot de passe de vérification",
+    "settings":"Paramètres"
     
 }

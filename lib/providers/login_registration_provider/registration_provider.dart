@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:validators/validators.dart';
 
 class RegistrationProvider extends ChangeNotifier {
+  bool _isLoading = false;
   bool _isValid = false;
   bool isEmailValid = false;
   bool isFirstNameValid = false;
@@ -15,6 +16,13 @@ class RegistrationProvider extends ChangeNotifier {
   late String _lastName;
   late String _password;
   late String _verificationPassword;
+
+  changIsLoading() {
+    _isLoading = !_isLoading;
+    notifyListeners();
+  }
+
+  get getIsLoading => _isLoading;
 
   setIsValid() {
     if (isEmailValid &&

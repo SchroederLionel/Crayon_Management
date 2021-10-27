@@ -1,6 +1,7 @@
 import 'package:crayon_management/providers/util_providers/theme_provider.dart';
 import 'package:crayon_management/screens/dashboard/menu/drawer_list_tile.dart';
 import 'package:crayon_management/screens/dashboard/menu/profile_dialog.dart';
+import 'package:crayon_management/screens/dashboard/menu/settings_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -12,7 +13,6 @@ class SideMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
     var translation = AppLocalizations.of(context);
     return Drawer(
       elevation: 16,
@@ -44,10 +44,13 @@ class SideMenu extends StatelessWidget {
                 },
               ),
               DrawerListTile(
-                title: translation.brightness,
-                icon: Icons.lightbulb_outline,
+                title: translation.settings,
+                icon: Icons.settings,
                 pressed: () {
-                  themeProvider.swapTheme();
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) =>
+                          const SettingsDialog());
                 },
               ),
               DrawerListTile(

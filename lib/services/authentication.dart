@@ -92,6 +92,5 @@ Future<String> signOut() async {
 
   uid = null;
   userEmail = null;
-  print('Logged Out');
   return 'User signed out';
 }

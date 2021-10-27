@@ -34,7 +34,6 @@ class _SignUpState extends State<SignUp> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _emailController.dispose();
     _firstNameController.dispose();
     _lastNameController.dispose();
@@ -133,8 +132,9 @@ class _SignUpState extends State<SignUp> {
                         icon: Icons.password,
                         labelText: translation.password),
                     Consumer<RegistrationProvider>(
-                        builder: (context, regiProv, child) =>
-                            ElevatedButton.icon(
+                        builder: (context, regiProv, child) => !regiProv
+                                .getIsLoading
+                            ? ElevatedButton.icon(
                                 style: TextButton.styleFrom(
                                     backgroundColor:
                                         registrationProvider.getColor(),
@@ -142,12 +142,14 @@ class _SignUpState extends State<SignUp> {
                                         horizontal: 14.0, vertical: 14.0)),
                                 onPressed: () async {
                                   if (regiProv.getIsValid) {
+                                    registrationProvider.changIsLoading();
                                     await registerWithEmailPassword(
                                       _emailController.text,
                                       registrationProvider.getPassword,
                                       _firstNameController.text,
                                       _lastNameController.text,
                                     ).then((result) {
+                                      registrationProvider.changIsLoading();
                                       if (result != null) {
                                         widget.cardKey.currentState!
                                             .toggleCard();
@@ -164,6 +166,7 @@ class _SignUpState extends State<SignUp> {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(snackBar);
                                       } else {
+                                        registrationProvider.changIsLoading();
                                         final snackBar = SnackBar(
                                             content: const Text(
                                                 'Account alreadExists!'),
@@ -178,13 +181,15 @@ class _SignUpState extends State<SignUp> {
                                             .showSnackBar(snackBar);
                                       }
                                     }).catchError((error) {
+                                      registrationProvider.changIsLoading();
                                       print(error);
                                       print('error while registrting');
                                     });
                                   }
                                 },
                                 icon: const Icon(Icons.login),
-                                label: Text(translation.register)))
+                                label: Text(translation.register))
+                            : CircularProgressIndicator())
                   ],
                 ),
               ),

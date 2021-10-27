@@ -52,5 +52,11 @@
     "ends":"Ends",
     "lastSlide":"Last Slide",
     "dates":"Dates",
-    "open":"Open"
+    "open":"Open",
+    "room":"Office",
+    "phoneNumber":"Phone number",
+    "currentPassword":"Current password",
+    "newPassword":"New password",
+    "newVerificationPass":"Verification password",
+    "settings":"Settings"
 }

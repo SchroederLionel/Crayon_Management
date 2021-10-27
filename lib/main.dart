@@ -34,7 +34,8 @@ void main() async {
       ChangeNotifierProvider<PresentationProvider>(
         create: (BuildContext context) => PresentationProvider(),
       ),
-      ChangeNotifierProvider(create: (BuildContext context) => UserProvider())
+      ChangeNotifierProvider<UserProvider>(
+          create: (BuildContext context) => UserProvider())
     ],
     child: MyApp(),
   ));

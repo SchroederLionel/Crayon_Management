@@ -27,7 +27,6 @@ class CustomTextFormField extends StatelessWidget {
         validator: validator,
         controller: controller,
         onChanged: onChanged,
-        initialValue: controller.text,
         style: Theme.of(context).textTheme.bodyText1,
         decoration: InputDecoration(
             prefix: Icon(

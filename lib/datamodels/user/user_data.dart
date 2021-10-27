@@ -6,7 +6,9 @@ class UserData {
   String uid; // non-nullable
   String email; // non-nullable
   String firstName; // non-nullable
-  String lastName; // non-nullable
+  String lastName; //nullable
+  String? office; //nullable
+  String? phoneNumber; // non-nullable
   List<LectureSnipped>? myLectures; //nullable
 
   UserData(
@@ -14,6 +16,8 @@ class UserData {
       required this.email,
       required this.firstName,
       required this.lastName,
+      this.office,
+      this.phoneNumber,
       this.myLectures});
 
   factory UserData.fromJson(Map<String, dynamic>? json) {
@@ -21,6 +25,8 @@ class UserData {
     final email = json['email'] as String;
     final firstName = json['firstName'] as String;
     final lastName = json['lastName'] as String;
+    final office = json['office'];
+    final phoneNumber = json['phoneNumber'];
     // Cast to a nullable list as the Lectures may be missing.
     final lecturesData = json['myLectures'] as List<dynamic>?;
 
@@ -36,13 +42,18 @@ class UserData {
         email: email,
         firstName: firstName,
         lastName: lastName,
-        myLectures: lectures);
+        myLectures: lectures,
+        office: office,
+        phoneNumber: phoneNumber);
   }
 
   Map<String, dynamic> toJson() => {
         'uid': uid,
         'email': email,
         'firstName': firstName,
+        'myLectures': myLectures,
         'lastName': lastName,
+        'office': office,
+        'phoneNumber': phoneNumber,
       };
 }
