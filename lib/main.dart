@@ -1,10 +1,11 @@
 import 'package:crayon_management/providers/login_registration_provider/user_provider.dart';
+import 'package:crayon_management/providers/presentation/presentation_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'package:crayon_management/Custom_scroll_behavior.dart';
 import 'package:crayon_management/providers/util_providers/locale_provider.dart';
 import 'package:crayon_management/providers/util_providers/menu_provider.dart';
-import 'package:crayon_management/providers/presentation_provider.dart';
+
 import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:flutter/material.dart';
@@ -30,9 +31,6 @@ void main() async {
       ),
       ChangeNotifierProvider<LocaleProvider>(
         create: (BuildContext context) => LocaleProvider(),
-      ),
-      ChangeNotifierProvider<PresentationProvider>(
-        create: (BuildContext context) => PresentationProvider(),
       ),
       ChangeNotifierProvider<UserProvider>(
           create: (BuildContext context) => UserProvider())

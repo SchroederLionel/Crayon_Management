@@ -1,7 +1,7 @@
 import 'package:crayon_management/datamodels/confirmation_dialog/confirmation_dialog_data.dart';
 import 'package:crayon_management/datamodels/lecture/lecture.dart';
 
-import 'package:crayon_management/providers/detailed_lecture_provider.dart';
+import 'package:crayon_management/providers/lecture/detailed_lecture_provider.dart';
 
 import 'package:crayon_management/providers/slide_data_provider.dart';
 
@@ -11,15 +11,15 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class Powerpoints extends StatefulWidget {
+class SlidesComponent extends StatefulWidget {
   final Lecture lecture;
-  const Powerpoints({required this.lecture, Key? key}) : super(key: key);
+  const SlidesComponent({required this.lecture, Key? key}) : super(key: key);
 
   @override
-  State<Powerpoints> createState() => _PowerpointsState();
+  State<SlidesComponent> createState() => _SlidesComponentState();
 }
 
-class _PowerpointsState extends State<Powerpoints> {
+class _SlidesComponentState extends State<SlidesComponent> {
   late Lecture lecture;
 
   @override

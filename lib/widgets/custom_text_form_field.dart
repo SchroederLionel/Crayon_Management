@@ -26,6 +26,7 @@ class CustomTextFormField extends StatelessWidget {
         obscureText: isPassword,
         validator: validator,
         controller: controller,
+        textInputAction: TextInputAction.next,
         onChanged: onChanged,
         style: Theme.of(context).textTheme.bodyText1,
         decoration: InputDecoration(

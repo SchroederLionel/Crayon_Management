@@ -7,7 +7,7 @@ import 'package:crayon_management/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:crayon_management/route/route.dart' as route;
 import 'package:provider/provider.dart';
-import 'package:validators/validators.dart';
+
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SignIn extends StatefulWidget {

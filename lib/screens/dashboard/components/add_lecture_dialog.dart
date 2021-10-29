@@ -1,6 +1,6 @@
 import 'package:crayon_management/datamodels/lecture/lecture.dart';
 import 'package:crayon_management/datamodels/lecture/lecture_date.dart';
-import 'package:crayon_management/providers/lecture_date_provider.dart';
+import 'package:crayon_management/providers/lecture/lecture_date_provider.dart';
 import 'package:crayon_management/providers/login_registration_provider/user_provider.dart';
 
 import 'package:crayon_management/providers/time_picker_provider.dart';

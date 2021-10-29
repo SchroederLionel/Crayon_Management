@@ -1,5 +1,6 @@
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html';
+import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -44,16 +45,19 @@ class LectureService {
     final destination = 'slides/${slide.fileId}';
     try {
       final ref = FirebaseStorage.instance.ref(destination);
+      await ref.putBlob(file);
+      String url = await ref.getDownloadURL();
+      slide.setUrl(url);
+      List<Map> list = [];
+      list.add(slide.toJson());
 
-      ref.putBlob(file);
-    } on FirebaseException catch (e) {}
-
-    List<Map> list = [];
-    list.add(slide.toJson());
-    await FirebaseFirestore.instance
-        .collection('lectures')
-        .doc(lectureId)
-        .update({'slides': FieldValue.arrayUnion(list)});
+      await FirebaseFirestore.instance
+          .collection('lectures')
+          .doc(lectureId)
+          .update({'slides': FieldValue.arrayUnion(list)});
+    } on FirebaseException catch (e) {
+      print(e);
+    }
   }
 
   static Future<Lecture?> getLecture(String lectureId) async {
@@ -69,6 +73,13 @@ class LectureService {
     }
 
     return lecture;
+  }
+
+  static Future<Uint8List?> getSilde(String fileName) async {
+    return FirebaseStorage.instance
+        .refFromURL('gs://crayon-33cdc.appspot.com/slides')
+        .child(fileName)
+        .getData();
   }
 
   static void removeSlideFromLecture(String lectureId, Slide slide) async {

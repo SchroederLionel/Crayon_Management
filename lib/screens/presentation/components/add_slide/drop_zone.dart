@@ -2,7 +2,6 @@ import 'dart:html';
 
 import 'package:crayon_management/datamodels/dropped_file.dart';
 import 'package:crayon_management/providers/slide_data_provider.dart';
-import 'package:crayon_management/services/lecture_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dropzone/flutter_dropzone.dart';
 import 'package:provider/provider.dart';
@@ -48,8 +47,9 @@ class _DropZoneState extends State<DropZone> {
         ElevatedButton(
             onPressed: () {
               if (pdfProvider.getTitle.length >= 4 &&
-                  pdfProvider.getDroppedFile != null)
+                  pdfProvider.getDroppedFile != null) {
                 Navigator.pop(context, pdfProvider);
+              }
             },
             child: Text(translation.upload))
       ],
@@ -83,7 +83,7 @@ class _DropZoneState extends State<DropZone> {
                               Icons.book_rounded,
                               size: 18,
                             ),
-                            border: UnderlineInputBorder(),
+                            border: const UnderlineInputBorder(),
                             labelText: translation.pdfTitle),
                       ),
                     ),

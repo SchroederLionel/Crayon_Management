@@ -1,10 +1,11 @@
 import 'package:crayon_management/datamodels/lecture/lecture.dart';
 import 'package:crayon_management/datamodels/lecture/lecture_snipped.dart';
-import 'package:crayon_management/providers/detailed_lecture_provider.dart';
+import 'package:crayon_management/providers/lecture/detailed_lecture_provider.dart';
 
 import 'package:crayon_management/providers/quiz_list_provider.dart';
+import 'package:crayon_management/screens/presentation/components/controls.dart';
 
-import 'package:crayon_management/screens/presentation/components/powerpoints.dart';
+import 'package:crayon_management/screens/presentation/components/slides_component.dart';
 import 'package:crayon_management/screens/presentation/components/quiz.dart';
 import 'package:flutter/material.dart';
 
@@ -57,7 +58,19 @@ class _PresentationScreenState extends State<PresentationScreen> {
               const SizedBox(
                 height: 14,
               ),
-              //  Controls(),
+              Consumer<DetailedLectureProvider>(
+                builder: (context, detailedLecture, child) {
+                  if (detailedLecture.lecture == null) {
+                    return Container();
+                  }
+                  if (detailedLecture.lecture!.slides.isNotEmpty) {
+                    return Controls(
+                      slides: detailedLecture.lecture!.slides,
+                    );
+                  }
+                  return Container();
+                },
+              ),
               const SizedBox(
                 height: 14,
               ),
@@ -68,11 +81,10 @@ class _PresentationScreenState extends State<PresentationScreen> {
               const SizedBox(
                 height: 14,
               ),
-
               Consumer<DetailedLectureProvider>(
                   builder: (context, lectureProvider, child) {
                 if (lectureProvider.lecture != null) {
-                  return Powerpoints(
+                  return SlidesComponent(
                     lecture: lectureProvider.lecture!,
                   );
                 }
