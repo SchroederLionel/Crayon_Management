@@ -1,9 +1,9 @@
 import 'package:crayon_management/datamodels/lecture/lecture.dart';
 import 'package:crayon_management/datamodels/lecture/lecture_date.dart';
 import 'package:crayon_management/providers/lecture/lecture_date_provider.dart';
+import 'package:crayon_management/providers/lecture/time_picker_provider.dart';
 import 'package:crayon_management/providers/login_registration_provider/user_provider.dart';
 
-import 'package:crayon_management/providers/time_picker_provider.dart';
 import 'package:crayon_management/services/lecture_service.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:crayon_management/screens/dashboard/components/time_picker.dart';
@@ -216,33 +216,42 @@ class _AddLectureDialogState extends State<AddLectureDialog> {
                         },
                         icon: Icon(Icons.add),
                         label: Text('Add time interval')),
+                    const SizedBox(
+                      height: 14,
+                    ),
                     Flexible(
                       child: Consumer<LectureDateProvider>(
                         builder: (context, lecture_info, child) {
                           if (lecture_info.getLectureLength != 0) {
                             return ListView.builder(
+                              shrinkWrap: true,
                               itemCount: lecture_info.getLectureLength,
                               itemBuilder: (context, index) {
-                                return Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Text(lecture_info
-                                        .getLectureDate(index)
-                                        .room),
-                                    Text(
-                                        lecture_info.getLectureDate(index).day),
-                                    Text(lecture_info
-                                        .getLectureDate(index)
-                                        .startingTime),
-                                    Text(lecture_info
-                                        .getLectureDate(index)
-                                        .endingTime),
-                                    Text(lecture_info
-                                        .getLectureDate(index)
-                                        .type
-                                        .toString())
-                                  ],
+                                return Card(
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Text(lecture_info
+                                          .getLectureDate(index)
+                                          .room),
+                                      Text(lecture_info
+                                          .getLectureDate(index)
+                                          .day),
+                                      Text(lecture_info
+                                          .getLectureDate(index)
+                                          .startingTime),
+                                      Text(lecture_info
+                                          .getLectureDate(index)
+                                          .endingTime),
+                                      Text(lecture_info
+                                          .getLectureDate(index)
+                                          .type
+                                          .toString())
+                                    ],
+                                  ),
                                 );
                               },
                             );

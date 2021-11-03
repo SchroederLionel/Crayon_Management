@@ -1,4 +1,4 @@
-import 'package:crayon_management/providers/time_picker_provider.dart';
+import 'package:crayon_management/providers/lecture/time_picker_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

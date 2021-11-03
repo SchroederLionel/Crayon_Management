@@ -109,6 +109,8 @@ class _SignInState extends State<SignIn> {
                                     userProvider.setUserData(result);
                                     Navigator.pushNamed(
                                         context, route.dashboard);
+                                  } else {
+                                    loginProvider.changIsLoading();
                                   }
                                 }).catchError((error) {
                                   loginProvider.changIsLoading();

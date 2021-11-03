@@ -31,8 +31,8 @@ class DashboardMainScreen extends StatelessWidget {
                     ),
                     Responsive(
                         mobile: LectureInfoCardGridView(
-                          crossAxisCount: _size.width < 650 ? 1 : 2,
-                          childAspectRatio: _size.width < 650 ? 1.1 : 1,
+                          crossAxisCount: _size.width < 600 ? 1 : 2,
+                          childAspectRatio: _size.width < 650 ? 1.5 : 1.35,
                         ),
                         tablet: const LectureInfoCardGridView(
                           crossAxisCount: 3,

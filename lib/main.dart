@@ -6,8 +6,6 @@ import 'package:crayon_management/Custom_scroll_behavior.dart';
 import 'package:crayon_management/providers/util_providers/locale_provider.dart';
 import 'package:crayon_management/providers/util_providers/menu_provider.dart';
 
-import 'package:firebase_storage/firebase_storage.dart';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

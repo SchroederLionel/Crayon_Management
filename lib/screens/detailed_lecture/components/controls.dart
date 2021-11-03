@@ -1,55 +1,42 @@
 import 'dart:html';
-import 'dart:typed_data';
+import 'package:crayon_management/datamodels/lecture/lecture.dart';
 import 'package:crayon_management/datamodels/lecture/slide.dart';
-import 'package:crayon_management/providers/presentation/presentation_provider.dart';
-import 'package:crayon_management/screens/presentation/components/dialog_presentation/dialog_presentation.dart';
-
+import 'package:crayon_management/datamodels/route_arguments/presentation_screen_argument.dart';
+import 'package:crayon_management/route/route.dart' as route;
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'package:provider/provider.dart';
+class Controls extends StatefulWidget {
+  final Lecture lecture;
+  const Controls({required this.lecture, Key? key}) : super(key: key);
 
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+  @override
+  State<Controls> createState() => _ControlsState();
+}
 
-class Controls extends StatelessWidget {
-  final List<Slide> slides;
-  Controls({required this.slides, Key? key}) : super(key: key);
+class _ControlsState extends State<Controls> {
+  late Slide currentSlide;
 
-  _launchURL(BuildContext context, String fileName) {
-    ItemScrollController _scrollController = ItemScrollController();
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-
-    showGeneralDialog(
-        barrierColor: Colors.black,
-        context: context,
-        pageBuilder: (_, __, ___) {
-          return Material(
-            child: ListenableProvider<PresentationProvider>(
-              create: (context) => PresentationProvider(),
-              child: DialogPresentation(
-                fileName: fileName,
-              ),
-            ),
-          );
-        });
+  initState() {
+    currentSlide = widget.lecture.slides.first;
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     var translation = AppLocalizations.of(context);
     bool isScreenWide = MediaQuery.of(context).size.width >= 650;
-    String currentfileName = slides.first.fileId;
+
     return Flex(
       direction: isScreenWide ? Axis.horizontal : Axis.vertical,
       children: [
-        slides.isEmpty
+        widget.lecture.slides.isEmpty
             ? Container()
             : Row(
                 children: [
                   DropdownButton<Slide>(
-                      value: slides.first,
+                      value: currentSlide,
                       icon: const Icon(Icons.arrow_drop_down),
                       iconSize: 18,
                       elevation: 16,
@@ -59,9 +46,12 @@ class Controls extends StatelessWidget {
                         color: Colors.blueAccent,
                       ),
                       onChanged: (Slide? file) {
-                        currentfileName = file!.fileId;
+                        setState(() {
+                          currentSlide = file!;
+                        });
                       },
-                      items: slides.map<DropdownMenuItem<Slide>>((Slide slide) {
+                      items: widget.lecture.slides
+                          .map<DropdownMenuItem<Slide>>((Slide slide) {
                         return DropdownMenuItem<Slide>(
                           value: slide,
                           child: Text(slide.title),
@@ -71,7 +61,11 @@ class Controls extends StatelessWidget {
                     width: 20,
                   ),
                   ElevatedButton.icon(
-                      onPressed: () => _launchURL(context, currentfileName),
+                      onPressed: () => Navigator.pushNamed(
+                          context, route.presentation,
+                          arguments: PresentationScreenArgument(
+                              lecture: widget.lecture,
+                              fileId: currentSlide.fileId)),
                       icon: const Icon(Icons.open_in_browser),
                       label: Text(translation!.openSlide)),
                 ],

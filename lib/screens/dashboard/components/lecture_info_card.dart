@@ -33,9 +33,6 @@ class LectureInfoCard extends StatelessWidget {
             const SizedBox(
               height: 14.0,
             ),
-            const SizedBox(
-              height: 14.0,
-            ),
             Text(
               translation!.dates,
               style: Theme.of(context).textTheme.bodyText1,
@@ -45,7 +42,7 @@ class LectureInfoCard extends StatelessWidget {
             ),
             Expanded(
               child: ListView.builder(
-                padding: const EdgeInsets.only(bottom: 15),
+                padding: const EdgeInsets.only(bottom: 5),
                 itemCount: lecture.lectureDates.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Container(
@@ -58,46 +55,40 @@ class LectureInfoCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.all(2.0),
+                        Container(
+                          margin: const EdgeInsets.only(left: 4.0),
                           child: Text(
                             lecture.lectureDates[index].room,
                             style: Theme.of(context).textTheme.bodyText1,
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(2.0),
+                        SizedBox(
+                          width: 60,
                           child: Text(
                             lecture.lectureDates[index].day,
+                            overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.bodyText1,
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(2.0),
+                        Text(
+                          lecture.lectureDates[index].startingTime,
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.bodyText1,
+                        ),
+                        Text(
+                          lecture.lectureDates[index].endingTime,
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.bodyText1,
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(right: 4.0),
+                          width: 50,
                           child: Text(
-                            lecture.lectureDates[index].startingTime,
+                            lecture.lectureDates[index].type,
+                            overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.bodyText1,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(2.0),
-                          child: Text(
-                            lecture.lectureDates[index].endingTime,
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.bodyText1,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(2.0),
-                          child: Container(
-                            width: 100,
-                            child: Text(
-                              lecture.lectureDates[index].type,
-                              textAlign: TextAlign.center,
-                              style: Theme.of(context).textTheme.bodyText1,
-                            ),
                           ),
                         )
                       ],
@@ -106,7 +97,9 @@ class LectureInfoCard extends StatelessWidget {
                 },
               ),
             ),
-            const Spacer(),
+            const SizedBox(
+              height: 14,
+            ),
             Row(
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -114,7 +107,7 @@ class LectureInfoCard extends StatelessWidget {
               children: [
                 ElevatedButton.icon(
                     onPressed: () {
-                      Navigator.pushNamed(context, route.presentation,
+                      Navigator.pushNamed(context, route.detailedLecture,
                           arguments: lecture);
                     },
                     icon: const Icon(Icons.open_in_browser),
@@ -152,41 +145,3 @@ class LectureInfoCard extends StatelessWidget {
     );
   }
 }
-
-/**
- * 
- * 
- * 
- * const Spacer(),
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ElevatedButton.icon(
-                    onPressed: () {
-                      Navigator.pushNamed(context, route.presentation,
-                          arguments: lecture);
-                    },
-                    icon: Icon(Icons.open_in_browser),
-                    label: Text(translation.open)),
-                ElevatedButton.icon(
-                    style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.redAccent)),
-                    onPressed: () {
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context) => ConfirmationDialog(
-                              confirmationDialogData: ConfirmationDialogData(
-                                  title: translation.delete,
-                                  cancelTitle: translation.cancel,
-                                  itemTitle: lecture.title,
-                                  description: translation.confirmationDeletion,
-                                  acceptTitle: translation.yes)));
-                    },
-                    icon: Icon(Icons.delete),
-                    label: Text(translation.delete))
-              ],
-            )
- */

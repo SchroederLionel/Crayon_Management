@@ -51,12 +51,22 @@ class ValidatorService {
     var translation = AppLocalizations.of(context);
     if (text != null) {
       if (!isByteLength(text, 2)) {
-        return translation!.firstNameEmpty;
+        return translation!.required;
       }
     } else {
       return translation!.required;
     }
 
+    return null;
+  }
+
+  static String? isNumber(String? text, BuildContext context) {
+    var translation = AppLocalizations.of(context);
+    if (text != null) {
+      if (isInt(text)) {
+        return 'Number required';
+      }
+    }
     return null;
   }
 }

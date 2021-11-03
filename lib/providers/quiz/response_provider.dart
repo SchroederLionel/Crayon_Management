@@ -1,9 +1,9 @@
 import 'package:crayon_management/datamodels/quiz/response.dart';
 import 'package:flutter/cupertino.dart';
 
-class QuizProvider extends ChangeNotifier {
+class ResponseProvider extends ChangeNotifier {
   String _question = '';
-  final List<Response> _responses = [];
+  List<Response> _responses = [];
   void setQuestion(String question) => _question = question;
 
   String get getQuestion => _question;
@@ -18,6 +18,18 @@ class QuizProvider extends ChangeNotifier {
   bool responseFromIndex(int index) => getResponse(index).isResponseRight;
   void remove(Response question) {
     _responses.remove(question);
+    notifyListeners();
+  }
+
+  void clearResponses() {
+    _question = '';
+    _responses = <Response>[];
+    notifyListeners();
+  }
+
+  void setUp(String quesiton, List<Response> responses) {
+    _question = quesiton;
+    _responses = responses;
     notifyListeners();
   }
 }

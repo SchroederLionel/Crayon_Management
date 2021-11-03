@@ -1,7 +1,11 @@
 import 'package:crayon_management/datamodels/confirmation_dialog/confirmation_dialog_data.dart';
-import 'package:crayon_management/providers/quiz_list_provider.dart';
-import 'package:crayon_management/providers/quiz_provider.dart';
-import 'package:crayon_management/screens/presentation/components/add_quiz/quiz_dialog.dart';
+import 'package:crayon_management/providers/quiz/question_provider.dart';
+import 'package:crayon_management/providers/quiz/quiz_provider.dart';
+
+import 'package:crayon_management/providers/quiz/response_provider.dart';
+import 'package:crayon_management/providers/util_providers/menu_provider.dart';
+import 'package:crayon_management/screens/detailed_lecture/add_quiz/quiz_dialog.dart';
+
 import 'package:crayon_management/widgets/confirmation_dialog.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -14,8 +18,7 @@ class Quiz extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var translation = AppLocalizations.of(context);
-    final quizListProvider =
-        Provider.of<QuizListProvider>(context, listen: false);
+    final quizProvider = Provider.of<QuizProvider>(context, listen: false);
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -33,17 +36,22 @@ class Quiz extends StatelessWidget {
                   showDialog(
                       context: context,
                       builder: (BuildContext context) {
-                        return ListenableProvider<QuizProvider>(
-                          create: (context) => QuizProvider(),
+                        return MultiProvider(
+                          providers: [
+                            ChangeNotifierProvider<ResponseProvider>(
+                                create: (context) => ResponseProvider()),
+                            ChangeNotifierProvider<QuestionProvider>(
+                                create: (context) => QuestionProvider())
+                          ],
                           child: const QuizDialog(),
                         );
                       }).then((value) {
                     if (value != null) {
-                      quizListProvider.add(value);
+                      quizProvider.addQuiz(value);
                     }
                   });
                 },
-                icon: Icon(Icons.add),
+                icon: const Icon(Icons.add),
                 label: Text(
                   translation.addQuestion,
                 ))
@@ -52,16 +60,15 @@ class Quiz extends StatelessWidget {
         const SizedBox(
           height: 14,
         ),
-        Container(
+        SizedBox(
             height: 300,
-            child: Consumer<QuizListProvider>(
-                builder: (context, questions, child) {
+            child: Consumer<QuizProvider>(builder: (context, questions, child) {
               return ListView.builder(
                 shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
-                itemCount: questions.getQuestionLength,
+                itemCount: questions.lengthOfQuizes(),
                 itemBuilder: (context, index) {
-                  return Container(
+                  return SizedBox(
                     height: 350,
                     width: 300,
                     child: Card(
@@ -73,7 +80,7 @@ class Quiz extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  questions.getQuizOnIndex(index).getQuestion,
+                                  questions.getQuiz(index).title,
                                   style: Theme.of(context).textTheme.subtitle1,
                                 ),
                                 IconButton(
@@ -90,14 +97,19 @@ class Quiz extends StatelessWidget {
                                                               translation
                                                                   .cancel,
                                                           itemTitle: questions
-                                                              .getQuizOnIndex(
-                                                                  index)
-                                                              .getQuestion,
+                                                              .getQuiz(index)
+                                                              .title,
                                                           description: translation
                                                               .confirmationDeletion,
                                                           acceptTitle:
                                                               translation
-                                                                  .yes)));
+                                                                  .yes))).then(
+                                          (value) {
+                                        if (value == true) {
+                                          questions.removeQuiz(
+                                              questions.getQuiz(index));
+                                        }
+                                      });
                                     },
                                     icon: const Icon(
                                       Icons.delete,
@@ -107,16 +119,15 @@ class Quiz extends StatelessWidget {
                             ),
                             Expanded(
                               child: ListView.builder(
-                                  itemCount: questions
-                                      .getQuizOnIndex(index)
-                                      .getQuestions
-                                      .length,
+                                  itemCount:
+                                      questions.getQuiz(index).questions.length,
                                   itemBuilder: (context, index2) {
                                     return Text(
                                       questions
-                                          .getQuizOnIndex(index)
-                                          .getQuestions[index2]
-                                          .getResponse,
+                                          .getQuiz(index)
+                                          .questions[index2]
+                                          .question,
+                                      overflow: TextOverflow.ellipsis,
                                       style:
                                           Theme.of(context).textTheme.bodyText1,
                                     );

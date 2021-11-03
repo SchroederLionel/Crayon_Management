@@ -4,8 +4,8 @@ import 'package:crayon_management/datamodels/lecture/lecture.dart';
 import 'package:crayon_management/providers/lecture/detailed_lecture_provider.dart';
 
 import 'package:crayon_management/providers/slide_data_provider.dart';
+import 'package:crayon_management/screens/detailed_lecture/add_slide/drop_zone.dart';
 
-import 'package:crayon_management/screens/presentation/components/add_slide/drop_zone.dart';
 import 'package:crayon_management/widgets/confirmation_dialog.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';

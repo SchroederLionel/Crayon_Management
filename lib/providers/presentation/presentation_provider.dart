@@ -6,13 +6,9 @@ import 'package:flutter/cupertino.dart';
 class PresentationProvider extends ChangeNotifier {
   bool isLoading = false;
 
-  late int _totalPageNumbers;
-  late int _startingPage;
-  late int _endingPage;
   late Uint8List _pdf;
 
   changeIsLoading(String fileName) async {
-    print('Loading file');
     isLoading = true;
     var data = await LectureService.getSilde(fileName);
 
@@ -20,7 +16,7 @@ class PresentationProvider extends ChangeNotifier {
       _pdf = data;
     }
     isLoading = false;
-    print('notify Listener');
+
     notifyListeners();
   }
 
@@ -31,8 +27,4 @@ class PresentationProvider extends ChangeNotifier {
   Uint8List get getPdf => _pdf;
 
   setPdf(Uint8List pdf) => _pdf = pdf;
-  setStartingPage(int startingPage) => _startingPage = startingPage;
-  setEndingPage(int endingPage) => _endingPage = endingPage;
-  setTotalPageNumber(int totalPageNumbers) =>
-      _totalPageNumbers = totalPageNumbers;
 }
