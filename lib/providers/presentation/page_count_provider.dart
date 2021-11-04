@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class PageCountProvider extends ChangeNotifier {
   bool showPageCount = false;
   int totalPageCount = 0;
-  int currentPageNumber = 0;
+  int currentPageNumber = 1;
 
   initValue(int totalPageCount, int currentPageNumber) {
     this.totalPageCount = totalPageCount;

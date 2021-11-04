@@ -1,17 +1,18 @@
 import 'dart:typed_data';
 import 'dart:html';
-import 'package:crayon_management/datamodels/lecture/lecture.dart';
 import 'package:crayon_management/datamodels/route_arguments/presentation_screen_argument.dart';
-import 'package:crayon_management/providers/lecture/detailed_lecture_provider.dart';
+import 'package:crayon_management/providers/presentation/drawingboard/canvas_provider.dart';
+import 'package:crayon_management/providers/presentation/drawingboard/color_picker_provider.dart';
+import 'package:crayon_management/providers/presentation/drawingboard/line_width_provider.dart';
 import 'package:crayon_management/providers/presentation/page_count_provider.dart';
 import 'package:crayon_management/providers/presentation/presentation_provider.dart';
-
+import 'package:crayon_management/screens/presentation/components/drawboard.dart';
+import 'package:crayon_management/screens/presentation/components/qr_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-
+import 'package:pdf_render/pdf_render.dart';
 import 'package:pdf_render/pdf_render_widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class PresentationScreen extends StatefulWidget {
@@ -26,6 +27,8 @@ class PresentationScreen extends StatefulWidget {
 class _PresentationScreenState extends State<PresentationScreen> {
   Uint8List? pdf;
   late Size size;
+  late PdfDocument? currentPdfDocument;
+  late PdfPage currentPdfPage;
   late ItemScrollController _scrollController;
   late TextEditingController _jumpToPageController;
   late PresentationScreenArgument arguement;
@@ -59,7 +62,6 @@ class _PresentationScreenState extends State<PresentationScreen> {
         Provider.of<PageCountProvider>(context, listen: false);
 
     if (presentationProvider.isLoading == true) {
-      // presentationProvider.getPdf
       return const Center(
           child: SizedBox(
               height: 100, width: 100, child: CircularProgressIndicator()));
@@ -72,7 +74,8 @@ class _PresentationScreenState extends State<PresentationScreen> {
               child: PdfDocumentLoader.openData(presentationProvider.getPdf,
                   documentBuilder: (context, pdfDocument, pageCount) {
                 return LayoutBuilder(builder: (context, constraints) {
-                  pageCountProvider.initValue(pageCount, 0);
+                  pageCountProvider.initValue(pageCount, 1);
+                  currentPdfDocument = pdfDocument;
                   return ScrollablePositionedList.builder(
                       itemCount: pageCount,
                       itemScrollController: _scrollController,
@@ -103,19 +106,7 @@ class _PresentationScreenState extends State<PresentationScreen> {
                     showDialog<void>(
                         context: context,
                         builder: (BuildContext context) {
-                          return AlertDialog(
-                            content: Container(
-                              height: 600,
-                              width: 600,
-                              alignment: Alignment.center,
-                              child: QrImage(
-                                foregroundColor: Colors.white,
-                                data: arguement.fileId,
-                                version: QrVersions.auto,
-                                size: 500.0,
-                              ),
-                            ),
-                          );
+                          return QrDialog(lectureId: arguement.lecture.id);
                         });
                   },
                   icon: const Icon(
@@ -128,6 +119,35 @@ class _PresentationScreenState extends State<PresentationScreen> {
                   },
                   icon: const Icon(
                     Icons.remove_red_eye,
+                    color: Colors.white24,
+                  )),
+              IconButton(
+                  onPressed: () {
+                    showDialog<void>(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Dialog(
+                            child: MultiProvider(
+                              providers: [
+                                ChangeNotifierProvider<CanvasProvider>(
+                                    create: (context) => CanvasProvider()),
+                                ChangeNotifierProvider<LineWidthProvider>(
+                                    create: (context) => LineWidthProvider()),
+                                ChangeNotifierProvider<ColorPickerProvider>(
+                                  create: (context) => ColorPickerProvider(),
+                                )
+                              ],
+                              child: DrawBoard(
+                                pdfDocument: currentPdfDocument,
+                                currentPage:
+                                    pageCountProvider.currentPageNumber,
+                              ),
+                            ),
+                          );
+                        });
+                  },
+                  icon: const Icon(
+                    Icons.app_registration,
                     color: Colors.white24,
                   )),
               const Spacer(),
@@ -157,10 +177,12 @@ class _PresentationScreenState extends State<PresentationScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 IconButton(
-                    onPressed: () {
+                    onPressed: () async {
                       _scrollController.scrollTo(
                           index: pageCountProvider.deacreasePageCount(),
                           duration: const Duration(milliseconds: 200));
+                      currentPdfPage = await currentPdfDocument!
+                          .getPage(pageCountProvider.currentPageNumber);
                     },
                     icon: const Icon(
                       Icons.arrow_left,
@@ -168,10 +190,12 @@ class _PresentationScreenState extends State<PresentationScreen> {
                       size: 24,
                     )),
                 IconButton(
-                    onPressed: () {
+                    onPressed: () async {
                       _scrollController.scrollTo(
                           index: pageCountProvider.increasePageCount(),
                           duration: const Duration(milliseconds: 200));
+                      currentPdfPage = await currentPdfDocument!
+                          .getPage(pageCountProvider.currentPageNumber);
                     },
                     icon: const Icon(
                       Icons.arrow_right,
