@@ -4,6 +4,7 @@ import 'package:crayon_management/datamodels/route_arguments/presentation_screen
 import 'package:crayon_management/providers/presentation/drawingboard/canvas_provider.dart';
 import 'package:crayon_management/providers/presentation/drawingboard/color_picker_provider.dart';
 import 'package:crayon_management/providers/presentation/drawingboard/line_width_provider.dart';
+import 'package:crayon_management/providers/presentation/drawingboard/pdf_provider.dart';
 import 'package:crayon_management/providers/presentation/page_count_provider.dart';
 import 'package:crayon_management/providers/presentation/presentation_provider.dart';
 import 'package:crayon_management/screens/presentation/components/drawboard.dart';
@@ -135,6 +136,9 @@ class _PresentationScreenState extends State<PresentationScreen> {
                                     create: (context) => LineWidthProvider()),
                                 ChangeNotifierProvider<ColorPickerProvider>(
                                   create: (context) => ColorPickerProvider(),
+                                ),
+                                ChangeNotifierProvider<PdfProvider>(
+                                  create: (context) => PdfProvider(),
                                 )
                               ],
                               child: DrawBoard(

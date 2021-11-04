@@ -4,6 +4,7 @@ import 'package:crayon_management/datamodels/drawboard/drawing_point.dart';
 import 'package:crayon_management/providers/presentation/drawingboard/canvas_provider.dart';
 import 'package:crayon_management/providers/presentation/drawingboard/color_picker_provider.dart';
 import 'package:crayon_management/providers/presentation/drawingboard/line_width_provider.dart';
+import 'package:crayon_management/providers/presentation/drawingboard/pdf_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:pdf_render/pdf_render.dart';
 import 'package:pdf_render/pdf_render_widgets.dart';
@@ -29,6 +30,7 @@ class _DrawBoardState extends State<DrawBoard> {
   late final CanvasProvider canvasProvider;
   late final LineWidthProvider lineWidthProvider;
   late final ColorPickerProvider colorPickerProvider;
+  late final PdfProvider pdfProvider;
 
   @override
   void initState() {
@@ -39,6 +41,7 @@ class _DrawBoardState extends State<DrawBoard> {
     lineWidthProvider = Provider.of<LineWidthProvider>(context, listen: false);
     colorPickerProvider =
         Provider.of<ColorPickerProvider>(context, listen: false);
+    pdfProvider = Provider.of<PdfProvider>(context, listen: false);
   }
 
   @override
@@ -46,15 +49,16 @@ class _DrawBoardState extends State<DrawBoard> {
     return Scaffold(
       body: Stack(
         children: [
-          SizedBox(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              child: !showCurrentPDF
-                  ? null
-                  : PdfPageView(
-                      pageNumber: currentPageNumber,
-                      pdfDocument: pdfDocument,
-                    )),
+          Consumer<PdfProvider>(
+              builder: (context, pdfProvider, child) => SizedBox(
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  child: pdfProvider.showCurrentPdfPage
+                      ? PdfPageView(
+                          pageNumber: currentPageNumber,
+                          pdfDocument: pdfDocument,
+                        )
+                      : null)),
           Consumer<CanvasProvider>(
               builder: (context, canvasProvider, child) => GestureDetector(
                     onPanUpdate: (DragUpdateDetails details) => canvasProvider
@@ -83,8 +87,7 @@ class _DrawBoardState extends State<DrawBoard> {
                       onPressed: () => canvasProvider.reserBoard(),
                       icon: const Icon(Icons.delete, color: Colors.blueAccent)),
                   IconButton(
-                      onPressed: () =>
-                          setState(() => showCurrentPDF = !showCurrentPDF),
+                      onPressed: () => pdfProvider.changeShow(),
                       icon: const Icon(Icons.remove_red_eye,
                           color: Colors.blueAccent)),
                   Consumer<LineWidthProvider>(
