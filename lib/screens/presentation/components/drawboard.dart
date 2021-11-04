@@ -57,6 +57,11 @@ class _DrawBoardState extends State<DrawBoard> {
                       ? PdfPageView(
                           pageNumber: currentPageNumber,
                           pdfDocument: pdfDocument,
+                          pageBuilder: (context, textureBuilder, pageSize) {
+                            return Center(
+                              child: textureBuilder(),
+                            );
+                          },
                         )
                       : null)),
           Consumer<CanvasProvider>(

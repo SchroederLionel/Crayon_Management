@@ -29,7 +29,6 @@ class _PresentationScreenState extends State<PresentationScreen> {
   Uint8List? pdf;
   late Size size;
   late PdfDocument? currentPdfDocument;
-  late PdfPage currentPdfPage;
   late ItemScrollController _scrollController;
   late TextEditingController _jumpToPageController;
   late PresentationScreenArgument arguement;
@@ -74,28 +73,26 @@ class _PresentationScreenState extends State<PresentationScreen> {
               margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 40),
               child: PdfDocumentLoader.openData(presentationProvider.getPdf,
                   documentBuilder: (context, pdfDocument, pageCount) {
-                return LayoutBuilder(builder: (context, constraints) {
-                  pageCountProvider.initValue(pageCount, 1);
-                  currentPdfDocument = pdfDocument;
-                  return ScrollablePositionedList.builder(
-                      itemCount: pageCount,
-                      itemScrollController: _scrollController,
-                      scrollDirection: Axis.horizontal,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) => SizedBox(
-                            height: height - 80,
-                            width: width - 100,
-                            child: PdfPageView(
-                              pdfDocument: pdfDocument,
-                              pageNumber: index + 1,
-                              pageBuilder: (context, textureBuilder, pageSize) {
-                                return Center(
-                                  child: textureBuilder(),
-                                );
-                              },
-                            ),
-                          ));
-                });
+                pageCountProvider.initValue(pageCount, 0);
+                currentPdfDocument = pdfDocument;
+                return ScrollablePositionedList.builder(
+                    itemCount: pageCount,
+                    itemScrollController: _scrollController,
+                    scrollDirection: Axis.horizontal,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) => SizedBox(
+                          height: height - 80,
+                          width: width - 100,
+                          child: PdfPageView(
+                            pdfDocument: pdfDocument,
+                            pageNumber: index + 1,
+                            pageBuilder: (context, textureBuilder, pageSize) {
+                              return Center(
+                                child: textureBuilder(),
+                              );
+                            },
+                          ),
+                        ));
               }),
             ),
           ),
@@ -144,7 +141,7 @@ class _PresentationScreenState extends State<PresentationScreen> {
                               child: DrawBoard(
                                 pdfDocument: currentPdfDocument,
                                 currentPage:
-                                    pageCountProvider.currentPageNumber,
+                                    pageCountProvider.currentPageNumber + 1,
                               ),
                             ),
                           );
@@ -181,12 +178,11 @@ class _PresentationScreenState extends State<PresentationScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 IconButton(
-                    onPressed: () async {
+                    onPressed: () {
+                      pageCountProvider.deacreasePageCount();
                       _scrollController.scrollTo(
-                          index: pageCountProvider.deacreasePageCount(),
+                          index: pageCountProvider.currentPageNumber,
                           duration: const Duration(milliseconds: 200));
-                      currentPdfPage = await currentPdfDocument!
-                          .getPage(pageCountProvider.currentPageNumber);
                     },
                     icon: const Icon(
                       Icons.arrow_left,
@@ -194,12 +190,11 @@ class _PresentationScreenState extends State<PresentationScreen> {
                       size: 24,
                     )),
                 IconButton(
-                    onPressed: () async {
+                    onPressed: () {
+                      pageCountProvider.increasePageCount();
                       _scrollController.scrollTo(
-                          index: pageCountProvider.increasePageCount(),
+                          index: pageCountProvider.currentPageNumber,
                           duration: const Duration(milliseconds: 200));
-                      currentPdfPage = await currentPdfDocument!
-                          .getPage(pageCountProvider.currentPageNumber);
                     },
                     icon: const Icon(
                       Icons.arrow_right,
@@ -216,7 +211,7 @@ class _PresentationScreenState extends State<PresentationScreen> {
               builder: (context, pageCountProvider, child) {
                 if (pageCountProvider.showPageCount) {
                   return Text(
-                    '${pageCountProvider.currentPageNumber}/${pageCountProvider.totalPageCount}',
+                    '${pageCountProvider.currentPageNumber + 1}/${pageCountProvider.totalPageCount}',
                     style: const TextStyle(color: Colors.white24),
                   );
                 }
