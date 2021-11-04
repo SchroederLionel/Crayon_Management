@@ -44,7 +44,7 @@ class _SignInState extends State<SignIn> {
         Provider.of<UserProvider>(context, listen: false);
     return Center(
         child: SizedBox(
-      height: 500,
+      height: 550,
       width: 400,
       child: Card(
         child: Padding(

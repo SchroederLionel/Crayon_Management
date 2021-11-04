@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class ThemeProvider extends ChangeNotifier {
   late ThemeData _selectedTheme;
@@ -18,23 +17,37 @@ class ThemeProvider extends ChangeNotifier {
       scaffoldBackgroundColor: const Color(0xFFFEFEFE),
       canvasColor: Colors.white,
       cardColor: const Color(0xFFF2F2F2),
-      textTheme: TextTheme(
-          headline1: GoogleFonts.poppins(
-              fontSize: 32.0, fontWeight: FontWeight.bold, color: Colors.black),
-          headline2: GoogleFonts.poppins(
-              fontSize: 24.0,
-              fontWeight: FontWeight.bold,
+      textTheme: const TextTheme(
+          headline1: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 28,
+              fontWeight: FontWeight.w700,
+              color: Colors.black),
+          headline2: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 21,
+              fontWeight: FontWeight.w600,
               color: Colors.black54),
-          subtitle1: GoogleFonts.poppins(
-              fontSize: 21.0,
-              fontWeight: FontWeight.bold,
+          subtitle1: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 21,
+              fontWeight: FontWeight.w600,
               color: Colors.blueAccent),
-          bodyText1: GoogleFonts.poppins(
-              fontSize: 18, color: Colors.black, fontWeight: FontWeight.normal),
-          bodyText2: GoogleFonts.poppins(
-              fontSize: 18, color: Colors.white, fontWeight: FontWeight.normal),
-          headline6: GoogleFonts.poppins(
-              fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold)));
+          bodyText1: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 18,
+              fontWeight: FontWeight.w400,
+              color: Colors.black),
+          bodyText2: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 18,
+              fontWeight: FontWeight.w400,
+              color: Colors.white),
+          headline6: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+              color: Colors.black)));
 
   ThemeData dark = ThemeData(
       fontFamily: 'Poppins',
@@ -50,25 +63,37 @@ class ThemeProvider extends ChangeNotifier {
       scaffoldBackgroundColor: const Color(0xFF212332),
       canvasColor: const Color(0xFF2A2D3E),
       cardColor: const Color(0xFF2A2D3E),
-      textTheme: TextTheme(
+      textTheme: const TextTheme(
           headline1: TextStyle(
-              fontFamily: 'Poppins', fontSize: 32, fontWeight: FontWeight.w400),
-          headline2: GoogleFonts.poppins(
-              fontSize: 24.0,
-              fontWeight: FontWeight.bold,
-              color: Colors.white60),
-          subtitle1: GoogleFonts.poppins(
-              fontSize: 21.0,
-              fontWeight: FontWeight.bold,
+              fontFamily: 'Poppins',
+              fontSize: 28,
+              fontWeight: FontWeight.w700,
+              color: Colors.white),
+          headline2: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 21,
+              fontWeight: FontWeight.w600,
+              color: Colors.white54),
+          subtitle1: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 21,
+              fontWeight: FontWeight.w600,
               color: Colors.blueAccent),
-          bodyText1: GoogleFonts.poppins(
-              fontSize: 18, color: Colors.white, fontWeight: FontWeight.normal),
-          bodyText2: GoogleFonts.poppins(
+          bodyText1: TextStyle(
+              fontFamily: 'Poppins',
               fontSize: 18,
-              color: Colors.white54,
-              fontWeight: FontWeight.normal),
-          headline6: GoogleFonts.poppins(
-              fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold)));
+              fontWeight: FontWeight.w400,
+              color: Colors.white),
+          bodyText2: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 18,
+              fontWeight: FontWeight.w400,
+              color: Colors.white54),
+          headline6: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+              color: Colors.white)));
 
   ThemeProvider({required bool isDarkMode}) {
     _selectedTheme = isDarkMode ? dark : light;
