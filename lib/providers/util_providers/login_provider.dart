@@ -1,26 +1,30 @@
-import 'dart:typed_data';
-
 import 'package:crayon_management/datamodels/enum.dart';
 import 'package:crayon_management/datamodels/failure.dart';
-import 'package:crayon_management/services/lecture_service.dart';
+import 'package:crayon_management/datamodels/user/user_data.dart';
+import 'package:crayon_management/services/authentication.dart';
 import 'package:dartz/dartz.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
-class PresentationProvider extends ChangeNotifier {
+class LoginProvider extends ChangeNotifier {
   NotifierState _state = NotifierState.initial;
   NotifierState get state => _state;
+
   void _setState(NotifierState state) {
     _state = state;
     notifyListeners();
   }
 
-  late Either<Failure, Uint8List?> _slides;
-  Either<Failure, Uint8List?> get slide => _slides;
-  void _setSlide(Either<Failure, Uint8List?> slides) => _slides = slides;
+  late Either<Failure, UserData> _user;
 
-  void getSlide(String fileName) async {
+  Either<Failure, UserData> get userData => _user;
+  void _setUserData(Either<Failure, UserData> user) {
+    _user = user;
+  }
+
+  void signUserIn(String email, String password) async {
     _setState(NotifierState.loading);
-    await Task(() => LectureService.getSilde(fileName))
+
+    await Task(() => signInWithEmailPassword(email, password))
         .attempt()
         .map(
           (either) => either.leftMap((obj) {
@@ -32,7 +36,7 @@ class PresentationProvider extends ChangeNotifier {
           }),
         )
         .run()
-        .then((slides) => _setSlide(slides));
+        .then((userData) => _setUserData(userData));
 
     _setState(NotifierState.loaded);
   }

@@ -50,6 +50,7 @@ dependencies:
   universal_html: ^2.0.8
   pdf_render: ^1.0.15
   qr_flutter: ^4.0.0
+  dartz: ^0.10.0
 
 dev_dependencies:
   flutter_test:

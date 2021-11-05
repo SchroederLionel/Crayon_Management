@@ -1,8 +1,10 @@
 // ignore: avoid_web_libraries_in_flutter
-import 'dart:html';
+import 'dart:html' as html;
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crayon_management/datamodels/failure.dart';
 
 import 'package:crayon_management/datamodels/lecture/lecture.dart';
 import 'package:crayon_management/datamodels/lecture/lecture_snipped.dart';
@@ -41,7 +43,8 @@ class LectureService {
         .update({'myLectures': FieldValue.arrayRemove(list)});
   }
 
-  static void addPdfToLecture(String lectureId, Slide slide, File file) async {
+  static void addPdfToLecture(
+      String lectureId, Slide slide, html.File file) async {
     final destination = 'slides/${slide.fileId}';
     try {
       final ref = FirebaseStorage.instance.ref(destination);
@@ -61,18 +64,27 @@ class LectureService {
   }
 
   static Future<Lecture?> getLecture(String lectureId) async {
-    Lecture? lecture;
+    try {
+      Lecture lecture;
+      var lectureDocument = await FirebaseFirestore.instance
+          .collection('lectures')
+          .doc(lectureId)
+          .get();
 
-    var lectureDocument = await FirebaseFirestore.instance
-        .collection('lectures')
-        .doc(lectureId)
-        .get();
+      if (lectureDocument.exists) {
+        lecture = Lecture.fromJson(lectureDocument.data());
+      } else {
+        throw Failure(code: 'lecture-not-exists');
+      }
 
-    if (lectureDocument.exists) {
-      lecture = Lecture.fromJson(lectureDocument.data());
+      return lecture;
+    } on SocketException {
+      throw Failure(code: 'no-internet');
+    } on HttpException {
+      throw Failure(code: 'not-found');
+    } on FormatException {
+      throw Failure(code: 'bad-format');
     }
-
-    return lecture;
   }
 
   static Future<Uint8List?> getSilde(String fileName) async {

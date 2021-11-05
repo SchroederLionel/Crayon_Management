@@ -1,15 +1,19 @@
 import 'dart:html';
 
 import 'package:crayon_management/datamodels/dropped_file.dart';
+import 'package:crayon_management/providers/lecture/detailed_lecture_provider.dart';
+import 'package:crayon_management/providers/presentation/drawingboard/pdf_provider.dart';
 import 'package:crayon_management/providers/slide_data_provider.dart';
+import 'package:crayon_management/services/validator_service.dart';
+import 'package:crayon_management/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dropzone/flutter_dropzone.dart';
 import 'package:provider/provider.dart';
-import 'package:validators/validators.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DropZone extends StatefulWidget {
-  const DropZone({Key? key}) : super(key: key);
+  final String lectureId;
+  const DropZone({required this.lectureId, Key? key}) : super(key: key);
 
   @override
   _DropZoneState createState() => _DropZoneState();
@@ -17,11 +21,13 @@ class DropZone extends StatefulWidget {
 
 class _DropZoneState extends State<DropZone> {
   late TextEditingController _titleController;
+  late SlideDataProvider slideProvider;
 
   @override
   void initState() {
     super.initState();
     _titleController = TextEditingController(text: '');
+    slideProvider = Provider.of<SlideDataProvider>(context, listen: false);
   }
 
   @override
@@ -31,10 +37,9 @@ class _DropZoneState extends State<DropZone> {
   }
 
   late DropzoneViewController controller;
-  DroppedFile? file;
+  File? file;
   @override
   Widget build(BuildContext context) {
-    final pdfProvider = Provider.of<SlideDataProvider>(context, listen: false);
     var translation = AppLocalizations.of(context);
     return AlertDialog(
       actions: [
@@ -46,9 +51,9 @@ class _DropZoneState extends State<DropZone> {
             child: Text(translation!.cancel)),
         ElevatedButton(
             onPressed: () {
-              if (pdfProvider.getTitle.length >= 4 &&
-                  pdfProvider.getDroppedFile != null) {
-                Navigator.pop(context, pdfProvider);
+              if (slideProvider.getTitle.length >= 2 &&
+                  slideProvider.getDroppedFile != null) {
+                Navigator.pop(context, slideProvider);
               }
             },
             child: Text(translation.upload))
@@ -56,7 +61,7 @@ class _DropZoneState extends State<DropZone> {
       content: Builder(
         builder: (context) {
           return Container(
-              height: 630,
+              height: 650,
               width: 500,
               color: Theme.of(context).scaffoldBackgroundColor,
               child: Column(
@@ -67,27 +72,14 @@ class _DropZoneState extends State<DropZone> {
                     translation.addSlide,
                     style: Theme.of(context).textTheme.headline1,
                   ),
-                  Form(
-                    autovalidateMode: AutovalidateMode.always,
-                    child: SizedBox(
-                      width: 350,
-                      child: TextFormField(
-                        validator: (val) => !isByteLength(val!, 4)
-                            ? translation.titleHasToHaveAtLeast4Chars
-                            : null,
-                        onChanged: (String text) => pdfProvider.title(text),
-                        controller: _titleController,
-                        style: Theme.of(context).textTheme.bodyText1,
-                        decoration: InputDecoration(
-                            prefixIcon: const Icon(
-                              Icons.book_rounded,
-                              size: 18,
-                            ),
-                            border: const UnderlineInputBorder(),
-                            labelText: translation.pdfTitle),
-                      ),
-                    ),
-                  ),
+                  CustomTextFormField(
+                      validator: (text) =>
+                          ValidatorService.isStringLengthAbove2(text, context),
+                      onChanged: (String text) => slideProvider.setTitle(text),
+                      controller: _titleController,
+                      icon: Icons.book_rounded,
+                      labelText: translation.pdfTitle,
+                      isPassword: false),
                   const SizedBox(
                     height: 14,
                   ),
@@ -157,11 +149,8 @@ class _DropZoneState extends State<DropZone> {
   }
 
   Future acceptFile(event) async {
-    final pdfProvider = Provider.of<SlideDataProvider>(context, listen: false);
+    file = event as File;
     final mime = await controller.getFileMIME(event);
-    final String fileName = await controller.getFilename(event);
-    final url = await controller.createFileUrl(event);
-
-    pdfProvider.updateValues(_titleController.text, event, mime, fileName);
+    slideProvider.updateValues(_titleController.text, event, mime);
   }
 }

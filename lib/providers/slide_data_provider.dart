@@ -6,20 +6,18 @@ import 'package:flutter/material.dart';
 
 class SlideDataProvider extends ChangeNotifier {
   late String _title = '';
-  late String _fileName = '';
-  late String _fileURL = '';
-  late File _file;
+
+  late File? _file;
 
   Color _currentColor = Colors.blueAccent;
 
   String get getTitle => _title;
-  String get getFileUrl => _fileURL;
-  File get getDroppedFile => _file;
+
+  File? get getDroppedFile => _file;
   Color get currentColor => _currentColor;
 
-  void updateValues(String title, File file, String fileType, String fileName) {
+  void updateValues(String title, File file, String fileType) {
     if (fileType.toUpperCase().contains('PDF')) {
-      _fileName = fileName;
       _currentColor = Colors.greenAccent;
       _file = file;
     } else {
@@ -29,10 +27,6 @@ class SlideDataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void title(String title) => _title = title;
-
-  void fileURL(String url) {
-    _fileURL = url;
-    notifyListeners();
-  }
+  void setTitle(String title) => _title = title;
+  void setFile(File file) => _file = file;
 }

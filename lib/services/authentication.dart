@@ -10,90 +10,71 @@ final FirebaseAuth _auth = FirebaseAuth.instance;
 String? uid;
 String? userEmail;
 
-Future<User?> registerWithEmailPassword(
+Future<UserData> registerWithEmailPassword(
     String email, String password, String firstName, String lastName) async {
-  User? user;
-
   try {
     UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
       email: email,
       password: password,
     );
 
-    user = userCredential.user;
     UserData userData = UserData(
-        uid: user!.uid, email: email, firstName: firstName, lastName: lastName);
+        uid: userCredential.user!.uid,
+        email: email,
+        firstName: firstName,
+        lastName: lastName);
 
     await FirebaseFirestore.instance
         .collection(userData.path)
-        .doc(user.uid)
+        .doc(userCredential.user!.uid)
         .set(userData.toJson());
 
-    if (user != null) {
-      uid = user.uid;
-      userEmail = user.email;
-    }
+    return userData;
   } on FirebaseAuthException catch (e) {
-    throw Failure(code: e.code);
+    if (e.code == 'weak-password') {
+      throw Failure(code: 'weak-password');
+    } else if (e.code == 'email-already-in-use') {
+      throw Failure(code: 'email-already-exists');
+    }
+    throw Failure(code: 'firebase-exception');
   } on SocketException {
-    throw Failure(code: 'no internet');
+    throw Failure(code: 'no-internet');
   } on HttpException {
-    throw Failure(code: 'not found');
+    throw Failure(code: 'not-found');
   } on FormatException {
-    throw Failure(code: 'bad format');
+    throw Failure(code: 'bad-format');
   }
-
-  return user;
 }
 
-/* if (e.code == 'weak-password') {
-      throw Failure(code: e.code);
-      // print('The password provided is too weak.');
-    } else if (e.code == 'email-already-in-use') {
-      throw Failure(code: e.code);
-      print('An account already exists for that email.');
-    }*/
-
-Future<UserData?> signInWithEmailPassword(String email, String password) async {
-  UserData? userData;
-  User? user;
-
+Future<UserData> signInWithEmailPassword(String email, String password) async {
   try {
     UserCredential userCredential = await _auth.signInWithEmailAndPassword(
       email: email,
       password: password,
     );
-    user = userCredential.user;
+    var userDocument = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userCredential.user!.uid)
+        .get();
 
-    if (user != null) {
-      uid = user.uid;
-      userEmail = user.email;
-
-      var userDocument = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(user.uid)
-          .get();
-
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('auth', true);
-
-      if (userDocument.exists) {
-        print('Logged IN!');
-        userData = UserData.fromJson(userDocument.data());
-        return userData;
-      }
+    if (!userDocument.exists) {
+      throw Failure(code: 'user-not-exists');
     }
+    return UserData.fromJson(userDocument.data());
   } on FirebaseAuthException catch (e) {
     if (e.code == 'user-not-found') {
-      print('No user found for that email.');
+      throw Failure(code: 'no-user-found');
     } else if (e.code == 'wrong-password') {
-      print('Wrong password provided.');
+      throw Failure(code: 'wrong-password');
     }
-
-    return null;
+    throw Failure(code: 'firebase-exception');
+  } on SocketException {
+    throw Failure(code: 'no-internet');
+  } on HttpException {
+    throw Failure(code: 'not-found');
+  } on FormatException {
+    throw Failure(code: 'bad-format');
   }
-
-  return userData;
 }
 
 Future<String> signOut() async {
@@ -105,8 +86,4 @@ Future<String> signOut() async {
   uid = null;
   userEmail = null;
   return 'User signed out';
-}
-
-Future<String> changePassword() async {
-  return 's';
 }

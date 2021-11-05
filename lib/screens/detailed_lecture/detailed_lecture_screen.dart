@@ -1,3 +1,4 @@
+import 'package:crayon_management/datamodels/enum.dart';
 import 'package:crayon_management/datamodels/lecture/lecture.dart';
 import 'package:crayon_management/datamodels/lecture/lecture_snipped.dart';
 import 'package:crayon_management/providers/lecture/detailed_lecture_provider.dart';
@@ -7,6 +8,7 @@ import 'package:crayon_management/screens/detailed_lecture/components/controls.d
 import 'package:crayon_management/screens/detailed_lecture/components/slides_component.dart';
 import 'package:crayon_management/screens/detailed_lecture/components/quiz.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 
 class DetailedLectureScreen extends StatefulWidget {
@@ -19,13 +21,12 @@ class DetailedLectureScreen extends StatefulWidget {
 }
 
 class _DetailedLectureScreenState extends State<DetailedLectureScreen> {
-  late Lecture lectureDetail;
   @override
   void initState() {
     super.initState();
-    final lectureProvider =
-        Provider.of<DetailedLectureProvider>(context, listen: false);
-    lectureProvider.getLectureData(widget.lecture.id);
+    WidgetsBinding.instance!.addPostFrameCallback((_) =>
+        Provider.of<DetailedLectureProvider>(context, listen: false)
+            .getLecture(widget.lecture.id));
   }
 
   @override
@@ -58,16 +59,23 @@ class _DetailedLectureScreenState extends State<DetailedLectureScreen> {
                 height: 14,
               ),
               Consumer<DetailedLectureProvider>(
-                builder: (context, detailedLecture, child) {
-                  if (detailedLecture.lecture == null) {
+                builder: (_, lectureNotifier, __) {
+                  if (lectureNotifier.state == NotifierState.initial) {
                     return Container();
+                  } else if (lectureNotifier.state == NotifierState.loading) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else {
+                    return lectureNotifier.lectureD.fold(
+                        (failure) => Center(child: Text(failure.toString())),
+                        (lecture) => lecture == null
+                            ? Container()
+                            : lecture.slides.isEmpty
+                                ? Container()
+                                : Controls(
+                                    lectureId: lecture.id,
+                                    slides: lecture.slides,
+                                  ));
                   }
-                  if (detailedLecture.lecture!.slides.isNotEmpty) {
-                    return Controls(
-                      lecture: detailedLecture.lecture!,
-                    );
-                  }
-                  return Container();
                 },
               ),
               const SizedBox(
@@ -81,13 +89,20 @@ class _DetailedLectureScreenState extends State<DetailedLectureScreen> {
                 height: 14,
               ),
               Consumer<DetailedLectureProvider>(
-                  builder: (context, lectureProvider, child) {
-                if (lectureProvider.lecture != null) {
-                  return SlidesComponent(
-                    lecture: lectureProvider.lecture!,
-                  );
+                  builder: (_, lectureNotifier, __) {
+                if (lectureNotifier.state == NotifierState.initial) {
+                  return Container();
+                } else if (lectureNotifier.state == NotifierState.loading) {
+                  return const CircularProgressIndicator();
+                } else {
+                  return lectureNotifier.lectureD.fold(
+                      (failure) => Text(failure.toString()),
+                      (lecture) => lecture == null
+                          ? Container()
+                          : SlidesComponent(
+                              lecture: lecture,
+                            ));
                 }
-                return Container();
               })
             ],
           ),

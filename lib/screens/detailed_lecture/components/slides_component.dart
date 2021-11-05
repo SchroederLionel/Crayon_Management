@@ -51,7 +51,7 @@ class _SlidesComponentState extends State<SlidesComponent> {
                       builder: (BuildContext context) {
                         return ListenableProvider<SlideDataProvider>(
                           create: (context) => SlideDataProvider(),
-                          child: const DropZone(),
+                          child: DropZone(lectureId: lecture.id),
                         );
                       }).then((value) {
                     if (value != null) {
@@ -96,13 +96,12 @@ class _SlidesComponentState extends State<SlidesComponent> {
                                                 title: AppLocalizations.of(
                                                         context)!
                                                     .delete,
-                                                itemTitle: detailLectureProvider
-                                                    .lecture!
-                                                    .slides[index]
-                                                    .title,
-                                                cancelTitle: AppLocalizations
-                                                        .of(context)!
-                                                    .cancel,
+                                                itemTitle:
+                                                    lecture.slides[index].title,
+                                                cancelTitle:
+                                                    AppLocalizations.of(
+                                                            context)!
+                                                        .cancel,
                                                 description: translation
                                                     .confirmationDeletion,
                                                 acceptTitle:
@@ -111,9 +110,7 @@ class _SlidesComponentState extends State<SlidesComponent> {
                                                         .yes))).then((value) {
                               if (value == true) {
                                 detailLectureProvider.removeSlide(
-                                    lecture.id,
-                                    detailLectureProvider
-                                        .lecture!.slides[index]);
+                                    lecture.id, lecture.slides[index]);
                               }
                             });
                           },
