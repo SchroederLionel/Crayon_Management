@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crayon_management/datamodels/failure.dart';
 import 'package:crayon_management/datamodels/user/user_data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,7 +13,7 @@ String? userEmail;
 Future<User?> registerWithEmailPassword(
     String email, String password, String firstName, String lastName) async {
   User? user;
-  print('Password: $password');
+
   try {
     UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
       email: email,
@@ -31,16 +34,25 @@ Future<User?> registerWithEmailPassword(
       userEmail = user.email;
     }
   } on FirebaseAuthException catch (e) {
-    print(e);
-    if (e.code == 'weak-password') {
-      print('The password provided is too weak.');
-    } else if (e.code == 'email-already-in-use') {
-      print('An account already exists for that email.');
-    }
+    throw Failure(code: e.code);
+  } on SocketException {
+    throw Failure(code: 'no internet');
+  } on HttpException {
+    throw Failure(code: 'not found');
+  } on FormatException {
+    throw Failure(code: 'bad format');
   }
 
   return user;
 }
+
+/* if (e.code == 'weak-password') {
+      throw Failure(code: e.code);
+      // print('The password provided is too weak.');
+    } else if (e.code == 'email-already-in-use') {
+      throw Failure(code: e.code);
+      print('An account already exists for that email.');
+    }*/
 
 Future<UserData?> signInWithEmailPassword(String email, String password) async {
   UserData? userData;
