@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'dart:html';
 import 'package:crayon_management/datamodels/enum.dart';
 import 'package:crayon_management/datamodels/route_arguments/presentation_screen_argument.dart';
+import 'package:crayon_management/providers/presentation/current_pdf_provider.dart';
 import 'package:crayon_management/providers/presentation/drawingboard/canvas_provider.dart';
 import 'package:crayon_management/providers/presentation/drawingboard/color_picker_provider.dart';
 import 'package:crayon_management/providers/presentation/drawingboard/line_width_provider.dart';
@@ -9,6 +10,9 @@ import 'package:crayon_management/providers/presentation/drawingboard/pdf_provid
 import 'package:crayon_management/providers/presentation/page_count_provider.dart';
 import 'package:crayon_management/providers/presentation/presentation_provider.dart';
 import 'package:crayon_management/screens/presentation/components/drawboard.dart';
+import 'package:crayon_management/screens/presentation/components/page_count.dart';
+import 'package:crayon_management/screens/presentation/components/presentation_controls.dart';
+import 'package:crayon_management/screens/presentation/components/presentation_options_row.dart';
 import 'package:crayon_management/screens/presentation/components/qr_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -57,6 +61,8 @@ class _PresentationScreenState extends State<PresentationScreen> {
     size = MediaQuery.of(context).size;
     double width = size.width;
     double height = size.height;
+    final currentPdfProvider =
+        Provider.of<CurrentPdfProvider>(context, listen: false);
     final pageCountProvider =
         Provider.of<PageCountProvider>(context, listen: false);
 
@@ -83,7 +89,9 @@ class _PresentationScreenState extends State<PresentationScreen> {
                               documentBuilder:
                                   (context, pdfDocument, pageCount) {
                             pageCountProvider.initValue(pageCount, 0);
-                            currentPdfDocument = pdfDocument;
+                            currentPdfProvider
+                                .setCurrentPdfDocument(pdfDocument);
+
                             return ScrollablePositionedList.builder(
                                 itemCount: pageCount,
                                 itemScrollController: _scrollController,
@@ -106,142 +114,9 @@ class _PresentationScreenState extends State<PresentationScreen> {
                           }),
                         ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          IconButton(
-                              onPressed: () {
-                                showDialog<void>(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return QrDialog(
-                                          lectureId: arguement.lectureId);
-                                    });
-                              },
-                              icon: const Icon(
-                                Icons.qr_code,
-                                color: Colors.white24,
-                              )),
-                          IconButton(
-                              onPressed: () {
-                                pageCountProvider.changeShowPageCount();
-                              },
-                              icon: const Icon(
-                                Icons.remove_red_eye,
-                                color: Colors.white24,
-                              )),
-                          IconButton(
-                              onPressed: () {
-                                showDialog<void>(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return Dialog(
-                                        child: MultiProvider(
-                                          providers: [
-                                            ChangeNotifierProvider<
-                                                    CanvasProvider>(
-                                                create: (context) =>
-                                                    CanvasProvider()),
-                                            ChangeNotifierProvider<
-                                                    LineWidthProvider>(
-                                                create: (context) =>
-                                                    LineWidthProvider()),
-                                            ChangeNotifierProvider<
-                                                ColorPickerProvider>(
-                                              create: (context) =>
-                                                  ColorPickerProvider(),
-                                            ),
-                                            ChangeNotifierProvider<PdfProvider>(
-                                              create: (context) =>
-                                                  PdfProvider(),
-                                            )
-                                          ],
-                                          child: DrawBoard(
-                                            pdfDocument: currentPdfDocument,
-                                            currentPage: pageCountProvider
-                                                    .currentPageNumber +
-                                                1,
-                                          ),
-                                        ),
-                                      );
-                                    });
-                              },
-                              icon: const Icon(
-                                Icons.app_registration,
-                                color: Colors.white24,
-                              )),
-                          const Spacer(),
-                          IconButton(
-                              onPressed: () {
-                                if (document.documentElement != null) {
-                                  document.documentElement!.requestFullscreen();
-                                }
-                              },
-                              icon: const Icon(
-                                Icons.fullscreen,
-                                color: Colors.white24,
-                              )),
-                          IconButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              icon: const Icon(
-                                Icons.close,
-                                color: Colors.white24,
-                              ))
-                        ],
-                      ),
-                      Center(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            IconButton(
-                                onPressed: () {
-                                  pageCountProvider.deacreasePageCount();
-                                  _scrollController.scrollTo(
-                                      index:
-                                          pageCountProvider.currentPageNumber,
-                                      duration:
-                                          const Duration(milliseconds: 200));
-                                },
-                                icon: const Icon(
-                                  Icons.arrow_left,
-                                  color: Colors.white24,
-                                  size: 24,
-                                )),
-                            IconButton(
-                                onPressed: () {
-                                  pageCountProvider.increasePageCount();
-                                  _scrollController.scrollTo(
-                                      index:
-                                          pageCountProvider.currentPageNumber,
-                                      duration:
-                                          const Duration(milliseconds: 200));
-                                },
-                                icon: const Icon(
-                                  Icons.arrow_right,
-                                  color: Colors.white24,
-                                  size: 24,
-                                )),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(right: 20, bottom: 20),
-                        alignment: Alignment.bottomRight,
-                        child: Consumer<PageCountProvider>(
-                          builder: (context, pageCountProvider, child) {
-                            if (pageCountProvider.showPageCount) {
-                              return Text(
-                                '${pageCountProvider.currentPageNumber + 1}/${pageCountProvider.totalPageCount}',
-                                style: const TextStyle(color: Colors.white24),
-                              );
-                            }
-                            return Container();
-                          },
-                        ),
-                      )
+                      PresentationOptionsRow(lectureId: arguement.lectureId),
+                      PresentationControls(scrollController: _scrollController),
+                      const PageCount()
                     ],
                   ));
       } else {

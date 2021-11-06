@@ -1,6 +1,7 @@
 import 'package:crayon_management/datamodels/lecture/lecture_snipped.dart';
 import 'package:crayon_management/datamodels/route_arguments/presentation_screen_argument.dart';
 import 'package:crayon_management/providers/lecture/detailed_lecture_provider.dart';
+import 'package:crayon_management/providers/presentation/current_pdf_provider.dart';
 import 'package:crayon_management/providers/presentation/page_count_provider.dart';
 import 'package:crayon_management/providers/presentation/presentation_provider.dart';
 import 'package:crayon_management/screens/detailed_lecture/detailed_lecture_screen.dart';
@@ -39,7 +40,9 @@ Route<dynamic> controller(RouteSettings routerSettings) {
                   ChangeNotifierProvider<PresentationProvider>(
                       create: (context) => PresentationProvider()),
                   ChangeNotifierProvider<PageCountProvider>(
-                      create: (context) => PageCountProvider())
+                      create: (context) => PageCountProvider()),
+                  Provider<CurrentPdfProvider>(
+                      create: (context) => CurrentPdfProvider())
                 ],
                 child: Material(
                   color: const Color(0xFF212332),
