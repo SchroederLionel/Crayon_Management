@@ -1,11 +1,10 @@
-import 'package:crayon_management/providers/login_registration_provider/login_button_provider.dart';
+import 'package:crayon_management/providers/login_registration_provider/login_provider.dart';
 import 'package:crayon_management/providers/login_registration_provider/registration_provider.dart';
-import 'package:crayon_management/providers/util_providers/login_provider.dart';
+import 'package:crayon_management/providers/util_providers/error_provider.dart';
 import 'package:crayon_management/providers/util_providers/theme_provider.dart';
 import 'package:crayon_management/screens/login_registration/components/sign_in.dart';
 import 'package:crayon_management/screens/login_registration/components/sign_up.dart';
 import 'package:crayon_management/widgets/language_widget.dart';
-
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -57,10 +56,10 @@ class LoginScreen extends StatelessWidget {
                   direction: FlipDirection.HORIZONTAL,
                   front: MultiProvider(
                     providers: [
-                      ChangeNotifierProvider<LoginButtonProvider>(
-                          create: (_) => LoginButtonProvider()),
                       ChangeNotifierProvider<LoginProvider>(
                           create: (_) => LoginProvider()),
+                      ChangeNotifierProvider<ErrorProvider>(
+                          create: (_) => ErrorProvider())
                     ],
                     child: const SignIn(),
                   ),

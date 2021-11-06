@@ -1,13 +1,9 @@
-import 'dart:async';
-
 import 'package:crayon_management/datamodels/enum.dart';
-import 'package:crayon_management/datamodels/user/user_data.dart';
-import 'package:crayon_management/providers/login_registration_provider/login_button_provider.dart';
-import 'package:crayon_management/providers/login_registration_provider/user_provider.dart';
-import 'package:crayon_management/providers/util_providers/login_provider.dart';
-import 'package:crayon_management/screens/login_registration/components/sign_in_button.dart';
+import 'package:crayon_management/providers/login_registration_provider/login_provider.dart';
 
-import 'package:crayon_management/services/authentication.dart';
+import 'package:crayon_management/providers/login_registration_provider/user_provider.dart';
+import 'package:crayon_management/providers/util_providers/error_provider.dart';
+import 'package:crayon_management/screens/login_registration/components/custom_button.dart';
 import 'package:crayon_management/services/validator_service.dart';
 import 'package:crayon_management/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
@@ -44,12 +40,12 @@ class _SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
     var translation = AppLocalizations.of(context);
-    final LoginButtonProvider buttonProvider =
-        Provider.of<LoginButtonProvider>(context, listen: false);
+    final LoginProvider buttonProvider =
+        Provider.of<LoginProvider>(context, listen: false);
     final UserProvider userProvider =
         Provider.of<UserProvider>(context, listen: false);
-    final LoginProvider loginNo =
-        Provider.of<LoginProvider>(context, listen: false);
+    final ErrorProvider errorProvider =
+        Provider.of<ErrorProvider>(context, listen: false);
     return Center(
         child: SizedBox(
       height: 560,
@@ -97,40 +93,40 @@ class _SignInState extends State<SignIn> {
                         icon: Icons.password,
                         labelText: translation.password,
                         isPassword: true),
-                    Consumer<LoginButtonProvider>(
-                        builder: (context, loginButton, child) =>
-                            SignInButton(onPressed: () async {
-                              if (loginButton.getIsValid) {
-                                loginNo
-                                    .signUserIn(buttonProvider.getEmail,
-                                        buttonProvider.getPassword, context)
-                                    .then((value) => value.fold(
-                                            (failure) => null, (userData) {
-                                          userProvider.setUserData(userData);
-                                          Navigator.pushNamed(
-                                              context, route.dashboard);
-                                        }));
-                              }
-                            })),
                     Consumer<LoginProvider>(
-                        builder: (context, loginNotifier, child) {
-                      if (loginNotifier.state == NotifierState.initial) {
+                        builder: (context, loginButton, child) =>
+                            loginButton.state == LoadingState.no
+                                ? CustomButton(
+                                    icon: Icons.login,
+                                    color: loginButton.getColor(),
+                                    text: translation.signIn,
+                                    onPressed: () => loginButton
+                                            .changeLoadingState(context)
+                                            .then((value) {
+                                          if (value != null) {
+                                            buttonProvider
+                                                .setState(LoadingState.no);
+                                            value.fold(
+                                                (failure) =>
+                                                    errorProvider.setErrorState(
+                                                        failure.toString()),
+                                                (userData) {
+                                              userProvider
+                                                  .setUserData(userData);
+                                              Navigator.pushNamed(
+                                                  context, route.dashboard);
+                                            });
+                                          }
+                                        }))
+                                : const Center(
+                                    child: CircularProgressIndicator(),
+                                  )),
+                    Consumer<ErrorProvider>(
+                        builder: (context, errorNotifier, child) {
+                      if (errorNotifier.state == ErrorState.noError) {
                         return Container();
-                      } else if (loginNotifier.state == NotifierState.loading) {
-                        return const CircularProgressIndicator();
-                      } else if (loginNotifier.state == NotifierState.loaded) {
-                        return loginNotifier.userData.fold(
-                            (failure) => Column(
-                                  children: [
-                                    Text(failure.toString()),
-                                  ],
-                                ), (userData) {
-                          userProvider.setUserData(userData);
-
-                          return Container();
-                        });
                       } else {
-                        return Container();
+                        return Text(errorNotifier.errorText);
                       }
                     }),
                   ],
