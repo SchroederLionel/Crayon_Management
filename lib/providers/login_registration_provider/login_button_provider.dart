@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:validators/validators.dart';
 
-class LoginProvider extends ChangeNotifier {
-  bool _isLoading = false;
+class LoginButtonProvider extends ChangeNotifier {
   bool _isValid = false;
   bool _isEmailValid = false;
   bool _isPasswordValid = false;
@@ -22,13 +21,6 @@ class LoginProvider extends ChangeNotifier {
       }
     }
   }
-
-  changIsLoading() {
-    _isLoading = !_isLoading;
-    notifyListeners();
-  }
-
-  bool get getIsloading => _isLoading;
 
   setEmail(String email) {
     _email = email;

@@ -21,23 +21,26 @@ class LoginProvider extends ChangeNotifier {
     _user = user;
   }
 
-  void signUserIn(String email, String password) async {
+  Future<Either<Failure, UserData>> signUserIn(
+      String email, String password, BuildContext context) async {
     _setState(NotifierState.loading);
 
-    await Task(() => signInWithEmailPassword(email, password))
-        .attempt()
-        .map(
-          (either) => either.leftMap((obj) {
-            try {
-              return obj as Failure;
-            } catch (e) {
-              throw obj;
-            }
-          }),
-        )
-        .run()
-        .then((userData) => _setUserData(userData));
-
+    Either<Failure, UserData> userData =
+        await Task(() => signInWithEmailPassword(email, password))
+            .attempt()
+            .map(
+              (either) => either.leftMap((obj) {
+                try {
+                  return obj as Failure;
+                } catch (e) {
+                  throw obj;
+                }
+              }),
+            )
+            .run();
+    _setUserData(userData);
     _setState(NotifierState.loaded);
+
+    return userData;
   }
 }
