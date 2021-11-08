@@ -1,9 +1,9 @@
 import 'package:crayon_management/datamodels/user/user_data.dart';
+import 'package:crayon_management/l10n/app_localizations.dart';
 import 'package:crayon_management/providers/login_registration_provider/user_provider.dart';
 import 'package:crayon_management/services/validator_service.dart';
 import 'package:crayon_management/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 class ProfileDialog extends StatefulWidget {
@@ -56,8 +56,7 @@ class _ProfileDialogState extends State<ProfileDialog> {
 
   @override
   Widget build(BuildContext context) {
-    var translation = AppLocalizations.of(context);
-
+    var appTranslation = AppLocalizations.of(context);
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       elevation: 0,
@@ -74,7 +73,7 @@ class _ProfileDialogState extends State<ProfileDialog> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      translation!.profile,
+                      appTranslation!.translate('profile') ?? 'Profile',
                       style: Theme.of(context).textTheme.headline1,
                     ),
                     IconButton(
@@ -94,7 +93,8 @@ class _ProfileDialogState extends State<ProfileDialog> {
                     onChanged: (String text) => () {},
                     controller: _firstNameController,
                     icon: Icons.person,
-                    labelText: translation.firstName,
+                    labelText:
+                        appTranslation.translate('firstName') ?? 'First name',
                     isPassword: false),
                 CustomTextFormField(
                     validator: (text) =>
@@ -102,7 +102,8 @@ class _ProfileDialogState extends State<ProfileDialog> {
                     onChanged: (String text) => () {},
                     controller: _lastNameController,
                     icon: Icons.person,
-                    labelText: translation.lastName,
+                    labelText:
+                        appTranslation.translate('lastName') ?? 'Last name',
                     isPassword: false),
                 CustomTextFormField(
                     validator: (text) =>
@@ -110,7 +111,7 @@ class _ProfileDialogState extends State<ProfileDialog> {
                     onChanged: (String text) => () {},
                     controller: _emailController,
                     icon: Icons.person,
-                    labelText: translation.email,
+                    labelText: appTranslation.translate('email') ?? 'Email',
                     isPassword: false),
                 CustomTextFormField(
                     validator: (text) =>
@@ -118,7 +119,7 @@ class _ProfileDialogState extends State<ProfileDialog> {
                     onChanged: (String text) => () {},
                     controller: _personalRoomController,
                     icon: Icons.room,
-                    labelText: translation.room,
+                    labelText: appTranslation.translate('room') ?? 'Room',
                     isPassword: false),
                 CustomTextFormField(
                     validator: (text) =>
@@ -126,7 +127,8 @@ class _ProfileDialogState extends State<ProfileDialog> {
                     onChanged: (String text) => () {},
                     controller: _phoneNumerController,
                     icon: Icons.phone,
-                    labelText: translation.phoneNumber,
+                    labelText: appTranslation.translate('phoneNumber') ??
+                        'Phone number',
                     isPassword: false),
                 const SizedBox(
                   height: 14,
@@ -155,7 +157,9 @@ class _ProfileDialogState extends State<ProfileDialog> {
                             Navigator.pop(context, newUserData);
                           }
                         },
-                        child: Text(translation.upload))
+                        child: Text(
+                          appTranslation.translate('upload') ?? 'Upload',
+                        ))
                   ],
                 ),
                 Container(
@@ -167,33 +171,6 @@ class _ProfileDialogState extends State<ProfileDialog> {
                               width: 3.0,
                               color: Theme.of(context).primaryColor)),
                     )),
-                CustomTextFormField(
-                    validator: (text) =>
-                        ValidatorService.checkPassword(text, context),
-                    onChanged: (String text) => () {},
-                    controller: _newPasswordController,
-                    icon: Icons.password,
-                    labelText: translation.newPassword,
-                    isPassword: true),
-                CustomTextFormField(
-                    validator: (text) =>
-                        ValidatorService.checkVerificationPassword(
-                            text, _newPasswordController.text, context),
-                    onChanged: (String text) => () {},
-                    controller: _newVerificationPasswordController,
-                    icon: Icons.password,
-                    labelText: translation.newVerificationPass,
-                    isPassword: true),
-                const SizedBox(
-                  height: 14,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ElevatedButton(
-                        onPressed: () {}, child: Text('Change Password'))
-                  ],
-                ),
               ],
             ),
           )),

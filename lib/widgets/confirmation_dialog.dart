@@ -1,4 +1,5 @@
 import 'package:crayon_management/datamodels/confirmation_dialog/confirmation_dialog_data.dart';
+import 'package:crayon_management/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class ConfirmationDialog extends StatelessWidget {
@@ -8,9 +9,12 @@ class ConfirmationDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var appTranslation = AppLocalizations.of(context);
     return AlertDialog(
       title: Text(
-        confirmationDialogData.title,
+        confirmationDialogData.title ??
+            appTranslation!.translate('delete') ??
+            'Delete',
         style: Theme.of(context).textTheme.subtitle1,
       ),
       content: Column(
@@ -19,7 +23,9 @@ class ConfirmationDialog extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            confirmationDialogData.description,
+            confirmationDialogData.description ??
+                appTranslation!.translate('confirmationDeletion') ??
+                'Confirm deletion',
             style: Theme.of(context).textTheme.bodyText1,
           ),
           Center(
@@ -36,10 +42,14 @@ class ConfirmationDialog extends StatelessWidget {
                 backgroundColor:
                     MaterialStateProperty.all<Color>(Colors.black26)),
             onPressed: () => Navigator.pop(context, false),
-            child: Text(confirmationDialogData.cancelTitle)),
+            child: Text(confirmationDialogData.cancelTitle ??
+                appTranslation!.translate('cancel') ??
+                'cancel')),
         ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
-            child: Text(confirmationDialogData.acceptTitle))
+            child: Text(confirmationDialogData.acceptTitle ??
+                appTranslation!.translate('yes') ??
+                'Yes'))
       ],
     );
   }

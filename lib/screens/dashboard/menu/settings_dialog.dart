@@ -1,15 +1,15 @@
+import 'package:crayon_management/l10n/app_localizations.dart';
 import 'package:crayon_management/providers/util_providers/theme_provider.dart';
 import 'package:crayon_management/widgets/language_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SettingsDialog extends StatelessWidget {
   const SettingsDialog({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var translation = AppLocalizations.of(context);
+    var appTranslation = AppLocalizations.of(context);
     final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return AlertDialog(
@@ -24,7 +24,8 @@ class SettingsDialog extends StatelessWidget {
             ElevatedButton.icon(
                 onPressed: () => themeProvider.swapTheme(),
                 icon: const Icon(Icons.lightbulb_outline),
-                label: Text(translation!.brightness))
+                label: Text(
+                    appTranslation!.translate('brightness') ?? 'Brightness'))
           ],
         ),
       ),

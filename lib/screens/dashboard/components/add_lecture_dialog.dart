@@ -2,6 +2,7 @@ import 'package:crayon_management/datamodels/enum.dart';
 import 'package:crayon_management/datamodels/language/language.dart';
 import 'package:crayon_management/datamodels/lecture/lecture.dart';
 import 'package:crayon_management/datamodels/lecture/lecture_date.dart';
+import 'package:crayon_management/l10n/app_localizations.dart';
 
 import 'package:crayon_management/providers/lecture/drop_down_day_provider.dart';
 import 'package:crayon_management/providers/lecture/lecture_date_provider.dart';
@@ -9,7 +10,7 @@ import 'package:crayon_management/providers/lecture/time_picker_provider.dart';
 import 'package:crayon_management/providers/login_registration_provider/user_provider.dart';
 
 import 'package:crayon_management/services/lecture_service.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'package:crayon_management/screens/dashboard/components/time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -44,7 +45,7 @@ class _AddLectureDialogState extends State<AddLectureDialog> {
 
   @override
   Widget build(BuildContext context) {
-    var translation = AppLocalizations.of(context);
+    var appTranslation = AppLocalizations.of(context);
 
     final lectureProvider =
         Provider.of<LectureDateProvider>(context, listen: false);
@@ -59,7 +60,7 @@ class _AddLectureDialogState extends State<AddLectureDialog> {
                   backgroundColor:
                       MaterialStateProperty.all<Color>(Colors.black26)),
               onPressed: () => Navigator.pop(context),
-              child: Text(translation!.cancel)),
+              child: Text(appTranslation!.translate('cancel') ?? 'Cancel')),
           ElevatedButton(
               onPressed: () {
                 String fileUid = const Uuid().v4();
@@ -74,7 +75,7 @@ class _AddLectureDialogState extends State<AddLectureDialog> {
                 userProvider.addLecture(lecture);
                 Navigator.pop(context);
               },
-              child: Text(translation.upload))
+              child: Text(appTranslation.translate('upload') ?? 'Upload'))
         ],
         content: Provider<TimePickerProvider>(
           create: (context) => TimePickerProvider(),
@@ -87,7 +88,7 @@ class _AddLectureDialogState extends State<AddLectureDialog> {
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     Text(
-                      translation.addLecture,
+                      appTranslation.translate('addLecture') ?? 'Add Lecture',
                       style: Theme.of(context).textTheme.headline1,
                     ),
                     Column(
@@ -104,7 +105,9 @@ class _AddLectureDialogState extends State<AddLectureDialog> {
                                       size: 18,
                                     ),
                                     border: const UnderlineInputBorder(),
-                                    labelText: translation.title))),
+                                    labelText:
+                                        appTranslation.translate('title') ??
+                                            'Title'))),
                         const SizedBox(
                           height: 14,
                         ),
@@ -122,7 +125,9 @@ class _AddLectureDialogState extends State<AddLectureDialog> {
                                         size: 18,
                                       ),
                                       border: const UnderlineInputBorder(),
-                                      labelText: translation.room)),
+                                      labelText:
+                                          appTranslation.translate('room') ??
+                                              'Room')),
                             ),
                             Container(
                                 margin: const EdgeInsets.only(top: 25),
@@ -198,10 +203,12 @@ class _AddLectureDialogState extends State<AddLectureDialog> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             CustomTimePicker(
-                              timeText: translation.starts,
+                              timeText: appTranslation.translate('starts') ??
+                                  'Starts',
                             ),
                             CustomTimePicker(
-                              timeText: translation.ends,
+                              timeText:
+                                  appTranslation.translate('ends') ?? 'Ends',
                             ),
                           ],
                         ),

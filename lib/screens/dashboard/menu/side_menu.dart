@@ -1,4 +1,5 @@
 import 'package:crayon_management/datamodels/user/user_data.dart';
+import 'package:crayon_management/l10n/app_localizations.dart';
 import 'package:crayon_management/providers/login_registration_provider/user_provider.dart';
 
 import 'package:crayon_management/screens/dashboard/menu/drawer_list_tile.dart';
@@ -6,7 +7,6 @@ import 'package:crayon_management/screens/dashboard/menu/profile_dialog.dart';
 import 'package:crayon_management/screens/dashboard/menu/settings_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SideMenu extends StatelessWidget {
   const SideMenu({
@@ -15,7 +15,7 @@ class SideMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var translation = AppLocalizations.of(context);
+    var appTranslation = AppLocalizations.of(context);
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     return Drawer(
       elevation: 16,
@@ -31,12 +31,12 @@ class SideMenu extends StatelessWidget {
                 width: 150,
               )),
               DrawerListTile(
-                title: translation!.dashboard,
+                title: appTranslation!.translate('dashboard') ?? 'Dashboard',
                 icon: Icons.dashboard,
                 pressed: () {},
               ),
               DrawerListTile(
-                title: translation.profile,
+                title: appTranslation.translate('profile') ?? 'Profile',
                 icon: Icons.account_circle,
                 pressed: () {
                   showDialog(
@@ -45,14 +45,13 @@ class SideMenu extends StatelessWidget {
                         return const ProfileDialog();
                       }).then((value) {
                     if (value is UserData) {
-                      print('KEKW');
                       userProvider.updateUserData(value);
                     }
                   });
                 },
               ),
               DrawerListTile(
-                title: translation.settings,
+                title: appTranslation.translate('settings') ?? 'Settings',
                 icon: Icons.settings,
                 pressed: () {
                   showDialog(
@@ -62,7 +61,7 @@ class SideMenu extends StatelessWidget {
                 },
               ),
               DrawerListTile(
-                title: translation.logout,
+                title: appTranslation.translate('logout') ?? 'Logout',
                 icon: Icons.logout,
                 pressed: () => Navigator.pop(context),
               ),

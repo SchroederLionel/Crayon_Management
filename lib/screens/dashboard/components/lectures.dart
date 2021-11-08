@@ -1,3 +1,4 @@
+import 'package:crayon_management/l10n/app_localizations.dart';
 import 'package:crayon_management/providers/lecture/drop_down_day_provider.dart';
 import 'package:crayon_management/providers/lecture/lecture_date_provider.dart';
 import 'package:crayon_management/providers/login_registration_provider/user_provider.dart';
@@ -7,7 +8,7 @@ import 'package:crayon_management/screens/dashboard/components/add_lecture_dialo
 import 'package:crayon_management/screens/dashboard/components/lecture_info_card.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'package:provider/provider.dart';
 
 class Lectures extends StatelessWidget {
@@ -15,7 +16,7 @@ class Lectures extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var translation = AppLocalizations.of(context);
+    var appTranslation = AppLocalizations.of(context);
 
     return Column(
       children: [
@@ -23,7 +24,7 @@ class Lectures extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              translation!.myLectures,
+              appTranslation!.translate('myLectures') ?? 'My Lectures',
               style: Theme.of(context).textTheme.headline2,
             ),
             ElevatedButton.icon(
@@ -47,7 +48,8 @@ class Lectures extends StatelessWidget {
                       });
                 },
                 icon: const Icon(Icons.add),
-                label: Text(translation.addLecture)),
+                label: Text(
+                    appTranslation.translate('addLecture') ?? 'Add Lecture')),
           ],
         ),
       ],

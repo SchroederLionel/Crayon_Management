@@ -1,7 +1,8 @@
+import 'package:crayon_management/l10n/app_localizations.dart';
 import 'package:crayon_management/providers/login_registration_provider/user_provider.dart';
 import 'package:crayon_management/services/authentication.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'package:provider/provider.dart';
 
 class ProfileCard extends StatelessWidget {
@@ -9,7 +10,7 @@ class ProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var translation = AppLocalizations.of(context);
+    var appTranslation = AppLocalizations.of(context);
 
     return Container(
       padding: const EdgeInsets.symmetric(
@@ -39,12 +40,10 @@ class ProfileCard extends StatelessWidget {
                   value: userP.getFirstAndLastName,
                   child: Row(
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         width: 30,
                         height: 30,
-                        child: Image.asset(
-                          "assets/images/profile.png",
-                        ),
+                        child: Icon(Icons.person),
                       ),
                       const SizedBox(width: 5.0),
                       Text(
@@ -70,7 +69,7 @@ class ProfileCard extends StatelessWidget {
                       ),
                       const SizedBox(width: 5.0),
                       Text(
-                        translation!.logout,
+                        appTranslation!.translate('logout') ?? ' Logout',
                         style: Theme.of(context).textTheme.bodyText1,
                       )
                     ],

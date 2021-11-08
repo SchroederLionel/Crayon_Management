@@ -1,6 +1,7 @@
 import 'package:crayon_management/datamodels/confirmation_dialog/confirmation_dialog_data.dart';
 
 import 'package:crayon_management/datamodels/lecture/lecture_snipped.dart';
+import 'package:crayon_management/l10n/app_localizations.dart';
 
 import 'package:crayon_management/providers/login_registration_provider/user_provider.dart';
 
@@ -8,7 +9,7 @@ import 'package:crayon_management/services/lecture_service.dart';
 import 'package:crayon_management/widgets/confirmation_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:crayon_management/route/route.dart' as route;
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'package:provider/provider.dart';
 
 class LectureInfoCard extends StatelessWidget {
@@ -17,7 +18,7 @@ class LectureInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var translation = AppLocalizations.of(context);
+    var appTranslation = AppLocalizations.of(context);
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(5.0),
@@ -34,7 +35,7 @@ class LectureInfoCard extends StatelessWidget {
               height: 14.0,
             ),
             Text(
-              translation!.dates,
+              appTranslation!.translate('dates') ?? 'Dates',
               style: Theme.of(context).textTheme.bodyText1,
             ),
             const SizedBox(
@@ -111,7 +112,9 @@ class LectureInfoCard extends StatelessWidget {
                           arguments: lecture);
                     },
                     icon: const Icon(Icons.open_in_browser),
-                    label: Text(translation.open)),
+                    label: Text(
+                      appTranslation.translate('open') ?? 'Open',
+                    )),
                 ElevatedButton.icon(
                     style: ButtonStyle(
                         backgroundColor:
@@ -120,12 +123,10 @@ class LectureInfoCard extends StatelessWidget {
                       showDialog(
                           context: context,
                           builder: (BuildContext context) => ConfirmationDialog(
-                              confirmationDialogData: ConfirmationDialogData(
-                                  title: translation.delete,
-                                  cancelTitle: translation.cancel,
-                                  itemTitle: lecture.title,
-                                  description: translation.confirmationDeletion,
-                                  acceptTitle: translation.yes))).then((value) {
+                                  confirmationDialogData:
+                                      ConfirmationDialogData(
+                                itemTitle: lecture.title,
+                              ))).then((value) {
                         if (value == true) {
                           final userProvider =
                               Provider.of<UserProvider>(context, listen: false);
@@ -136,7 +137,7 @@ class LectureInfoCard extends StatelessWidget {
                       });
                     },
                     icon: const Icon(Icons.delete),
-                    label: Text(translation.delete))
+                    label: Text(appTranslation.translate('delete') ?? 'Delete'))
               ],
             )
           ],
