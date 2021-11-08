@@ -1,5 +1,9 @@
+import 'package:crayon_management/datamodels/enum.dart';
+import 'package:crayon_management/datamodels/language/language.dart';
 import 'package:crayon_management/datamodels/lecture/lecture.dart';
 import 'package:crayon_management/datamodels/lecture/lecture_date.dart';
+
+import 'package:crayon_management/providers/lecture/drop_down_day_provider.dart';
 import 'package:crayon_management/providers/lecture/lecture_date_provider.dart';
 import 'package:crayon_management/providers/lecture/time_picker_provider.dart';
 import 'package:crayon_management/providers/login_registration_provider/user_provider.dart';
@@ -21,7 +25,7 @@ class AddLectureDialog extends StatefulWidget {
 class _AddLectureDialogState extends State<AddLectureDialog> {
   late TextEditingController _titleController;
   late TextEditingController _roomController;
-  String currentValueDay = 'monday';
+
   String currentLectureType = 'lecture';
 
   @override
@@ -41,9 +45,13 @@ class _AddLectureDialogState extends State<AddLectureDialog> {
   @override
   Widget build(BuildContext context) {
     var translation = AppLocalizations.of(context);
+
     final lectureProvider =
         Provider.of<LectureDateProvider>(context, listen: false);
     final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final dropDownDayProvider =
+        Provider.of<DropDownDayProvider>(context, listen: false);
+
     return AlertDialog(
         actions: [
           ElevatedButton(
@@ -103,56 +111,59 @@ class _AddLectureDialogState extends State<AddLectureDialog> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Container(
+                            SizedBox(
                               width: 100,
                               child: TextField(
                                   controller: _roomController,
                                   style: Theme.of(context).textTheme.bodyText1,
-                                  decoration: const InputDecoration(
-                                      prefixIcon: Icon(
+                                  decoration: InputDecoration(
+                                      prefixIcon: const Icon(
                                         Icons.room,
                                         size: 18,
                                       ),
-                                      border: UnderlineInputBorder(),
-                                      labelText: 'Room')),
+                                      border: const UnderlineInputBorder(),
+                                      labelText: translation.room)),
                             ),
                             Container(
-                              margin: EdgeInsets.only(top: 25),
-                              child: DropdownButton<String>(
-                                  onChanged: (String? day) {
-                                    setState(() {
-                                      currentValueDay = day!;
-                                    });
+                                margin: const EdgeInsets.only(top: 25),
+                                child: Consumer<DropDownDayProvider>(
+                                  builder: (context, dropProvider, __) {
+                                    if (dropProvider.state ==
+                                        NotifierState.initial) {
+                                      WidgetsBinding.instance!
+                                          .addPostFrameCallback((_) =>
+                                              dropDownDayProvider
+                                                  .setUp(context));
+
+                                      return Container();
+                                    }
+
+                                    return DropdownButton<Language>(
+                                        onChanged: (Language? day) {
+                                          if (day != null) {
+                                            dropProvider.setWeekDay(day);
+                                          }
+                                        },
+                                        value: dropProvider.currentWeekDay,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1,
+                                        underline: Container(
+                                          height: 2,
+                                          color: Colors.blueAccent,
+                                        ),
+                                        icon: const Icon(Icons.arrow_drop_down),
+                                        iconSize: 18,
+                                        items: dropProvider.weekDays
+                                            .map<DropdownMenuItem<Language>>(
+                                                (Language value) {
+                                          return DropdownMenuItem<Language>(
+                                            value: value,
+                                            child: Text(value.translation),
+                                          );
+                                        }).toList());
                                   },
-                                  value: currentValueDay,
-                                  style: Theme.of(context).textTheme.bodyText1,
-                                  underline: Container(
-                                    height: 2,
-                                    color: Colors.blueAccent,
-                                  ),
-                                  icon: const Icon(Icons.arrow_drop_down),
-                                  iconSize: 18,
-                                  items: <String>[
-                                    'monday',
-                                    'tuesday',
-                                    'wednesday',
-                                    'thursday',
-                                    'friday',
-                                    'saturday',
-                                    'sunday'
-                                  ].map<DropdownMenuItem<String>>(
-                                      (String value) {
-                                    return DropdownMenuItem<String>(
-                                      onTap: () {
-                                        setState(() {
-                                          currentValueDay = value;
-                                        });
-                                      },
-                                      value: value,
-                                      child: Text(value),
-                                    );
-                                  }).toList()),
-                            ),
+                                )),
                             Container(
                               margin: const EdgeInsets.only(top: 25),
                               child: DropdownButton<String>(
@@ -206,7 +217,7 @@ class _AddLectureDialogState extends State<AddLectureDialog> {
                                   listen: false);
                           LectureDate date = LectureDate(
                               room: _roomController.text,
-                              day: currentValueDay,
+                              day: dropDownDayProvider.currentWeekDay!.keyword,
                               startingTime:
                                   timePickerProvider.getStartingTimeInString(),
                               endingTime:
@@ -214,7 +225,7 @@ class _AddLectureDialogState extends State<AddLectureDialog> {
                               type: currentLectureType);
                           lectureProvider.add(date);
                         },
-                        icon: Icon(Icons.add),
+                        icon: const Icon(Icons.add),
                         label: Text('Add time interval')),
                     const SizedBox(
                       height: 14,

@@ -30,21 +30,18 @@ class LoginProvider extends ChangeNotifier {
 
   Future<Either<Failure, UserData>> signUserIn(
       String email, String password) async {
-    Either<Failure, UserData> userData =
-        await Task(() => signInWithEmailPassword(email, password))
-            .attempt()
-            .map(
-              (either) => either.leftMap((obj) {
-                try {
-                  return obj as Failure;
-                } catch (e) {
-                  throw obj;
-                }
-              }),
-            )
-            .run();
-
-    return userData;
+    return await Task(() => signInWithEmailPassword(email, password))
+        .attempt()
+        .map(
+          (either) => either.leftMap((obj) {
+            try {
+              return obj as Failure;
+            } catch (e) {
+              throw obj;
+            }
+          }),
+        )
+        .run();
   }
 
   setIsValid() {
@@ -83,15 +80,5 @@ class LoginProvider extends ChangeNotifier {
     setIsValid();
   }
 
-  Color getColor() {
-    if (_isValid) {
-      return Colors.blueAccent;
-    } else {
-      return Colors.grey[500]!;
-    }
-  }
-
-  String get getEmail => _email;
-  String get getPassword => _password;
-  bool get getIsValid => _isValid;
+  Color getColor() => _isValid ? Colors.blueAccent : Colors.grey[500]!;
 }

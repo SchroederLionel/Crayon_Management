@@ -1,3 +1,4 @@
+import 'package:crayon_management/l10n/app_localizations.dart';
 import 'package:crayon_management/providers/login_registration_provider/login_provider.dart';
 import 'package:crayon_management/providers/login_registration_provider/registration_provider.dart';
 import 'package:crayon_management/providers/util_providers/error_provider.dart';
@@ -8,7 +9,6 @@ import 'package:crayon_management/widgets/language_widget.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -17,7 +17,7 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
     GlobalKey<FlipCardState> cardKey = GlobalKey<FlipCardState>();
-    var translation = AppLocalizations.of(context);
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -29,9 +29,7 @@ class LoginScreen extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      const LanguageWidget(
-                        forStartingPage: true,
-                      ),
+                      const LanguageWidget(),
                       IconButton(
                           onPressed: () => themeProvider.swapTheme(),
                           icon: const Icon(
@@ -46,7 +44,9 @@ class LoginScreen extends StatelessWidget {
                       onPressed: () {
                         cardKey.currentState!.toggleCard();
                       },
-                      child: Text(translation!.signUp))
+                      child: Text(
+                          AppLocalizations.of(context)!.translate('register') ??
+                              'Register'))
                 ],
               ),
               Expanded(

@@ -1,3 +1,4 @@
+import 'package:crayon_management/l10n/app_localizations.dart';
 import 'package:crayon_management/providers/login_registration_provider/registration_provider.dart';
 import 'package:crayon_management/services/authentication.dart';
 import 'package:crayon_management/services/validator_service.dart';
@@ -5,8 +6,6 @@ import 'package:crayon_management/widgets/custom_text_form_field.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:validators/validators.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SignUp extends StatefulWidget {
   final GlobalKey<FlipCardState> cardKey;
@@ -44,7 +43,7 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
-    var translation = AppLocalizations.of(context);
+    var appTranslation = AppLocalizations.of(context);
     final RegistrationProvider registrationProvider =
         Provider.of<RegistrationProvider>(context, listen: false);
     return Center(
@@ -60,7 +59,7 @@ class _SignUpState extends State<SignUp> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    translation!.registration,
+                    appTranslation!.translate('registration') ?? 'Registration',
                     style: Theme.of(context).textTheme.headline1,
                   ),
                   IconButton(
@@ -82,14 +81,15 @@ class _SignUpState extends State<SignUp> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     CustomTextFormField(
-                        isPassword: false,
-                        validator: (email) =>
-                            ValidatorService.checkEmail(email, context),
-                        onChanged: (String text) =>
-                            registrationProvider.setEmail(text),
-                        controller: _emailController,
-                        icon: Icons.email,
-                        labelText: translation.email),
+                      isPassword: false,
+                      validator: (email) =>
+                          ValidatorService.checkEmail(email, context),
+                      onChanged: (String text) =>
+                          registrationProvider.setEmail(text),
+                      controller: _emailController,
+                      icon: Icons.email,
+                      labelText: appTranslation.translate('email') ?? 'Email',
+                    ),
                     CustomTextFormField(
                         isPassword: false,
                         validator: (text) =>
@@ -99,7 +99,8 @@ class _SignUpState extends State<SignUp> {
                             registrationProvider.setFirstName(text),
                         controller: _firstNameController,
                         icon: Icons.person,
-                        labelText: translation.firstName),
+                        labelText: appTranslation.translate('firstName') ??
+                            'Firstname'),
                     CustomTextFormField(
                         isPassword: false,
                         validator: (text) =>
@@ -109,7 +110,8 @@ class _SignUpState extends State<SignUp> {
                             registrationProvider.setLastName(text),
                         controller: _lastNameController,
                         icon: Icons.person,
-                        labelText: translation.lastName),
+                        labelText: appTranslation.translate('lastName') ??
+                            'Last name'),
                     CustomTextFormField(
                         isPassword: true,
                         validator: (password) =>
@@ -118,7 +120,8 @@ class _SignUpState extends State<SignUp> {
                             registrationProvider.setPassword(text),
                         controller: _passwordController,
                         icon: Icons.password,
-                        labelText: translation.password),
+                        labelText:
+                            appTranslation.translate('password') ?? 'Password'),
                     CustomTextFormField(
                         isPassword: true,
                         validator: (verificationPassword) =>
@@ -130,7 +133,8 @@ class _SignUpState extends State<SignUp> {
                             registrationProvider.setVerificationPassword(text),
                         controller: _verificationPasswordController,
                         icon: Icons.password,
-                        labelText: translation.password),
+                        labelText:
+                            appTranslation.translate('password') ?? 'Password'),
                     Consumer<RegistrationProvider>(
                         builder: (context, regiProv, child) => !regiProv
                                 .getIsLoading
@@ -188,7 +192,9 @@ class _SignUpState extends State<SignUp> {
                                   }
                                 },
                                 icon: const Icon(Icons.login),
-                                label: Text(translation.register))
+                                label: Text(
+                                    appTranslation.translate('register') ??
+                                        'Register'))
                             : CircularProgressIndicator())
                   ],
                 ),

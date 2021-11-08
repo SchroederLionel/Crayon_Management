@@ -1,4 +1,5 @@
 import 'package:crayon_management/datamodels/enum.dart';
+import 'package:crayon_management/l10n/app_localizations.dart';
 import 'package:crayon_management/providers/login_registration_provider/login_provider.dart';
 
 import 'package:crayon_management/providers/login_registration_provider/user_provider.dart';
@@ -9,8 +10,6 @@ import 'package:crayon_management/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:crayon_management/route/route.dart' as route;
 import 'package:provider/provider.dart';
-
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);
@@ -39,7 +38,8 @@ class _SignInState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context) {
-    var translation = AppLocalizations.of(context);
+    var appTranslation = AppLocalizations.of(context);
+
     final LoginProvider buttonProvider =
         Provider.of<LoginProvider>(context, listen: false);
     final UserProvider userProvider =
@@ -82,7 +82,8 @@ class _SignInState extends State<SignIn> {
                             buttonProvider.setEmail(email),
                         controller: _emailController,
                         icon: Icons.email,
-                        labelText: translation!.email,
+                        labelText:
+                            appTranslation!.translate('email') ?? 'Email',
                         isPassword: false),
                     CustomTextFormField(
                         validator: (password) =>
@@ -91,7 +92,8 @@ class _SignInState extends State<SignIn> {
                             buttonProvider.setPassword(password),
                         controller: _passwordController,
                         icon: Icons.password,
-                        labelText: translation.password,
+                        labelText:
+                            appTranslation.translate('password') ?? 'Password',
                         isPassword: true),
                     Consumer<LoginProvider>(
                         builder: (context, loginButton, child) =>
@@ -99,7 +101,8 @@ class _SignInState extends State<SignIn> {
                                 ? CustomButton(
                                     icon: Icons.login,
                                     color: loginButton.getColor(),
-                                    text: translation.signIn,
+                                    text: appTranslation.translate('signIn') ??
+                                        'Sign In',
                                     onPressed: () => loginButton
                                             .changeLoadingState(context)
                                             .then((value) {

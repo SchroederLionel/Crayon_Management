@@ -1,3 +1,4 @@
+import 'package:crayon_management/providers/lecture/drop_down_day_provider.dart';
 import 'package:crayon_management/providers/lecture/lecture_date_provider.dart';
 import 'package:crayon_management/providers/login_registration_provider/user_provider.dart';
 
@@ -35,9 +36,14 @@ class Lectures extends StatelessWidget {
                   showDialog(
                       context: context,
                       builder: (context) {
-                        return ListenableProvider<LectureDateProvider>(
-                            create: (context) => LectureDateProvider(),
-                            child: const AddLectureDialog());
+                        return MultiProvider(providers: [
+                          ChangeNotifierProvider<LectureDateProvider>(
+                            create: (_) => LectureDateProvider(),
+                          ),
+                          ChangeNotifierProvider<DropDownDayProvider>(
+                            create: (context) => DropDownDayProvider(),
+                          )
+                        ], child: const AddLectureDialog());
                       });
                 },
                 icon: const Icon(Icons.add),

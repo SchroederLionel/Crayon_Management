@@ -75,9 +75,9 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
-    - assets/DataAnalysis.pdf
-    - assets/QuantumComputing.pdf
-    - assets/test.pdf
+    - assets/language/de.json
+    - assets/language/fr.json
+    - assets/language/en.json
 
   fonts:
     - family: Poppins

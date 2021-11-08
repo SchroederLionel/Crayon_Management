@@ -1,25 +1,24 @@
+import 'package:crayon_management/datamodels/custom_locale.dart';
+import 'package:crayon_management/l10n/app_localizations.dart';
 import 'package:crayon_management/l10n/l10n.dart';
 import 'package:crayon_management/providers/util_providers/locale_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class LanguageWidget extends StatelessWidget {
-  final bool forStartingPage;
-  const LanguageWidget({required this.forStartingPage, Key? key})
-      : super(key: key);
+  const LanguageWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final locale = Localizations.localeOf(context);
     final localeProvider = Provider.of<LocaleProvider>(context, listen: false);
 
     return DropdownButton(
-      value: locale,
+      value: localeProvider.getLocal,
       icon: Container(
         child: const Icon(
           Icons.arrow_drop_down,
         ),
-        margin: EdgeInsets.only(left: 5),
+        margin: const EdgeInsets.only(left: 5),
       ),
       iconSize: 24,
       elevation: 16,
@@ -29,7 +28,7 @@ class LanguageWidget extends StatelessWidget {
         height: 2,
         color: Theme.of(context).primaryColor,
       ),
-      items: L10n.languages.map((Locale locale) {
+      items: AppLocalizations.languages.map((CustomLocale locale) {
         final String flag = L10n.getFlag(locale.languageCode);
         return DropdownMenuItem(
           value: locale,
@@ -38,7 +37,8 @@ class LanguageWidget extends StatelessWidget {
             style: const TextStyle(fontSize: 24),
           ),
           onTap: () {
-            localeProvider.setLocale(Locale(locale.languageCode));
+            localeProvider
+                .setLocale(CustomLocale(languageCode: locale.languageCode));
           },
         );
       }).toList(),

@@ -1,5 +1,7 @@
+import 'package:crayon_management/l10n/app_localizations.dart';
+import 'package:crayon_management/l10n/app_localizations_delegate.dart';
 import 'package:crayon_management/providers/login_registration_provider/user_provider.dart';
-import 'package:crayon_management/providers/presentation/presentation_provider.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 
 import 'package:crayon_management/Custom_scroll_behavior.dart';
@@ -7,8 +9,8 @@ import 'package:crayon_management/providers/util_providers/locale_provider.dart'
 import 'package:crayon_management/providers/util_providers/menu_provider.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:crayon_management/providers/util_providers/theme_provider.dart';
 import 'route/route.dart' as route;
@@ -55,8 +57,12 @@ class MyApp extends StatelessWidget {
       locale: localeProvider.getLocal,
       onGenerateRoute: route.controller,
       initialRoute: route.loginScreen,
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
+      localizationsDelegates: const [
+        AppLocalizationsDelegate(),
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: AppLocalizations.languages,
     );
   }
 }

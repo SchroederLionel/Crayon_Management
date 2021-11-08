@@ -1,7 +1,8 @@
+import 'package:crayon_management/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class LocaleProvider extends ChangeNotifier {
-  Locale _locale = const Locale('en');
+  Locale _locale = AppLocalizations.languages.first;
 
   Locale get getLocal => _locale;
 

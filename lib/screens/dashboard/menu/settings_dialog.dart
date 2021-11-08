@@ -1,4 +1,3 @@
-import 'package:crayon_management/providers/util_providers/locale_provider.dart';
 import 'package:crayon_management/providers/util_providers/theme_provider.dart';
 import 'package:crayon_management/widgets/language_widget.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +20,7 @@ class SettingsDialog extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const LanguageWidget(forStartingPage: true),
+            const LanguageWidget(),
             ElevatedButton.icon(
                 onPressed: () => themeProvider.swapTheme(),
                 icon: const Icon(Icons.lightbulb_outline),
