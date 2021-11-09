@@ -1,15 +1,12 @@
 import 'dart:html';
 
-import 'package:crayon_management/datamodels/dropped_file.dart';
-import 'package:crayon_management/providers/lecture/detailed_lecture_provider.dart';
-import 'package:crayon_management/providers/presentation/drawingboard/pdf_provider.dart';
+import 'package:crayon_management/l10n/app_localizations.dart';
 import 'package:crayon_management/providers/slide_data_provider.dart';
 import 'package:crayon_management/services/validator_service.dart';
 import 'package:crayon_management/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dropzone/flutter_dropzone.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DropZone extends StatefulWidget {
   final String lectureId;
@@ -40,7 +37,7 @@ class _DropZoneState extends State<DropZone> {
   File? file;
   @override
   Widget build(BuildContext context) {
-    var translation = AppLocalizations.of(context);
+    var appTranslation = AppLocalizations.of(context);
     return AlertDialog(
       actions: [
         ElevatedButton(
@@ -48,7 +45,7 @@ class _DropZoneState extends State<DropZone> {
                 backgroundColor:
                     MaterialStateProperty.all<Color>(Colors.black26)),
             onPressed: () => Navigator.pop(context),
-            child: Text(translation!.cancel)),
+            child: Text(appTranslation!.translate('cancel') ?? 'Cancel')),
         ElevatedButton(
             onPressed: () {
               if (slideProvider.getTitle.length >= 2 &&
@@ -56,7 +53,7 @@ class _DropZoneState extends State<DropZone> {
                 Navigator.pop(context, slideProvider);
               }
             },
-            child: Text(translation.upload))
+            child: Text(appTranslation.translate('upload') ?? 'Upload'))
       ],
       content: Builder(
         builder: (context) {
@@ -69,16 +66,18 @@ class _DropZoneState extends State<DropZone> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Text(
-                    translation.addSlide,
+                    appTranslation.translate('addSlide') ?? 'Add slide',
                     style: Theme.of(context).textTheme.headline1,
                   ),
                   CustomTextFormField(
                       validator: (text) =>
-                          ValidatorService.isStringLengthAbove2(text, context),
+                          ValidatorService.isStringLengthAbove2(
+                              text, appTranslation),
                       onChanged: (String text) => slideProvider.setTitle(text),
                       controller: _titleController,
                       icon: Icons.book_rounded,
-                      labelText: translation.pdfTitle,
+                      labelText:
+                          appTranslation.translate('pdfTitle') ?? 'PdfTitle',
                       isPassword: false),
                   const SizedBox(
                     height: 14,
@@ -113,7 +112,8 @@ class _DropZoneState extends State<DropZone> {
                                     Icons.search,
                                   ),
                                   label: Text(
-                                    translation.chooseFile,
+                                    appTranslation.translate('chooseFile') ??
+                                        'Choose file',
                                   ),
                                   onPressed: () async {
                                     final events = await controller.pickFiles();
@@ -125,7 +125,8 @@ class _DropZoneState extends State<DropZone> {
                                   height: 14,
                                 ),
                                 Text(
-                                  translation.dropFileHere,
+                                  appTranslation.translate('dropFileHere') ??
+                                      'Drop file here',
                                   style: Theme.of(context).textTheme.subtitle1,
                                 ),
                                 const SizedBox(

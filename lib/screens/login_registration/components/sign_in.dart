@@ -1,14 +1,12 @@
 import 'package:crayon_management/datamodels/enum.dart';
 import 'package:crayon_management/l10n/app_localizations.dart';
 import 'package:crayon_management/providers/login_registration_provider/login_provider.dart';
-
-import 'package:crayon_management/providers/login_registration_provider/user_provider.dart';
 import 'package:crayon_management/providers/util_providers/error_provider.dart';
 import 'package:crayon_management/screens/login_registration/components/custom_button.dart';
 import 'package:crayon_management/services/validator_service.dart';
 import 'package:crayon_management/widgets/custom_text_form_field.dart';
+import 'package:crayon_management/widgets/error_text.dart';
 import 'package:flutter/material.dart';
-import 'package:crayon_management/route/route.dart' as route;
 import 'package:provider/provider.dart';
 
 class SignIn extends StatefulWidget {
@@ -40,10 +38,9 @@ class _SignInState extends State<SignIn> {
   Widget build(BuildContext context) {
     var appTranslation = AppLocalizations.of(context);
 
-    final LoginProvider buttonProvider =
+    final LoginProvider loginProvider =
         Provider.of<LoginProvider>(context, listen: false);
-    final UserProvider userProvider =
-        Provider.of<UserProvider>(context, listen: false);
+
     final ErrorProvider errorProvider =
         Provider.of<ErrorProvider>(context, listen: false);
     return Center(
@@ -77,19 +74,19 @@ class _SignInState extends State<SignIn> {
                   children: [
                     CustomTextFormField(
                         validator: (email) =>
-                            ValidatorService.checkEmail(email, context),
+                            ValidatorService.checkEmail(email, appTranslation),
                         onChanged: (String email) =>
-                            buttonProvider.setEmail(email),
+                            loginProvider.setEmail(email),
                         controller: _emailController,
                         icon: Icons.email,
                         labelText:
                             appTranslation!.translate('email') ?? 'Email',
                         isPassword: false),
                     CustomTextFormField(
-                        validator: (password) =>
-                            ValidatorService.checkPassword(password, context),
+                        validator: (password) => ValidatorService.checkPassword(
+                            password, appTranslation),
                         onChanged: (String password) =>
-                            buttonProvider.setPassword(password),
+                            loginProvider.setPassword(password),
                         controller: _passwordController,
                         icon: Icons.password,
                         labelText:
@@ -103,24 +100,9 @@ class _SignInState extends State<SignIn> {
                                     color: loginButton.getColor(),
                                     text: appTranslation.translate('signIn') ??
                                         'Sign In',
-                                    onPressed: () => loginButton
-                                            .changeLoadingState(context)
-                                            .then((value) {
-                                          if (value != null) {
-                                            buttonProvider
-                                                .setState(LoadingState.no);
-                                            value.fold(
-                                                (failure) =>
-                                                    errorProvider.setErrorState(
-                                                        failure.toString()),
-                                                (userData) {
-                                              userProvider
-                                                  .setUserData(userData);
-                                              Navigator.pushNamed(
-                                                  context, route.dashboard);
-                                            });
-                                          }
-                                        }))
+                                    onPressed: () =>
+                                        loginButton.changeLoadingState(
+                                            context, errorProvider))
                                 : const Center(
                                     child: CircularProgressIndicator(),
                                   )),
@@ -129,7 +111,7 @@ class _SignInState extends State<SignIn> {
                       if (errorNotifier.state == ErrorState.noError) {
                         return Container();
                       } else {
-                        return Text(errorNotifier.errorText);
+                        return ErrorText(error: errorNotifier.errorText);
                       }
                     }),
                   ],

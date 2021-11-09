@@ -1,5 +1,6 @@
 import 'package:crayon_management/datamodels/confirmation_dialog/confirmation_dialog_data.dart';
 import 'package:crayon_management/datamodels/lecture/lecture.dart';
+import 'package:crayon_management/l10n/app_localizations.dart';
 
 import 'package:crayon_management/providers/lecture/detailed_lecture_provider.dart';
 
@@ -7,7 +8,7 @@ import 'package:crayon_management/providers/slide_data_provider.dart';
 import 'package:crayon_management/screens/detailed_lecture/add_slide/drop_zone.dart';
 
 import 'package:crayon_management/widgets/confirmation_dialog.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -30,7 +31,7 @@ class _SlidesComponentState extends State<SlidesComponent> {
 
   @override
   Widget build(BuildContext context) {
-    var translation = AppLocalizations.of(context);
+    var appTranslation = AppLocalizations.of(context);
     final detailLectureProvider =
         Provider.of<DetailedLectureProvider>(context, listen: false);
     return Column(
@@ -41,7 +42,7 @@ class _SlidesComponentState extends State<SlidesComponent> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              translation!.slides,
+              appTranslation!.translate('slides') ?? 'Slides',
               style: Theme.of(context).textTheme.subtitle1,
             ),
             ElevatedButton.icon(
@@ -61,7 +62,9 @@ class _SlidesComponentState extends State<SlidesComponent> {
                   });
                 },
                 icon: const Icon(Icons.add),
-                label: Text(AppLocalizations.of(context)!.addSlide))
+                label: Text(
+                  appTranslation.translate('addSlide') ?? 'Add slide',
+                ))
           ],
         ),
         const SizedBox(
@@ -93,21 +96,8 @@ class _SlidesComponentState extends State<SlidesComponent> {
                                     ConfirmationDialog(
                                         confirmationDialogData:
                                             ConfirmationDialogData(
-                                                title: AppLocalizations.of(
-                                                        context)!
-                                                    .delete,
-                                                itemTitle:
-                                                    lecture.slides[index].title,
-                                                cancelTitle:
-                                                    AppLocalizations.of(
-                                                            context)!
-                                                        .cancel,
-                                                description: translation
-                                                    .confirmationDeletion,
-                                                acceptTitle:
-                                                    AppLocalizations.of(
-                                                            context)!
-                                                        .yes))).then((value) {
+                                      itemTitle: lecture.slides[index].title,
+                                    ))).then((value) {
                               if (value == true) {
                                 detailLectureProvider.removeSlide(
                                     lecture.id, lecture.slides[index]);

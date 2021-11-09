@@ -46,7 +46,7 @@
     "saturday":"Samedi",
     "sunday":"Dimanche",
     "lecture":"Cours",
-    "exercise":"Exercer",
+    "exercise":"Exercice",
     "other":"Autre",
     "starts":"Starts",
     "ends":"Prend fin",
@@ -58,6 +58,14 @@
     "currentPassword":"Mot de passe actuel",
     "newPassword":"Nouveau mot de passe",
     "newVerificationPass":"Mot de passe de vérification",
-    "settings":"Paramètres"
+    "settings":"Paramètres",
+    "no-user-found":"Aucun utilisateur trouvé",
+    "wrong-password":"Mauvais mot de passe",
+    "firebase-exception":"Erreur de la base de données",
+    "no-internet":"Pas d'Internet",
+    "not-found":"Aucun objet trouvé",
+    "bad-format":"Mauvaise demande",
+    "weak-password":"Le mot de passe est trop faible",
+    "email-already-in-use":"L'email existe déjà"
     
 }

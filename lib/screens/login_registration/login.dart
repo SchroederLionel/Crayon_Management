@@ -63,11 +63,16 @@ class LoginScreen extends StatelessWidget {
                     ],
                     child: const SignIn(),
                   ),
-                  back: ChangeNotifierProvider<RegistrationProvider>(
+                  back: MultiProvider(
+                    providers: [
+                      ChangeNotifierProvider<RegistrationProvider>(
+                          create: (context) => RegistrationProvider()),
+                      ChangeNotifierProvider<ErrorProvider>(
+                          create: (context) => ErrorProvider())
+                    ],
                     child: SignUp(
                       cardKey: cardKey,
                     ),
-                    create: (context) => RegistrationProvider(),
                   ),
                 ),
               ),

@@ -1,5 +1,4 @@
 import 'package:crayon_management/datamodels/enum.dart';
-import 'package:crayon_management/datamodels/language/language.dart';
 import 'package:crayon_management/datamodels/lecture/lecture.dart';
 import 'package:crayon_management/datamodels/lecture/lecture_date.dart';
 import 'package:crayon_management/l10n/app_localizations.dart';
@@ -137,14 +136,13 @@ class _AddLectureDialogState extends State<AddLectureDialog> {
                                         NotifierState.initial) {
                                       WidgetsBinding.instance!
                                           .addPostFrameCallback((_) =>
-                                              dropDownDayProvider
-                                                  .setUp(context));
+                                              dropDownDayProvider.setUp(null));
 
                                       return Container();
                                     }
 
-                                    return DropdownButton<Language>(
-                                        onChanged: (Language? day) {
+                                    return DropdownButton<String>(
+                                        onChanged: (String? day) {
                                           if (day != null) {
                                             dropProvider.setWeekDay(day);
                                           }
@@ -160,11 +158,13 @@ class _AddLectureDialogState extends State<AddLectureDialog> {
                                         icon: const Icon(Icons.arrow_drop_down),
                                         iconSize: 18,
                                         items: dropProvider.weekDays
-                                            .map<DropdownMenuItem<Language>>(
-                                                (Language value) {
-                                          return DropdownMenuItem<Language>(
+                                            .map<DropdownMenuItem<String>>(
+                                                (String value) {
+                                          return DropdownMenuItem<String>(
                                             value: value,
-                                            child: Text(value.translation),
+                                            child: Text(appTranslation
+                                                    .translate(value) ??
+                                                value),
                                           );
                                         }).toList());
                                   },
@@ -193,7 +193,9 @@ class _AddLectureDialogState extends State<AddLectureDialog> {
                                       (String value) {
                                     return DropdownMenuItem<String>(
                                       value: value,
-                                      child: Text(value),
+                                      child: Text(
+                                          appTranslation.translate(value) ??
+                                              'error'),
                                     );
                                   }).toList()),
                             ),
@@ -224,7 +226,7 @@ class _AddLectureDialogState extends State<AddLectureDialog> {
                                   listen: false);
                           LectureDate date = LectureDate(
                               room: _roomController.text,
-                              day: dropDownDayProvider.currentWeekDay!.keyword,
+                              day: dropDownDayProvider.currentWeekDay!,
                               startingTime:
                                   timePickerProvider.getStartingTimeInString(),
                               endingTime:

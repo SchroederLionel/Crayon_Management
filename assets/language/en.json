@@ -58,5 +58,14 @@
     "currentPassword":"Current password",
     "newPassword":"New password",
     "newVerificationPass":"Verification password",
-    "settings":"Settings"
+    "settings":"Settings",
+    "no-user-found":"No user found",
+    "wrong-password":"Wrong Password",
+    "firebase-exception":"Database error",
+    "no-internet":"No internet",
+    "not-found":"No object found",
+    "weak-password":"Password is to weak",
+    "email-already-in-use":"Email already exists"
+ 
+
 }

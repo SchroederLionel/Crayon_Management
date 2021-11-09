@@ -1,13 +1,13 @@
 import 'package:crayon_management/datamodels/confirmation_dialog/confirmation_dialog_data.dart';
+import 'package:crayon_management/l10n/app_localizations.dart';
 import 'package:crayon_management/providers/quiz/question_provider.dart';
 import 'package:crayon_management/providers/quiz/quiz_provider.dart';
 
 import 'package:crayon_management/providers/quiz/response_provider.dart';
-import 'package:crayon_management/providers/util_providers/menu_provider.dart';
+
 import 'package:crayon_management/screens/detailed_lecture/add_quiz/quiz_dialog.dart';
 
 import 'package:crayon_management/widgets/confirmation_dialog.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +17,7 @@ class Quiz extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var translation = AppLocalizations.of(context);
+    var appTranslation = AppLocalizations.of(context);
     final quizProvider = Provider.of<QuizProvider>(context, listen: false);
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -28,7 +28,7 @@ class Quiz extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              translation!.quiz,
+              appTranslation!.translate('quiz') ?? 'Quiz',
               style: Theme.of(context).textTheme.subtitle1,
             ),
             ElevatedButton.icon(
@@ -53,7 +53,7 @@ class Quiz extends StatelessWidget {
                 },
                 icon: const Icon(Icons.add),
                 label: Text(
-                  translation.addQuestion,
+                  appTranslation.translate('addQuestion') ?? 'Add Question',
                 ))
           ],
         ),
@@ -91,20 +91,10 @@ class Quiz extends StatelessWidget {
                                               ConfirmationDialog(
                                                   confirmationDialogData:
                                                       ConfirmationDialogData(
-                                                          title: translation
-                                                              .delete,
-                                                          cancelTitle:
-                                                              translation
-                                                                  .cancel,
-                                                          itemTitle: questions
-                                                              .getQuiz(index)
-                                                              .title,
-                                                          description: translation
-                                                              .confirmationDeletion,
-                                                          acceptTitle:
-                                                              translation
-                                                                  .yes))).then(
-                                          (value) {
+                                                itemTitle: questions
+                                                    .getQuiz(index)
+                                                    .title,
+                                              ))).then((value) {
                                         if (value == true) {
                                           questions.removeQuiz(
                                               questions.getQuiz(index));

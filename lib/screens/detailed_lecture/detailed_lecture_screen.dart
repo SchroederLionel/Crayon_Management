@@ -1,14 +1,11 @@
 import 'package:crayon_management/datamodels/enum.dart';
-import 'package:crayon_management/datamodels/lecture/lecture.dart';
 import 'package:crayon_management/datamodels/lecture/lecture_snipped.dart';
 import 'package:crayon_management/providers/lecture/detailed_lecture_provider.dart';
 import 'package:crayon_management/providers/quiz/quiz_provider.dart';
-import 'package:crayon_management/providers/quiz/response_provider.dart';
 import 'package:crayon_management/screens/detailed_lecture/components/controls.dart';
 import 'package:crayon_management/screens/detailed_lecture/components/slides_component.dart';
 import 'package:crayon_management/screens/detailed_lecture/components/quiz.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 
 class DetailedLectureScreen extends StatefulWidget {

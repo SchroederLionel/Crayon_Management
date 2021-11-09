@@ -1,6 +1,7 @@
 import 'package:crayon_management/datamodels/enum.dart';
 import 'package:crayon_management/datamodels/failure.dart';
 import 'package:crayon_management/datamodels/user/user_data.dart';
+import 'package:crayon_management/providers/util_providers/error_provider.dart';
 import 'package:crayon_management/services/authentication.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
@@ -14,17 +15,24 @@ class LoginProvider extends ChangeNotifier {
   bool _isPasswordValid = false;
   String _email = '';
   String _password = '';
+  UserData? userData;
 
   void setState(LoadingState state) {
     _state = state;
     notifyListeners();
   }
 
-  Future<Either<Failure, UserData>?> changeLoadingState(
-      BuildContext context) async {
+  void changeLoadingState(
+      BuildContext context, ErrorProvider errorProvider) async {
     if (_isValid) {
       setState(LoadingState.yes);
-      return await signUserIn(_email, _password);
+      Either<Failure, UserData> response = await signUserIn(_email, _password);
+      setState(LoadingState.no);
+      response
+          .fold((failure) => errorProvider.setErrorState(failure.toString()),
+              (userData) {
+        Navigator.pushNamed(context, 'dashboard', arguments: userData);
+      });
     }
   }
 

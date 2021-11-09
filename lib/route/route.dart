@@ -1,5 +1,6 @@
 import 'package:crayon_management/datamodels/lecture/lecture_snipped.dart';
 import 'package:crayon_management/datamodels/route_arguments/presentation_screen_argument.dart';
+import 'package:crayon_management/datamodels/user/user_data.dart';
 import 'package:crayon_management/providers/lecture/detailed_lecture_provider.dart';
 import 'package:crayon_management/providers/presentation/current_pdf_provider.dart';
 import 'package:crayon_management/providers/presentation/page_count_provider.dart';
@@ -24,7 +25,9 @@ Route<dynamic> controller(RouteSettings routerSettings) {
     case loginScreen:
       return MaterialPageRoute(builder: (context) => const LoginScreen());
     case dashboard:
-      return MaterialPageRoute(builder: (context) => const Dashboard());
+      return MaterialPageRoute(
+          builder: (context) =>
+              Dashboard(userData: routerSettings.arguments as UserData));
     case detailedLecture:
       return MaterialPageRoute(
           builder: (context) => ListenableProvider(

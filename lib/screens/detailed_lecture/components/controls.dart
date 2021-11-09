@@ -1,13 +1,10 @@
 import 'dart:html';
-import 'package:crayon_management/datamodels/lecture/lecture.dart';
 import 'package:crayon_management/datamodels/lecture/slide.dart';
 import 'package:crayon_management/datamodels/route_arguments/presentation_screen_argument.dart';
-import 'package:crayon_management/providers/lecture/detailed_lecture_provider.dart';
+import 'package:crayon_management/l10n/app_localizations.dart';
+
 import 'package:crayon_management/route/route.dart' as route;
 import 'package:flutter/material.dart';
-
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:provider/provider.dart';
 
 class Controls extends StatefulWidget {
   final List<Slide> slides;
@@ -30,7 +27,7 @@ class _ControlsState extends State<Controls> {
 
   @override
   Widget build(BuildContext context) {
-    var translation = AppLocalizations.of(context);
+    var appTranslation = AppLocalizations.of(context);
     bool isScreenWide = MediaQuery.of(context).size.width >= 650;
 
     return Flex(
@@ -70,7 +67,8 @@ class _ControlsState extends State<Controls> {
                         lectureId: widget.lectureId,
                         fileId: currentSlide!.fileId)),
                 icon: const Icon(Icons.open_in_browser),
-                label: Text(translation!.openSlide)),
+                label: Text(
+                    appTranslation!.translate('openSlide') ?? 'Open Slide')),
           ],
         )
       ],

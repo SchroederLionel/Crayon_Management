@@ -1,9 +1,22 @@
+import 'package:crayon_management/datamodels/enum.dart';
+import 'package:crayon_management/datamodels/failure.dart';
+import 'package:crayon_management/datamodels/user/user_data.dart';
+import 'package:crayon_management/providers/util_providers/error_provider.dart';
+import 'package:crayon_management/services/authentication.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:validators/validators.dart';
 
 class RegistrationProvider extends ChangeNotifier {
-  bool _isLoading = false;
+  LoadingState _state = LoadingState.no;
+  LoadingState get state => _state;
+
+  void setState(LoadingState state) {
+    _state = state;
+    notifyListeners();
+  }
+
   bool _isValid = false;
   bool isEmailValid = false;
   bool isFirstNameValid = false;
@@ -17,12 +30,34 @@ class RegistrationProvider extends ChangeNotifier {
   late String _password;
   late String _verificationPassword;
 
-  changIsLoading() {
-    _isLoading = !_isLoading;
-    notifyListeners();
+  void changIsLoading(BuildContext context, ErrorProvider errorProvider) async {
+    if (_isValid) {
+      setState(LoadingState.yes);
+      Either<Failure, UserData> response = await register();
+      setState(LoadingState.no);
+      response.fold(
+          (failure) => errorProvider.setErrorState(failure.toString()),
+          (userData) =>
+              Navigator.pushNamed(context, 'dashboard', arguments: userData));
+      notifyListeners();
+    }
   }
 
-  get getIsLoading => _isLoading;
+  Future<Either<Failure, UserData>> register() async {
+    return await Task(() =>
+            registerWithEmailPassword(_email, _password, _firstName, _lastName))
+        .attempt()
+        .map(
+          (either) => either.leftMap((obj) {
+            try {
+              return obj as Failure;
+            } catch (e) {
+              throw obj;
+            }
+          }),
+        )
+        .run();
+  }
 
   setIsValid() {
     if (isEmailValid &&
@@ -42,13 +77,7 @@ class RegistrationProvider extends ChangeNotifier {
     }
   }
 
-  Color getColor() {
-    if (_isValid) {
-      return Colors.blueAccent;
-    } else {
-      return Colors.grey[500]!;
-    }
-  }
+  Color getColor() => _isValid ? Colors.blueAccent : Colors.grey[500]!;
 
   setIsVerificationPasswordValid(bool validVerificationPassword) =>
       isPasswordVerificationValid = validVerificationPassword;

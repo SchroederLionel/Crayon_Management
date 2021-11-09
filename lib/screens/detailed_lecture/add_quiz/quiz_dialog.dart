@@ -1,6 +1,7 @@
 import 'package:crayon_management/datamodels/quiz/question.dart';
 import 'package:crayon_management/datamodels/quiz/quiz.dart';
 import 'package:crayon_management/datamodels/quiz/response.dart';
+import 'package:crayon_management/l10n/app_localizations.dart';
 import 'package:crayon_management/providers/quiz/question_provider.dart';
 
 import 'package:crayon_management/providers/quiz/response_provider.dart';
@@ -8,7 +9,6 @@ import 'package:crayon_management/services/validator_service.dart';
 import 'package:crayon_management/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class QuizDialog extends StatefulWidget {
   const QuizDialog({Key? key}) : super(key: key);
@@ -41,7 +41,7 @@ class _QuizDialogState extends State<QuizDialog> {
 
   @override
   Widget build(BuildContext context) {
-    var translation = AppLocalizations.of(context);
+    var appTranslation = AppLocalizations.of(context);
     final responseProvider =
         Provider.of<ResponseProvider>(context, listen: false);
     final questionProvider =
@@ -54,7 +54,7 @@ class _QuizDialogState extends State<QuizDialog> {
                 backgroundColor:
                     MaterialStateProperty.all<Color>(Colors.black26)),
             onPressed: () => Navigator.pop(context, null),
-            child: Text(translation!.cancel)),
+            child: Text(appTranslation!.translate('cancel') ?? 'Cancel')),
         ElevatedButton(
             onPressed: () {
               if (_quizTitleController.text.length >= 4 &&
@@ -65,7 +65,7 @@ class _QuizDialogState extends State<QuizDialog> {
                 Navigator.pop(context, quiz);
               }
             },
-            child: Text(translation.upload))
+            child: Text(appTranslation.translate('upload') ?? 'Upload'))
       ],
       content: Builder(
         builder: (context) {
@@ -78,7 +78,7 @@ class _QuizDialogState extends State<QuizDialog> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Text(
-                  translation.quiz,
+                  appTranslation.translate('quiz') ?? 'Quiz',
                   style: Theme.of(context).textTheme.headline1,
                 ),
                 const SizedBox(
@@ -86,7 +86,8 @@ class _QuizDialogState extends State<QuizDialog> {
                 ),
                 CustomTextFormField(
                     validator: (String? text) =>
-                        ValidatorService.isStringLengthAbove2(text, context),
+                        ValidatorService.isStringLengthAbove2(
+                            text, appTranslation),
                     onChanged: (String value) {},
                     controller: _quizTitleController,
                     icon: Icons.title,
@@ -96,7 +97,7 @@ class _QuizDialogState extends State<QuizDialog> {
                   height: 14,
                 ),
                 Text(
-                  translation.addQuestion,
+                  appTranslation.translate('addQuestion') ?? 'Add quiz',
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
                 Row(
@@ -105,7 +106,7 @@ class _QuizDialogState extends State<QuizDialog> {
                       child: CustomTextFormField(
                           validator: (String? text) =>
                               ValidatorService.isStringLengthAbove2(
-                                  text, context),
+                                  text, appTranslation),
                           onChanged: (String value) {},
                           controller: _questionController,
                           icon: Icons.question_answer,
@@ -150,11 +151,13 @@ class _QuizDialogState extends State<QuizDialog> {
                                 child: CustomTextFormField(
                                     validator: (text) =>
                                         ValidatorService.isStringLengthAbove2(
-                                            text, context),
+                                            text, appTranslation),
                                     onChanged: (String text) {},
                                     controller: _responseController,
                                     icon: Icons.question_answer_rounded,
-                                    labelText: translation.response,
+                                    labelText:
+                                        appTranslation.translate('response') ??
+                                            'Response',
                                     isPassword: false)),
                             IconButton(
                                 onPressed: () {

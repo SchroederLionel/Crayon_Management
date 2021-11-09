@@ -88,8 +88,8 @@ class _ProfileDialogState extends State<ProfileDialog> {
                 ),
                 const SizedBox(height: 14),
                 CustomTextFormField(
-                    validator: (text) =>
-                        ValidatorService.isStringLengthAbove2(text, context),
+                    validator: (text) => ValidatorService.isStringLengthAbove2(
+                        text, appTranslation),
                     onChanged: (String text) => () {},
                     controller: _firstNameController,
                     icon: Icons.person,
@@ -97,8 +97,8 @@ class _ProfileDialogState extends State<ProfileDialog> {
                         appTranslation.translate('firstName') ?? 'First name',
                     isPassword: false),
                 CustomTextFormField(
-                    validator: (text) =>
-                        ValidatorService.isStringLengthAbove2(text, context),
+                    validator: (text) => ValidatorService.isStringLengthAbove2(
+                        text, appTranslation),
                     onChanged: (String text) => () {},
                     controller: _lastNameController,
                     icon: Icons.person,
@@ -106,24 +106,24 @@ class _ProfileDialogState extends State<ProfileDialog> {
                         appTranslation.translate('lastName') ?? 'Last name',
                     isPassword: false),
                 CustomTextFormField(
-                    validator: (text) =>
-                        ValidatorService.isStringLengthAbove2(text, context),
+                    validator: (text) => ValidatorService.isStringLengthAbove2(
+                        text, appTranslation),
                     onChanged: (String text) => () {},
                     controller: _emailController,
                     icon: Icons.person,
                     labelText: appTranslation.translate('email') ?? 'Email',
                     isPassword: false),
                 CustomTextFormField(
-                    validator: (text) =>
-                        ValidatorService.isStringLengthAbove2(text, context),
+                    validator: (text) => ValidatorService.isStringLengthAbove2(
+                        text, appTranslation),
                     onChanged: (String text) => () {},
                     controller: _personalRoomController,
                     icon: Icons.room,
                     labelText: appTranslation.translate('room') ?? 'Room',
                     isPassword: false),
                 CustomTextFormField(
-                    validator: (text) =>
-                        ValidatorService.isStringLengthAbove2(text, context),
+                    validator: (text) => ValidatorService.isStringLengthAbove2(
+                        text, appTranslation),
                     onChanged: (String text) => () {},
                     controller: _phoneNumerController,
                     icon: Icons.phone,

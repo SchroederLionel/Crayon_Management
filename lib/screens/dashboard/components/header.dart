@@ -1,16 +1,16 @@
+import 'package:crayon_management/l10n/app_localizations.dart';
 import 'package:crayon_management/providers/util_providers/menu_provider.dart';
 import 'package:crayon_management/responsive.dart';
 import 'package:crayon_management/screens/dashboard/components/profile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Header extends StatelessWidget {
   const Header({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var translation = AppLocalizations.of(context);
+    var appLocalization = AppLocalizations.of(context);
     return Row(
       children: [
         if (!Responsive.isDesktop(context))
@@ -20,7 +20,7 @@ class Header extends StatelessWidget {
           ),
         if (!Responsive.isMobile(context))
           Text(
-            translation!.dashboard,
+            appLocalization!.translate('dashboard') ?? 'Dashboard',
             style: Theme.of(context).textTheme.headline1,
           ),
         Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
