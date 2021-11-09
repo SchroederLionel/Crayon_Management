@@ -2,11 +2,11 @@ import 'package:crayon_management/datamodels/enum.dart';
 import 'package:crayon_management/l10n/app_localizations.dart';
 import 'package:crayon_management/providers/login_registration_provider/registration_provider.dart';
 import 'package:crayon_management/providers/util_providers/error_provider.dart';
-import 'package:crayon_management/services/authentication.dart';
+
 import 'package:crayon_management/services/validator_service.dart';
 import 'package:crayon_management/widgets/custom_text_form_field.dart';
 import 'package:crayon_management/widgets/error_text.dart';
-import 'package:crayon_management/widgets/snackbar.dart';
+
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

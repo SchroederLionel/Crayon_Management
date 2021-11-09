@@ -65,7 +65,9 @@
     "no-internet":"No internet",
     "not-found":"No object found",
     "weak-password":"Password is to weak",
-    "email-already-in-use":"Email already exists"
+    "email-already-in-use":"Email already exists",
+    "add-time-interval":"as"
+   
  
 
 }

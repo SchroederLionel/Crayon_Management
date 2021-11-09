@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class ThemeProvider extends ChangeNotifier {
   late ThemeData _selectedTheme;
-  static const hex_primary_color = 0xFF2A2D3E;
+
   ThemeData light = ThemeData(
       fontFamily: 'Poppins',
       primaryColor: Colors.blueAccent,

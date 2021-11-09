@@ -1,19 +1,16 @@
 import 'dart:typed_data';
-import 'dart:html';
+
 import 'package:crayon_management/datamodels/enum.dart';
 import 'package:crayon_management/datamodels/route_arguments/presentation_screen_argument.dart';
 import 'package:crayon_management/providers/presentation/current_pdf_provider.dart';
-import 'package:crayon_management/providers/presentation/drawingboard/canvas_provider.dart';
-import 'package:crayon_management/providers/presentation/drawingboard/color_picker_provider.dart';
-import 'package:crayon_management/providers/presentation/drawingboard/line_width_provider.dart';
-import 'package:crayon_management/providers/presentation/drawingboard/pdf_provider.dart';
+
 import 'package:crayon_management/providers/presentation/page_count_provider.dart';
 import 'package:crayon_management/providers/presentation/presentation_provider.dart';
-import 'package:crayon_management/screens/presentation/components/drawboard.dart';
+
 import 'package:crayon_management/screens/presentation/components/page_count.dart';
 import 'package:crayon_management/screens/presentation/components/presentation_controls.dart';
 import 'package:crayon_management/screens/presentation/components/presentation_options_row.dart';
-import 'package:crayon_management/screens/presentation/components/qr_dialog.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:pdf_render/pdf_render.dart';

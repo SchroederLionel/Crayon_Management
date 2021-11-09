@@ -35,15 +35,13 @@ void main() async {
       ChangeNotifierProvider<UserProvider>(
           create: (BuildContext context) => UserProvider())
     ],
-    child: MyApp(),
+    child: const MyApp(),
   ));
 }
 
 class MyApp extends StatelessWidget {
-  final Future<FirebaseApp> _initilaization = Firebase.initializeApp();
-  MyApp({Key? key}) : super(key: key);
-  //var app = Firebase.initializeApp();
-  // This widget is the root of your application.
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context, listen: true);

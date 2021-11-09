@@ -235,17 +235,20 @@ class _AddLectureDialogState extends State<AddLectureDialog> {
                           lectureProvider.add(date);
                         },
                         icon: const Icon(Icons.add),
-                        label: Text('Add time interval')),
+                        label: Text(
+                          appTranslation.translate('add-time-interval') ??
+                              'Add time interval',
+                        )),
                     const SizedBox(
                       height: 14,
                     ),
                     Flexible(
                       child: Consumer<LectureDateProvider>(
-                        builder: (context, lecture_info, child) {
-                          if (lecture_info.getLectureLength != 0) {
+                        builder: (context, lectureInfo, child) {
+                          if (lectureInfo.getLectureLength != 0) {
                             return ListView.builder(
                               shrinkWrap: true,
-                              itemCount: lecture_info.getLectureLength,
+                              itemCount: lectureInfo.getLectureLength,
                               itemBuilder: (context, index) {
                                 return Card(
                                   child: Row(
@@ -254,19 +257,19 @@ class _AddLectureDialogState extends State<AddLectureDialog> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceEvenly,
                                     children: [
-                                      Text(lecture_info
+                                      Text(lectureInfo
                                           .getLectureDate(index)
                                           .room),
-                                      Text(lecture_info
+                                      Text(lectureInfo
                                           .getLectureDate(index)
                                           .day),
-                                      Text(lecture_info
+                                      Text(lectureInfo
                                           .getLectureDate(index)
                                           .startingTime),
-                                      Text(lecture_info
+                                      Text(lectureInfo
                                           .getLectureDate(index)
                                           .endingTime),
-                                      Text(lecture_info
+                                      Text(lectureInfo
                                           .getLectureDate(index)
                                           .type
                                           .toString())

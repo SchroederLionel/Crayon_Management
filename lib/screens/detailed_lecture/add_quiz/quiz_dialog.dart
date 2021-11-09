@@ -110,7 +110,8 @@ class _QuizDialogState extends State<QuizDialog> {
                           onChanged: (String value) {},
                           controller: _questionController,
                           icon: Icons.question_answer,
-                          labelText: 'Question',
+                          labelText: appTranslation.translate('question') ??
+                              'Question',
                           isPassword: false),
                     ),
                     const SizedBox(

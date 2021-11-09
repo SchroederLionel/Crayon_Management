@@ -2,7 +2,7 @@ import 'package:crayon_management/datamodels/quiz/quiz.dart';
 import 'package:flutter/material.dart';
 
 class QuizProvider extends ChangeNotifier {
-  List<Quiz> _quizes = <Quiz>[];
+  final List<Quiz> _quizes = <Quiz>[];
 
   int lengthOfQuizes() {
     return _quizes.length;

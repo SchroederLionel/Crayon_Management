@@ -1,4 +1,3 @@
-import 'dart:html';
 import 'package:crayon_management/datamodels/lecture/slide.dart';
 import 'package:crayon_management/datamodels/route_arguments/presentation_screen_argument.dart';
 import 'package:crayon_management/l10n/app_localizations.dart';
