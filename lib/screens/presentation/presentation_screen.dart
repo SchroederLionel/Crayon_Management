@@ -6,6 +6,7 @@ import 'package:crayon_management/providers/presentation/current_pdf_provider.da
 
 import 'package:crayon_management/providers/presentation/page_count_provider.dart';
 import 'package:crayon_management/providers/presentation/presentation_provider.dart';
+import 'package:crayon_management/providers/presentation/show_options_provider.dart';
 
 import 'package:crayon_management/screens/presentation/components/page_count.dart';
 import 'package:crayon_management/screens/presentation/components/presentation_controls.dart';
@@ -111,7 +112,19 @@ class _PresentationScreenState extends State<PresentationScreen> {
                           }),
                         ),
                       ),
-                      PresentationOptionsRow(lectureId: arguement.lectureId),
+                      Consumer<ShowOptionProvider>(
+                          builder: (_, showOptionProvider, child) {
+                        return !showOptionProvider.show
+                            ? IconButton(
+                                onPressed: () =>
+                                    showOptionProvider.changeShow(),
+                                icon: const Icon(
+                                  Icons.remove_red_eye,
+                                  color: Colors.white24,
+                                ))
+                            : PresentationOptionsRow(
+                                lectureId: arguement.lectureId);
+                      }),
                       PresentationControls(scrollController: _scrollController),
                       const PageCount()
                     ],

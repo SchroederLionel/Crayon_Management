@@ -1,14 +1,12 @@
 import 'package:crayon_management/datamodels/confirmation_dialog/confirmation_dialog_data.dart';
 import 'package:crayon_management/datamodels/lecture/lecture.dart';
+import 'package:crayon_management/datamodels/lecture/slide.dart';
 import 'package:crayon_management/l10n/app_localizations.dart';
-
 import 'package:crayon_management/providers/lecture/detailed_lecture_provider.dart';
-
 import 'package:crayon_management/providers/slide_data_provider.dart';
 import 'package:crayon_management/screens/detailed_lecture/add_slide/drop_zone.dart';
-
 import 'package:crayon_management/widgets/confirmation_dialog.dart';
-
+import 'package:crayon_management/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -34,6 +32,7 @@ class _SlidesComponentState extends State<SlidesComponent> {
     var appTranslation = AppLocalizations.of(context);
     final detailLectureProvider =
         Provider.of<DetailedLectureProvider>(context, listen: false);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -55,9 +54,16 @@ class _SlidesComponentState extends State<SlidesComponent> {
                           child: DropZone(lectureId: lecture.id),
                         );
                       }).then((value) {
-                    if (value != null) {
-                      detailLectureProvider.addSlide(
-                          lecture.id, value.getTitle, value.getDroppedFile);
+                    if (value is Slide) {
+                      detailLectureProvider.addSlide(value);
+                    } else if (value is String) {
+                      ScaffoldMessenger.of(context).showSnackBar(CustomSnackbar(
+                          text: appTranslation.translate(value) ??
+                              'Something went wrong',
+                          color: Colors.red));
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(CustomSnackbar(
+                          text: 'Something went wrong', color: Colors.red));
                     }
                   });
                 },
@@ -100,7 +106,7 @@ class _SlidesComponentState extends State<SlidesComponent> {
                                     ))).then((value) {
                               if (value == true) {
                                 detailLectureProvider.removeSlide(
-                                    lecture.id, lecture.slides[index]);
+                                    widget.lecture.id, lecture.slides[index]);
                               }
                             });
                           },

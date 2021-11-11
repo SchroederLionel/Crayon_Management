@@ -66,5 +66,12 @@
     "not-found":"Kein Objekt gefunden",
     "bad-format":"Ungültige Anforderung",
     "weak-password":"Passwort ist zu schwach",
-    "email-already-in-use":"E-Mail existiert bereits"
+    "email-already-in-use":"E-Mail existiert bereits",
+    "add-time-interval":"Zeitintervall hinzufügen",
+    "failed-to-remove-file":"Folie konnte nicht entfernt werden",
+    "quiz-requires-at-least-one-question":"Ein Quiz erfordert mindestens eine Frage!",
+    "a-question-requires-at-least-two-responses":"Eine Frage erfordert mindestens zwei Antworten!",
+    "a-question-requires-a-question-title":"Eine Frage erfordert einen Fragetitel!",
+    "quiz-requires-a-title":"Ein Quiz erfordert einen Titel!",
+    "response-requires-at-least-two-chars":"Antwort erfordert mindestens zwei Zeichen!"
 }

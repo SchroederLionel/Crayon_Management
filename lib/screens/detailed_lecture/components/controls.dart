@@ -1,9 +1,12 @@
 import 'package:crayon_management/datamodels/lecture/slide.dart';
+import 'package:crayon_management/datamodels/quiz/quiz.dart';
 import 'package:crayon_management/datamodels/route_arguments/presentation_screen_argument.dart';
 import 'package:crayon_management/l10n/app_localizations.dart';
+import 'package:crayon_management/providers/quiz/quiz_provider.dart';
 
 import 'package:crayon_management/route/route.dart' as route;
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Controls extends StatefulWidget {
   final List<Slide> slides;
@@ -63,6 +66,10 @@ class _ControlsState extends State<Controls> {
                 onPressed: () => Navigator.pushNamed(
                     context, route.presentation,
                     arguments: PresentationScreenArgument(
+                        quizes:
+                            Provider.of<QuizProvider>(context, listen: false)
+                                .quizes
+                                .fold((l) => [], (quizes) => quizes),
                         lectureId: widget.lectureId,
                         fileId: currentSlide!.fileId)),
                 icon: const Icon(Icons.open_in_browser),

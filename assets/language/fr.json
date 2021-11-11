@@ -66,6 +66,13 @@
     "not-found":"Aucun objet trouvé",
     "bad-format":"Mauvaise demande",
     "weak-password":"Le mot de passe est trop faible",
-    "email-already-in-use":"L'email existe déjà"
+    "email-already-in-use":"L'email existe déjà",
+    "add-time-interval":"Ajouter un intervalle de temps",
+    "failed-to-remove-file":"Échec de la suppression de la diapositive",
+    "quiz-requires-at-least-one-question":"Un quiz nécessite au moins une question!",
+    "a-question-requires-at-least-two-responses":"Une question nécessite au moins deux réponses!",
+    "a-question-requires-a-question-title":"Une question nécessite un titre de question!",
+    "quiz-requires-a-title":"Un quiz nécessite un titre!",
+    "response-requires-at-least-two-chars":"La réponse nécessite au moins deux caractères !"
     
 }

@@ -66,8 +66,12 @@
     "not-found":"No object found",
     "weak-password":"Password is to weak",
     "email-already-in-use":"Email already exists",
-    "add-time-interval":"as"
-   
- 
-
+    "add-time-interval":"Add time interval",
+    "failed-to-remove-file":"Failed to remove Slide",
+    "quiz-title":"Quiz title",
+    "quiz-requires-at-least-one-question":"A quiz requires at least one question!",
+    "a-question-requires-at-least-two-responses":"A question requires at least two responses!",
+    "a-question-requires-a-question-title":"A question requires a question title!",
+    "quiz-requires-a-title":"A quiz requires a title!",
+    "response-requires-at-least-two-chars":"Response requires at least two characters!"
 }

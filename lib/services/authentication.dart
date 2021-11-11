@@ -6,6 +6,7 @@ import 'package:crayon_management/datamodels/user/user_data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// https://firebase.google.com/docs/auth/admin/errors
 final FirebaseAuth _auth = FirebaseAuth.instance;
 String? uid;
 String? userEmail;

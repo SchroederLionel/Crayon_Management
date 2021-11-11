@@ -18,6 +18,7 @@ class DetailedLectureScreen extends StatefulWidget {
 }
 
 class _DetailedLectureScreenState extends State<DetailedLectureScreen> {
+  List<Quiz> quizes = [];
   @override
   void initState() {
     super.initState();
@@ -62,7 +63,7 @@ class _DetailedLectureScreenState extends State<DetailedLectureScreen> {
                   } else if (lectureNotifier.state == NotifierState.loading) {
                     return const Center(child: CircularProgressIndicator());
                   } else {
-                    return lectureNotifier.lectureD.fold(
+                    return lectureNotifier.lecture.fold(
                         (failure) => Center(child: Text(failure.toString())),
                         (lecture) => lecture == null
                             ? Container()
@@ -78,9 +79,8 @@ class _DetailedLectureScreenState extends State<DetailedLectureScreen> {
               const SizedBox(
                 height: 14,
               ),
-              ListenableProvider<QuizProvider>(
-                create: (context) => QuizProvider(),
-                child: const Quiz(),
+              Quiz(
+                lectureId: widget.lecture.id,
               ),
               const SizedBox(
                 height: 14,
@@ -92,7 +92,7 @@ class _DetailedLectureScreenState extends State<DetailedLectureScreen> {
                 } else if (lectureNotifier.state == NotifierState.loading) {
                   return const CircularProgressIndicator();
                 } else {
-                  return lectureNotifier.lectureD.fold(
+                  return lectureNotifier.lecture.fold(
                       (failure) => Text(failure.toString()),
                       (lecture) => lecture == null
                           ? Container()

@@ -1,7 +1,8 @@
 import 'package:crayon_management/datamodels/quiz/question.dart';
+import 'package:uuid/uuid.dart';
 
 class Quiz {
-  late String id;
+  String id = const Uuid().v4();
   String title;
   List<Question> questions;
 
@@ -21,5 +22,9 @@ class Quiz {
     return quiz;
   }
 
-  Map<String, dynamic> toJson() => {'id': id, 'questions': questions};
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'title': title,
+        'questions': questions.map((question) => question.toJson()).toList()
+      };
 }

@@ -5,6 +5,9 @@ import 'package:crayon_management/providers/lecture/detailed_lecture_provider.da
 import 'package:crayon_management/providers/presentation/current_pdf_provider.dart';
 import 'package:crayon_management/providers/presentation/page_count_provider.dart';
 import 'package:crayon_management/providers/presentation/presentation_provider.dart';
+import 'package:crayon_management/providers/presentation/quiz_selector_provider.dart';
+import 'package:crayon_management/providers/presentation/show_options_provider.dart';
+import 'package:crayon_management/providers/quiz/quiz_provider.dart';
 import 'package:crayon_management/screens/detailed_lecture/detailed_lecture_screen.dart';
 import 'package:crayon_management/screens/presentation/presentation_screen.dart';
 import 'package:flutter/material.dart';
@@ -30,13 +33,18 @@ Route<dynamic> controller(RouteSettings routerSettings) {
               Dashboard(userData: routerSettings.arguments as UserData));
     case detailedLecture:
       return MaterialPageRoute(
-          builder: (context) => ListenableProvider(
-                create: (context) => DetailedLectureProvider(),
-                child: DetailedLectureScreen(
-                  lecture: routerSettings.arguments as LectureSnipped,
-                ),
-              ));
+          builder: (context) => MultiProvider(
+                  providers: [
+                    ChangeNotifierProvider<DetailedLectureProvider>(
+                        create: (context) => DetailedLectureProvider()),
+                    ChangeNotifierProvider<QuizProvider>(
+                        create: (context) => QuizProvider())
+                  ],
+                  child: DetailedLectureScreen(
+                    lecture: routerSettings.arguments as LectureSnipped,
+                  )));
     case presentation:
+      var arg = routerSettings.arguments as PresentationScreenArgument;
       return MaterialPageRoute(
           builder: (context) => MultiProvider(
                 providers: [
@@ -45,12 +53,17 @@ Route<dynamic> controller(RouteSettings routerSettings) {
                   ChangeNotifierProvider<PageCountProvider>(
                       create: (context) => PageCountProvider()),
                   Provider<CurrentPdfProvider>(
-                      create: (context) => CurrentPdfProvider())
+                      create: (context) => CurrentPdfProvider()),
+                  ChangeNotifierProvider<QuizSelectorProvider>(
+                      create: (context) =>
+                          QuizSelectorProvider(quizes: arg.quizes)),
+                  ChangeNotifierProvider<ShowOptionProvider>(
+                      create: (context) => ShowOptionProvider())
                 ],
                 child: Material(
                   color: const Color(0xFF212332),
                   child: PresentationScreen(
-                    arg: routerSettings.arguments as PresentationScreenArgument,
+                    arg: arg,
                   ),
                 ),
               ));

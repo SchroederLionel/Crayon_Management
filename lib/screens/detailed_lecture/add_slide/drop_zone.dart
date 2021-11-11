@@ -1,6 +1,7 @@
 import 'dart:html';
 
 import 'package:crayon_management/l10n/app_localizations.dart';
+import 'package:crayon_management/providers/lecture/detailed_lecture_provider.dart';
 import 'package:crayon_management/providers/slide_data_provider.dart';
 import 'package:crayon_management/services/validator_service.dart';
 import 'package:crayon_management/widgets/custom_text_form_field.dart';
@@ -38,6 +39,7 @@ class _DropZoneState extends State<DropZone> {
   @override
   Widget build(BuildContext context) {
     var appTranslation = AppLocalizations.of(context);
+
     return AlertDialog(
       actions: [
         ElevatedButton(
@@ -47,10 +49,14 @@ class _DropZoneState extends State<DropZone> {
             onPressed: () => Navigator.pop(context),
             child: Text(appTranslation!.translate('cancel') ?? 'Cancel')),
         ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
               if (slideProvider.getTitle.length >= 2 &&
                   slideProvider.getDroppedFile != null) {
-                Navigator.pop(context, slideProvider);
+                slideProvider.addSlide(widget.lectureId).then((value) => value
+                        .fold((failure) => Navigator.pop(context, failure.code),
+                            (slide) {
+                      Navigator.pop(context, slide);
+                    }));
               }
             },
             child: Text(appTranslation.translate('upload') ?? 'Upload'))

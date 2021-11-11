@@ -5,8 +5,10 @@ import 'package:crayon_management/l10n/app_localizations.dart';
 import 'package:crayon_management/providers/quiz/question_provider.dart';
 
 import 'package:crayon_management/providers/quiz/response_provider.dart';
+import 'package:crayon_management/providers/util_providers/error_provider.dart';
 import 'package:crayon_management/services/validator_service.dart';
 import 'package:crayon_management/widgets/custom_text_form_field.dart';
+import 'package:crayon_management/widgets/error_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -46,6 +48,7 @@ class _QuizDialogState extends State<QuizDialog> {
         Provider.of<ResponseProvider>(context, listen: false);
     final questionProvider =
         Provider.of<QuestionProvider>(context, listen: false);
+    final errorProvider = Provider.of<ErrorProvider>(context, listen: false);
 
     return AlertDialog(
       actions: [
@@ -57,8 +60,12 @@ class _QuizDialogState extends State<QuizDialog> {
             child: Text(appTranslation!.translate('cancel') ?? 'Cancel')),
         ElevatedButton(
             onPressed: () {
-              if (_quizTitleController.text.length >= 4 &&
-                  responseProvider.getQuestions.length >= 2) {
+              if (_quizTitleController.text.length < 2) {
+                errorProvider.setErrorState('quiz-requires-a-title');
+              } else if (questionProvider.questions.isEmpty) {
+                errorProvider
+                    .setErrorState('quiz-requires-at-least-one-question');
+              } else {
                 Quiz quiz = Quiz(
                     title: _quizTitleController.text,
                     questions: questionProvider.questions);
@@ -91,7 +98,8 @@ class _QuizDialogState extends State<QuizDialog> {
                     onChanged: (String value) {},
                     controller: _quizTitleController,
                     icon: Icons.title,
-                    labelText: 'Quiz Title',
+                    labelText:
+                        appTranslation.translate('quiz-title') ?? 'Quiz title',
                     isPassword: false),
                 const SizedBox(
                   height: 14,
@@ -119,13 +127,21 @@ class _QuizDialogState extends State<QuizDialog> {
                     ),
                     IconButton(
                         onPressed: () {
-                          Question question = Question(
-                              question: _questionController.text,
-                              responses: responseProvider.getQuestions);
+                          if (_questionController.text.length < 2) {
+                            errorProvider.setErrorState(
+                                'a-question-requires-a-question-title');
+                          } else if (responseProvider.getResponses.length < 2) {
+                            errorProvider.setErrorState(
+                                'a-question-requires-at-least-two-responses');
+                          } else {
+                            Question question = Question(
+                                question: _questionController.text,
+                                responses: responseProvider.getResponses);
 
-                          questionProvider.addQuestion(question);
-                          responseProvider.clearResponses();
-                          _questionController.text = '';
+                            questionProvider.addQuestion(question);
+                            responseProvider.clearResponses();
+                            _questionController.text = '';
+                          }
                         },
                         icon: const Icon(Icons.add))
                   ],
@@ -162,11 +178,16 @@ class _QuizDialogState extends State<QuizDialog> {
                                     isPassword: false)),
                             IconButton(
                                 onPressed: () {
-                                  Response respone = Response(
-                                      response: _responseController.text,
-                                      isResponseRight: response);
-                                  _responseController.text = '';
-                                  responseProvider.add(respone);
+                                  if (_responseController.text.length < 2) {
+                                    errorProvider.setErrorState(
+                                        'response-requires-at-least-two-chars');
+                                  } else {
+                                    Response respone = Response(
+                                        response: _responseController.text,
+                                        isResponseRight: response);
+                                    _responseController.text = '';
+                                    responseProvider.add(respone);
+                                  }
                                 },
                                 icon: const Icon(Icons.add))
                           ],
@@ -181,7 +202,7 @@ class _QuizDialogState extends State<QuizDialog> {
                         child: Consumer<ResponseProvider>(
                           builder: (context, responseProvider, child) {
                             return ListView.builder(
-                                itemCount: responseProvider.getQuestions.length,
+                                itemCount: responseProvider.getResponses.length,
                                 shrinkWrap: true,
                                 physics: const ClampingScrollPhysics(),
                                 itemBuilder: (context, index) {
@@ -261,11 +282,9 @@ class _QuizDialogState extends State<QuizDialog> {
                               });
                         },
                       )),
-                      Text(
-                        errorMessage,
-                        style: const TextStyle(
-                            color: Colors.redAccent, fontSize: 18),
-                      )
+                      Consumer<ErrorProvider>(builder: (_, errorProvider, __) {
+                        return ErrorText(error: errorProvider.errorText);
+                      })
                     ],
                   ),
                 )

@@ -7,7 +7,6 @@ import 'package:crayon_management/datamodels/lecture/slide.dart';
 import 'package:crayon_management/services/lecture_service.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
-import 'package:uuid/uuid.dart';
 
 class DetailedLectureProvider extends ChangeNotifier {
   NotifierState _state = NotifierState.initial;
@@ -20,7 +19,7 @@ class DetailedLectureProvider extends ChangeNotifier {
 
   late Either<Failure, Lecture?> _lecture;
 
-  Either<Failure, Lecture?> get lectureD => _lecture;
+  Either<Failure, Lecture?> get lecture => _lecture;
   void _setLecture(Either<Failure, Lecture?> lecture) {
     _lecture = lecture;
   }
@@ -44,21 +43,27 @@ class DetailedLectureProvider extends ChangeNotifier {
     _setState(NotifierState.loaded);
   }
 
-  void removeSlide(String lectureID, Slide slide) {
-    lectureD.fold((l) => 'failed-to-remove-file',
+  void removeSlide(String lectureID, Slide slide) async {
+    await Task(() => LectureService.removeSlideFromLecture(lectureID, slide))
+        .attempt()
+        .map(
+          (either) => either.leftMap((obj) {
+            try {
+              return obj as Failure;
+            } catch (e) {
+              throw obj;
+            }
+          }),
+        )
+        .run();
+    lecture.fold((l) => 'removing-slide-not-working',
         (lecture) => lecture!.slides.remove(slide));
-    LectureService.removeSlideFromLecture(lectureID, slide);
     notifyListeners();
   }
 
-  void addSlide(String lectureID, String title, File file) {
-    String slideId = const Uuid().v4();
-    Slide newSlide = Slide(fileId: slideId, title: title);
-
-    LectureService.addPdfToLecture(lectureID, newSlide, file);
-
-    lectureD.fold((l) => 'adding-slide-not-working',
-        (lecture) => lecture!.slides.add(newSlide));
+  void addSlide(Slide slide) {
+    lecture.fold((l) => 'adding-slide-not-working',
+        (lecture) => lecture!.slides.add(slide));
     notifyListeners();
   }
 }
