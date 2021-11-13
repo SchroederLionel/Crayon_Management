@@ -1,10 +1,12 @@
+import 'package:crayon_management/datamodels/enum.dart';
 import 'package:crayon_management/datamodels/user/user_data.dart';
 import 'package:crayon_management/l10n/app_localizations.dart';
-import 'package:crayon_management/providers/login_registration_provider/user_provider.dart';
-
+import 'package:crayon_management/providers/user/user_header_provider.dart';
+import 'package:crayon_management/providers/user/user_provider.dart';
 import 'package:crayon_management/screens/dashboard/menu/drawer_list_tile.dart';
 import 'package:crayon_management/screens/dashboard/menu/profile_dialog.dart';
 import 'package:crayon_management/screens/dashboard/menu/settings_dialog.dart';
+import 'package:crayon_management/widgets/error_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,7 +18,9 @@ class SideMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var appTranslation = AppLocalizations.of(context);
+
     final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final userHeader = Provider.of<UserHeaderProvider>(context, listen: false);
     return Drawer(
       elevation: 16,
       child: Container(
@@ -39,14 +43,25 @@ class SideMenu extends StatelessWidget {
                 title: appTranslation.translate('profile') ?? 'Profile',
                 icon: Icons.account_circle,
                 pressed: () {
-                  showDialog(
+                  userProvider.user.fold(
+                      (failure) => showDialog(
+                          context: context,
+                          builder: (context) => ErrorText(error: failure.code)),
+                      (userData) {
+                    showDialog(
                       context: context,
-                      builder: (BuildContext context) {
-                        return const ProfileDialog();
-                      }).then((value) {
-                    if (value is UserData) {
-                      userProvider.updateUserData(value);
-                    }
+                      builder: (context) {
+                        return ProfileDialog(
+                          userData: userData,
+                        );
+                      },
+                    ).then((value) {
+                      if (value is UserData) {
+                        userHeader.setState(NotifierState.loading);
+                        userProvider.updateUserData(value);
+                        userHeader.setFirstName(value.firstNameAndLastName);
+                      }
+                    });
                   });
                 },
               ),

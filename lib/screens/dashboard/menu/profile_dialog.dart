@@ -1,45 +1,36 @@
 import 'package:crayon_management/datamodels/user/user_data.dart';
 import 'package:crayon_management/l10n/app_localizations.dart';
-import 'package:crayon_management/providers/login_registration_provider/user_provider.dart';
 import 'package:crayon_management/services/validator_service.dart';
 import 'package:crayon_management/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class ProfileDialog extends StatefulWidget {
-  const ProfileDialog({Key? key}) : super(key: key);
+  final UserData userData;
+  const ProfileDialog({required this.userData, Key? key}) : super(key: key);
 
   @override
   _ProfileDialogState createState() => _ProfileDialogState();
 }
 
 class _ProfileDialogState extends State<ProfileDialog> {
-  late UserData currentUserdata;
+  late UserData userData;
   late TextEditingController _firstNameController;
   late TextEditingController _lastNameController;
   late TextEditingController _emailController;
   late TextEditingController _personalRoomController;
   late TextEditingController _phoneNumerController;
-  late TextEditingController _newPasswordController;
-  late TextEditingController _newVerificationPasswordController;
 
   @override
   void initState() {
     super.initState();
-
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
-    currentUserdata = userProvider.getUserData;
-    _firstNameController =
-        TextEditingController(text: userProvider.getFirstName);
-    _lastNameController = TextEditingController(text: userProvider.getLastName);
-    _emailController = TextEditingController(text: userProvider.getEmail);
+    userData = widget.userData;
+    _firstNameController = TextEditingController(text: userData.firstName);
+    _lastNameController = TextEditingController(text: userData.lastName);
+    _emailController = TextEditingController(text: userData.email);
     _personalRoomController =
-        TextEditingController(text: userProvider.getOffice);
+        TextEditingController(text: userData.office ?? '');
     _phoneNumerController =
-        TextEditingController(text: userProvider.getPhoneNumber);
-
-    _newPasswordController = TextEditingController();
-    _newVerificationPasswordController = TextEditingController();
+        TextEditingController(text: userData.phoneNumber ?? '');
   }
 
   @override
@@ -49,14 +40,13 @@ class _ProfileDialogState extends State<ProfileDialog> {
     _emailController.dispose();
     _personalRoomController.dispose();
     _phoneNumerController.dispose();
-    _newPasswordController.dispose();
-    _newVerificationPasswordController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     var appTranslation = AppLocalizations.of(context);
+
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       elevation: 0,
@@ -137,21 +127,20 @@ class _ProfileDialogState extends State<ProfileDialog> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           UserData newUserData = UserData(
-                              uid: currentUserdata.uid,
+                              uid: userData.uid,
                               email: _emailController.text,
                               firstName: _firstNameController.text,
                               lastName: _lastNameController.text,
-                              myLectures: currentUserdata.myLectures,
                               office: _personalRoomController.text.isEmpty
                                   ? null
                                   : _personalRoomController.text,
                               phoneNumber: _phoneNumerController.text.isEmpty
                                   ? null
                                   : _phoneNumerController.text);
-
-                          if (newUserData == currentUserdata) {
+                          newUserData.setmyLectures(userData.myLectures);
+                          if (newUserData == userData) {
                             Navigator.pop(context);
                           } else {
                             Navigator.pop(context, newUserData);

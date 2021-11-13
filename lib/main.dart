@@ -1,6 +1,7 @@
 import 'package:crayon_management/l10n/app_localizations.dart';
 import 'package:crayon_management/l10n/app_localizations_delegate.dart';
-import 'package:crayon_management/providers/login_registration_provider/user_provider.dart';
+
+import 'package:crayon_management/services/authentication.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 
@@ -32,8 +33,6 @@ void main() async {
       ChangeNotifierProvider<LocaleProvider>(
         create: (BuildContext context) => LocaleProvider(),
       ),
-      ChangeNotifierProvider<UserProvider>(
-          create: (BuildContext context) => UserProvider())
     ],
     child: const MyApp(),
   ));
@@ -46,7 +45,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
     final localeProvider = Provider.of<LocaleProvider>(context, listen: true);
-
     return MaterialApp(
       scrollBehavior: CustomScrollBehavior(),
       debugShowCheckedModeBanner: false,
@@ -54,7 +52,7 @@ class MyApp extends StatelessWidget {
       theme: themeProvider.getTheme,
       locale: localeProvider.getLocal,
       onGenerateRoute: route.controller,
-      initialRoute: route.loginScreen,
+      initialRoute: isSignedIN() ? route.dashboard : route.loginScreen,
       localizationsDelegates: const [
         AppLocalizationsDelegate(),
         GlobalMaterialLocalizations.delegate,

@@ -1,11 +1,15 @@
+import 'package:crayon_management/datamodels/enum.dart';
+import 'package:crayon_management/datamodels/lecture/lecture.dart';
 import 'package:crayon_management/l10n/app_localizations.dart';
 import 'package:crayon_management/providers/lecture/drop_down_day_provider.dart';
 import 'package:crayon_management/providers/lecture/lecture_date_provider.dart';
-import 'package:crayon_management/providers/login_registration_provider/user_provider.dart';
-
+import 'package:crayon_management/providers/user/user_provider.dart';
+import 'package:crayon_management/providers/user/user_lectures_provider.dart';
 import 'package:crayon_management/responsive.dart';
 import 'package:crayon_management/screens/dashboard/components/add_lecture_dialog.dart';
-import 'package:crayon_management/screens/dashboard/components/lecture_info_card.dart';
+import 'package:crayon_management/screens/dashboard/components/lecture_list.dart';
+import 'package:crayon_management/widgets/error_text.dart';
+import 'package:crayon_management/widgets/loading_widget.dart';
 
 import 'package:flutter/material.dart';
 
@@ -37,15 +41,26 @@ class Lectures extends StatelessWidget {
                   showDialog(
                       context: context,
                       builder: (context) {
-                        return MultiProvider(providers: [
-                          ChangeNotifierProvider<LectureDateProvider>(
-                            create: (_) => LectureDateProvider(),
-                          ),
-                          ChangeNotifierProvider<DropDownDayProvider>(
-                            create: (context) => DropDownDayProvider(),
-                          )
-                        ], child: const AddLectureDialog());
-                      });
+                        return MultiProvider(
+                            providers: [
+                              ChangeNotifierProvider<LectureDateProvider>(
+                                create: (_) => LectureDateProvider(),
+                              ),
+                              ChangeNotifierProvider<DropDownDayProvider>(
+                                create: (context) => DropDownDayProvider(),
+                              )
+                            ],
+                            child: const AddLectureDialog(
+                              userData: null,
+                            ));
+                      }).then((value) {
+                    if (value is Lecture) {
+                      Provider.of<UserLectureProvider>(context, listen: false)
+                          .addLecture(value);
+                      Provider.of<UserProvider>(context, listen: false)
+                          .addLecture(value);
+                    }
+                  });
                 },
                 icon: const Icon(Icons.add),
                 label: Text(
@@ -67,28 +82,31 @@ class LectureInfoCardGridView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(context, listen: true);
-    final myLectures = userProvider.getMyLectures;
-
-    if (myLectures == null) {
-      return Container();
-    } else {
-      return GridView.builder(
-        physics: const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: crossAxisCount,
-          childAspectRatio: childAspectRatio,
-          crossAxisSpacing: 5.0,
-          mainAxisSpacing: 5.0,
-        ),
-        itemCount: userProvider.getMyLectures!.length,
-        itemBuilder: (context, index) {
-          return LectureInfoCard(
-            lecture: userProvider.getMyLectures![index],
-          );
-        },
-      );
-    }
+    return Consumer<UserProvider>(builder: (_, userProvider, __) {
+      if (userProvider.state == NotifierState.initial) {
+        return Container();
+      } else if (userProvider.state == NotifierState.loading) {
+        return const LoadingWidget();
+      } else if (userProvider.state == NotifierState.loaded) {
+        return userProvider.user.fold(
+            (failure) => Center(
+                  child: ErrorText(
+                    error: failure.code,
+                  ),
+                ), (userData) {
+          WidgetsBinding.instance!.addPostFrameCallback((_) =>
+              Provider.of<UserLectureProvider>(context, listen: false)
+                  .setLectures(userData.myLectures));
+          return LectureList(
+              crossAxisCount: crossAxisCount,
+              childAspectRatio: childAspectRatio);
+        });
+      } else {
+        return const Center(
+            child: ErrorText(
+          error: 'something-went-wrong',
+        ));
+      }
+    });
   }
 }

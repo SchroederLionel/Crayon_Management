@@ -1,7 +1,8 @@
 import 'package:crayon_management/l10n/app_localizations.dart';
-import 'package:crayon_management/providers/login_registration_provider/login_provider.dart';
-import 'package:crayon_management/providers/login_registration_provider/registration_provider.dart';
+import 'package:crayon_management/providers/user/login_provider.dart';
+import 'package:crayon_management/providers/user/registration_provider.dart';
 import 'package:crayon_management/providers/util_providers/error_provider.dart';
+
 import 'package:crayon_management/providers/util_providers/theme_provider.dart';
 import 'package:crayon_management/screens/login_registration/components/sign_in.dart';
 import 'package:crayon_management/screens/login_registration/components/sign_up.dart';

@@ -1,15 +1,11 @@
 import 'package:crayon_management/datamodels/confirmation_dialog/confirmation_dialog_data.dart';
-
 import 'package:crayon_management/datamodels/lecture/lecture_snipped.dart';
 import 'package:crayon_management/l10n/app_localizations.dart';
-
-import 'package:crayon_management/providers/login_registration_provider/user_provider.dart';
-
-import 'package:crayon_management/services/lecture_service.dart';
+import 'package:crayon_management/providers/user/user_lectures_provider.dart';
+import 'package:crayon_management/providers/user/user_provider.dart';
 import 'package:crayon_management/widgets/confirmation_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:crayon_management/route/route.dart' as route;
-
 import 'package:provider/provider.dart';
 
 class LectureInfoCard extends StatelessWidget {
@@ -128,11 +124,11 @@ class LectureInfoCard extends StatelessWidget {
                                 itemTitle: lecture.title,
                               ))).then((value) {
                         if (value == true) {
-                          final userProvider =
-                              Provider.of<UserProvider>(context, listen: false);
-                          LectureService.deleteLecture(
-                              lecture, userProvider.getUserId);
-                          userProvider.removeLecture(lecture);
+                          Provider.of<UserLectureProvider>(context,
+                                  listen: false)
+                              .removeLecture(lecture);
+                          Provider.of<UserProvider>(context, listen: false)
+                              .removeLecture(lecture);
                         }
                       });
                     },

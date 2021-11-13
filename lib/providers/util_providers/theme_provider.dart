@@ -47,6 +47,11 @@ class ThemeProvider extends ChangeNotifier {
               fontFamily: 'Poppins',
               fontSize: 18,
               fontWeight: FontWeight.w700,
+              color: Colors.black),
+          headline5: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 38,
+              fontWeight: FontWeight.w400,
               color: Colors.black)));
 
   ThemeData dark = ThemeData(
@@ -93,6 +98,11 @@ class ThemeProvider extends ChangeNotifier {
               fontFamily: 'Poppins',
               fontSize: 18,
               fontWeight: FontWeight.w700,
+              color: Colors.white),
+          headline5: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 38,
+              fontWeight: FontWeight.w400,
               color: Colors.white)));
 
   ThemeProvider({required bool isDarkMode}) {

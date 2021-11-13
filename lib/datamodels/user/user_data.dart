@@ -9,16 +9,21 @@ class UserData {
   String lastName; //nullable
   String? office; //nullable
   String? phoneNumber; // non-nullable
-  List<LectureSnipped>? myLectures; //nullable
+  List<LectureSnipped> myLectures = [];
 
-  UserData(
-      {required this.uid,
-      required this.email,
-      required this.firstName,
-      required this.lastName,
-      this.office,
-      this.phoneNumber,
-      this.myLectures});
+  setmyLectures(List<LectureSnipped> lectures) {
+    myLectures = lectures;
+  }
+
+  String get firstNameAndLastName => '$firstName $lastName';
+  UserData({
+    required this.uid,
+    required this.email,
+    required this.firstName,
+    required this.lastName,
+    this.office,
+    this.phoneNumber,
+  });
 
   factory UserData.fromJson(Map<String, dynamic>? json) {
     final uid = json!['uid'] as String;
@@ -37,14 +42,15 @@ class UserData {
             .toList()
         : <LectureSnipped>[];
 
-    return UserData(
+    var user = UserData(
         uid: uid,
         email: email,
         firstName: firstName,
         lastName: lastName,
-        myLectures: lectures,
         office: office,
         phoneNumber: phoneNumber);
+    user.setmyLectures(lectures);
+    return user;
   }
 
   // lectureDates.map((date) => date.toJson()
@@ -53,7 +59,7 @@ class UserData {
         'email': email,
         'firstName': firstName,
         'myLectures':
-            myLectures!.map((lectureSnipped) => lectureSnipped.toJson()),
+            myLectures.map((lectureSnipped) => lectureSnipped.toJson()),
         'lastName': lastName,
         'office': office,
         'phoneNumber': phoneNumber,

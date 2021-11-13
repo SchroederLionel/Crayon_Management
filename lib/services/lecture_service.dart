@@ -7,6 +7,7 @@ import 'package:crayon_management/datamodels/failure.dart';
 import 'package:crayon_management/datamodels/lecture/lecture.dart';
 import 'package:crayon_management/datamodels/lecture/lecture_snipped.dart';
 import 'package:crayon_management/datamodels/lecture/slide.dart';
+import 'package:crayon_management/services/authentication.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class LectureService {
@@ -23,6 +24,21 @@ class LectureService {
           .collection('users')
           .doc(lecture.uid)
           .update({'myLectures': FieldValue.arrayUnion(list)});
+
+      await FirebaseFirestore.instance
+          .collection('lectures')
+          .doc(lecture.uid)
+          .collection('features')
+          .doc('questions')
+          .set({'questions': []});
+
+      await FirebaseFirestore.instance
+          .collection('lectures')
+          .doc(lecture.uid)
+          .collection('features')
+          .doc('currentQuiz')
+          .set({'currentQuiz': []});
+
       return lecture;
     } on FirebaseException catch (error) {
       throw Failure(code: error.code);
@@ -35,8 +51,7 @@ class LectureService {
     }
   }
 
-  static void deleteLecture(
-      LectureSnipped lectureSnipped, String userID) async {
+  static void deleteLecture(LectureSnipped lectureSnipped) async {
     try {
       await FirebaseFirestore.instance
           .collection('lectures')
@@ -47,7 +62,7 @@ class LectureService {
       list.add(lectureSnipped.toJson());
       await FirebaseFirestore.instance
           .collection('users')
-          .doc(userID)
+          .doc(uid)
           .update({'myLectures': FieldValue.arrayRemove(list)});
     } on FirebaseException catch (error) {
       throw Failure(code: error.code);

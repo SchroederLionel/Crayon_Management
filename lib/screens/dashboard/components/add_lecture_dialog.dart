@@ -1,22 +1,22 @@
 import 'package:crayon_management/datamodels/enum.dart';
 import 'package:crayon_management/datamodels/lecture/lecture.dart';
 import 'package:crayon_management/datamodels/lecture/lecture_date.dart';
+import 'package:crayon_management/datamodels/user/user_data.dart';
 import 'package:crayon_management/l10n/app_localizations.dart';
-
 import 'package:crayon_management/providers/lecture/drop_down_day_provider.dart';
 import 'package:crayon_management/providers/lecture/lecture_date_provider.dart';
 import 'package:crayon_management/providers/lecture/time_picker_provider.dart';
-import 'package:crayon_management/providers/login_registration_provider/user_provider.dart';
-
-import 'package:crayon_management/services/lecture_service.dart';
-
+import 'package:crayon_management/services/authentication.dart';
 import 'package:crayon_management/screens/dashboard/components/time_picker.dart';
+import 'package:crayon_management/services/validator_service.dart';
+import 'package:crayon_management/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 class AddLectureDialog extends StatefulWidget {
-  const AddLectureDialog({Key? key}) : super(key: key);
+  final UserData? userData;
+  const AddLectureDialog({required this.userData, Key? key}) : super(key: key);
 
   @override
   _AddLectureDialogState createState() => _AddLectureDialogState();
@@ -48,7 +48,7 @@ class _AddLectureDialogState extends State<AddLectureDialog> {
 
     final lectureProvider =
         Provider.of<LectureDateProvider>(context, listen: false);
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
+
     final dropDownDayProvider =
         Provider.of<DropDownDayProvider>(context, listen: false);
 
@@ -66,13 +66,12 @@ class _AddLectureDialogState extends State<AddLectureDialog> {
 
                 final lecture = Lecture(
                   id: fileUid,
-                  uid: userProvider.getUserId,
+                  uid: uid as String,
                   title: _titleController.text,
                 );
                 lecture.setLectureDates(lectureProvider.getLectureDates);
-                LectureService.addLecture(lecture);
-                userProvider.addLecture(lecture);
-                Navigator.pop(context);
+
+                Navigator.pop(context, lecture);
               },
               child: Text(appTranslation.translate('upload') ?? 'Upload'))
         ],
@@ -94,19 +93,16 @@ class _AddLectureDialogState extends State<AddLectureDialog> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Form(
-                            child: TextField(
-                                style: Theme.of(context).textTheme.bodyText1,
-                                controller: _titleController,
-                                decoration: InputDecoration(
-                                    prefixIcon: const Icon(
-                                      Icons.title,
-                                      size: 18,
-                                    ),
-                                    border: const UnderlineInputBorder(),
-                                    labelText:
-                                        appTranslation.translate('title') ??
-                                            'Title'))),
+                        CustomTextFormField(
+                            validator: (text) =>
+                                ValidatorService.isStringLengthAbove2(
+                                    _titleController.text, appTranslation),
+                            onChanged: (String text) {},
+                            controller: _titleController,
+                            icon: Icons.title,
+                            labelText:
+                                appTranslation.translate('title') ?? 'Title',
+                            isPassword: false),
                         const SizedBox(
                           height: 14,
                         ),
@@ -115,18 +111,16 @@ class _AddLectureDialogState extends State<AddLectureDialog> {
                           children: [
                             SizedBox(
                               width: 100,
-                              child: TextField(
+                              child: CustomTextFormField(
+                                  validator: (text) =>
+                                      ValidatorService.isStringLengthAbove2(
+                                          _roomController.text, appTranslation),
+                                  onChanged: (String text) {},
                                   controller: _roomController,
-                                  style: Theme.of(context).textTheme.bodyText1,
-                                  decoration: InputDecoration(
-                                      prefixIcon: const Icon(
-                                        Icons.room,
-                                        size: 18,
-                                      ),
-                                      border: const UnderlineInputBorder(),
-                                      labelText:
-                                          appTranslation.translate('room') ??
-                                              'Room')),
+                                  icon: Icons.room,
+                                  labelText: appTranslation.translate('room') ??
+                                      'Room',
+                                  isPassword: false),
                             ),
                             Container(
                                 margin: const EdgeInsets.only(top: 25),

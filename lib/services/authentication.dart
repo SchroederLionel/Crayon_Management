@@ -6,7 +6,6 @@ import 'package:crayon_management/datamodels/user/user_data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-// https://firebase.google.com/docs/auth/admin/errors
 final FirebaseAuth _auth = FirebaseAuth.instance;
 String? uid;
 String? userEmail;
@@ -29,7 +28,7 @@ Future<UserData> registerWithEmailPassword(
         .collection(userData.path)
         .doc(userCredential.user!.uid)
         .set(userData.toJson());
-
+    uid = userCredential.user!.uid;
     return userData;
   } on FirebaseAuthException catch (e) {
     if (e.code == 'weak-password') {
@@ -47,21 +46,15 @@ Future<UserData> registerWithEmailPassword(
   }
 }
 
-Future<UserData> signInWithEmailPassword(String email, String password) async {
+Future<UserCredential> signInWithEmailPassword(
+    String email, String password) async {
   try {
     UserCredential userCredential = await _auth.signInWithEmailAndPassword(
       email: email,
       password: password,
     );
-    var userDocument = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(userCredential.user!.uid)
-        .get();
-
-    if (!userDocument.exists) {
-      throw Failure(code: 'user-not-exists');
-    }
-    return UserData.fromJson(userDocument.data());
+    uid = userCredential.user!.uid;
+    return userCredential;
   } on FirebaseAuthException catch (e) {
     if (e.code == 'user-not-found') {
       throw Failure(code: 'no-user-found');
@@ -87,4 +80,8 @@ Future<String> signOut() async {
   uid = null;
   userEmail = null;
   return 'User signed out';
+}
+
+bool isSignedIN() {
+  return _auth.currentUser != null ? true : false;
 }

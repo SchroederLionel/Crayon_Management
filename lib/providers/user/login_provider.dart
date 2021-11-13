@@ -4,6 +4,7 @@ import 'package:crayon_management/datamodels/user/user_data.dart';
 import 'package:crayon_management/providers/util_providers/error_provider.dart';
 import 'package:crayon_management/services/authentication.dart';
 import 'package:dartz/dartz.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:validators/validators.dart';
 
@@ -26,17 +27,18 @@ class LoginProvider extends ChangeNotifier {
       BuildContext context, ErrorProvider errorProvider) async {
     if (_isValid) {
       setState(LoadingState.yes);
-      Either<Failure, UserData> response = await signUserIn(_email, _password);
+      Either<Failure, UserCredential> response =
+          await signUserIn(_email, _password);
       setState(LoadingState.no);
       response
           .fold((failure) => errorProvider.setErrorState(failure.toString()),
-              (userData) {
-        Navigator.pushNamed(context, 'dashboard', arguments: userData);
+              (userCredential) {
+        Navigator.pushNamed(context, 'dashboard');
       });
     }
   }
 
-  Future<Either<Failure, UserData>> signUserIn(
+  Future<Either<Failure, UserCredential>> signUserIn(
       String email, String password) async {
     return await Task(() => signInWithEmailPassword(email, password))
         .attempt()

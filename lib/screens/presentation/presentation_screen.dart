@@ -1,17 +1,15 @@
 import 'dart:typed_data';
-
 import 'package:crayon_management/datamodels/enum.dart';
 import 'package:crayon_management/datamodels/route_arguments/presentation_screen_argument.dart';
 import 'package:crayon_management/providers/presentation/current_pdf_provider.dart';
-
 import 'package:crayon_management/providers/presentation/page_count_provider.dart';
 import 'package:crayon_management/providers/presentation/presentation_provider.dart';
 import 'package:crayon_management/providers/presentation/show_options_provider.dart';
-
 import 'package:crayon_management/screens/presentation/components/page_count.dart';
 import 'package:crayon_management/screens/presentation/components/presentation_controls.dart';
 import 'package:crayon_management/screens/presentation/components/presentation_options_row.dart';
-
+import 'package:crayon_management/screens/presentation/question.dart';
+import 'package:crayon_management/services/question_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:pdf_render/pdf_render.dart';
@@ -30,13 +28,14 @@ class PresentationScreen extends StatefulWidget {
 
 class _PresentationScreenState extends State<PresentationScreen> {
   Uint8List? pdf;
-  late Size size;
+  Size? size;
   late PdfDocument? currentPdfDocument;
   late ItemScrollController _scrollController;
   late TextEditingController _jumpToPageController;
   late PresentationScreenArgument arguement;
   int currentPage = 0;
   int totalPageNumber = 0;
+
   @override
   void initState() {
     super.initState();
@@ -56,9 +55,8 @@ class _PresentationScreenState extends State<PresentationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    size = MediaQuery.of(context).size;
-    double width = size.width;
-    double height = size.height;
+    size ??= MediaQuery.of(context).size;
+
     final currentPdfProvider =
         Provider.of<CurrentPdfProvider>(context, listen: false);
     final pageCountProvider =
@@ -91,13 +89,15 @@ class _PresentationScreenState extends State<PresentationScreen> {
                                 .setCurrentPdfDocument(pdfDocument);
 
                             return ScrollablePositionedList.builder(
+                                minCacheExtent: 4,
+                                initialScrollIndex: 0,
                                 itemCount: pageCount,
                                 itemScrollController: _scrollController,
                                 scrollDirection: Axis.horizontal,
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemBuilder: (context, index) => SizedBox(
-                                      height: height - 80,
-                                      width: width - 100,
+                                      height: size!.height - 80,
+                                      width: size!.width - 100,
                                       child: PdfPageView(
                                         pdfDocument: pdfDocument,
                                         pageNumber: index + 1,
@@ -126,6 +126,18 @@ class _PresentationScreenState extends State<PresentationScreen> {
                                 lectureId: arguement.lectureId);
                       }),
                       PresentationControls(scrollController: _scrollController),
+                      Container(
+                        alignment: Alignment.bottomLeft,
+                        child: StreamProvider<List<String>>(
+                          create: (context) =>
+                              QuestionService.getQuestionSnapshots(
+                                  arguement.lectureId),
+                          initialData: [],
+                          child: Question(
+                            lectureId: arguement.lectureId,
+                          ),
+                        ),
+                      ),
                       const PageCount()
                     ],
                   ));

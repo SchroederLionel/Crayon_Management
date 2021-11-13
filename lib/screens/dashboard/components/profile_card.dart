@@ -1,5 +1,5 @@
 import 'package:crayon_management/l10n/app_localizations.dart';
-import 'package:crayon_management/providers/login_registration_provider/user_provider.dart';
+import 'package:crayon_management/providers/user/user_header_provider.dart';
 import 'package:crayon_management/services/authentication.dart';
 import 'package:flutter/material.dart';
 
@@ -21,9 +21,10 @@ class ProfileCard extends StatelessWidget {
         borderRadius: const BorderRadius.all(Radius.circular(10)),
         border: Border.all(color: Colors.blueAccent),
       ),
-      child: Consumer<UserProvider>(builder: (context, userP, child) {
+      child: Consumer<UserHeaderProvider>(
+          builder: (context, userHeaderProvider, child) {
         return DropdownButton(
-            value: userP.getFirstAndLastName,
+            value: userHeaderProvider.firstNameAndLastName,
             icon: Container(
               margin: const EdgeInsets.only(left: 5),
               child: const Icon(
@@ -37,7 +38,7 @@ class ProfileCard extends StatelessWidget {
             items: [
               DropdownMenuItem(
                   onTap: () {},
-                  value: userP.getFirstAndLastName,
+                  value: userHeaderProvider.firstNameAndLastName,
                   child: Row(
                     children: [
                       const SizedBox(
@@ -47,7 +48,7 @@ class ProfileCard extends StatelessWidget {
                       ),
                       const SizedBox(width: 5.0),
                       Text(
-                        userP.getFirstAndLastName,
+                        userHeaderProvider.firstNameAndLastName,
                         style: Theme.of(context).textTheme.bodyText1,
                       )
                     ],
@@ -56,7 +57,7 @@ class ProfileCard extends StatelessWidget {
                   value: 'logout',
                   onTap: () {
                     signOut();
-                    Navigator.pop(context);
+                    Navigator.of(context).pop();
                   },
                   child: Row(
                     children: [
