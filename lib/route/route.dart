@@ -42,7 +42,7 @@ Route<dynamic> controller(RouteSettings routerSettings) {
                   ChangeNotifierProvider<UserLectureProvider>(
                       create: (BuildContext context) => UserLectureProvider())
                 ],
-                child: Dashboard(),
+                child: const Dashboard(),
               ));
     case detailedLecture:
       return MaterialPageRoute(

@@ -132,7 +132,7 @@ class _PresentationScreenState extends State<PresentationScreen> {
                           create: (context) =>
                               QuestionService.getQuestionSnapshots(
                                   arguement.lectureId),
-                          initialData: [],
+                          initialData: const [],
                           child: Question(
                             lectureId: arguement.lectureId,
                           ),

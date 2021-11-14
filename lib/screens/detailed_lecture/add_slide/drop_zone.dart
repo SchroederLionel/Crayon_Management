@@ -1,7 +1,5 @@
 import 'dart:html';
-
 import 'package:crayon_management/l10n/app_localizations.dart';
-import 'package:crayon_management/providers/lecture/detailed_lecture_provider.dart';
 import 'package:crayon_management/providers/slide_data_provider.dart';
 import 'package:crayon_management/services/validator_service.dart';
 import 'package:crayon_management/widgets/custom_text_form_field.dart';

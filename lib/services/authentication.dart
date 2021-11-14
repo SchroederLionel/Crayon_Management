@@ -46,6 +46,10 @@ Future<UserData> registerWithEmailPassword(
   }
 }
 
+void resetPassword(String email) {
+  _auth.sendPasswordResetEmail(email: email);
+}
+
 Future<UserCredential> signInWithEmailPassword(
     String email, String password) async {
   try {
@@ -53,6 +57,7 @@ Future<UserCredential> signInWithEmailPassword(
       email: email,
       password: password,
     );
+
     uid = userCredential.user!.uid;
     return userCredential;
   } on FirebaseAuthException catch (e) {

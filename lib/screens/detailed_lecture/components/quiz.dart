@@ -1,7 +1,6 @@
 import 'package:crayon_management/datamodels/confirmation_dialog/confirmation_dialog_data.dart';
 import 'package:crayon_management/datamodels/enum.dart';
 import 'package:crayon_management/l10n/app_localizations.dart';
-import 'package:crayon_management/providers/lecture/detailed_lecture_provider.dart';
 import 'package:crayon_management/providers/quiz/question_provider.dart';
 import 'package:crayon_management/providers/quiz/quiz_provider.dart';
 import 'package:crayon_management/providers/quiz/response_provider.dart';
