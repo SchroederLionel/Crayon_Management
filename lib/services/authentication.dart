@@ -46,8 +46,13 @@ Future<UserData> registerWithEmailPassword(
   }
 }
 
-void resetPassword(String email) {
-  _auth.sendPasswordResetEmail(email: email);
+Future<bool> resetPassword(String email) async {
+  try {
+    await _auth.sendPasswordResetEmail(email: email);
+    return true;
+  } on FirebaseAuthException catch (e) {
+    throw Failure(code: e.code);
+  }
 }
 
 Future<UserCredential> signInWithEmailPassword(

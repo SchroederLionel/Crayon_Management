@@ -1,4 +1,5 @@
 import 'package:crayon_management/datamodels/enum.dart';
+import 'package:crayon_management/datamodels/failure.dart';
 import 'package:crayon_management/l10n/app_localizations.dart';
 import 'package:crayon_management/providers/user/login_provider.dart';
 import 'package:crayon_management/providers/util_providers/error_provider.dart';
@@ -6,6 +7,7 @@ import 'package:crayon_management/screens/login_registration/components/custom_b
 import 'package:crayon_management/services/validator_service.dart';
 import 'package:crayon_management/widgets/custom_text_form_field.dart';
 import 'package:crayon_management/widgets/error_text.dart';
+import 'package:crayon_management/widgets/reset_password_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -106,6 +108,34 @@ class _SignInState extends State<SignIn> {
                                 : const Center(
                                     child: CircularProgressIndicator(),
                                   )),
+                    TextButton(
+                        onPressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return const ResetPasswordDailog();
+                              }).then((value) {
+                            if (value is bool) {
+                              if (value) {
+                                const snackBar = SnackBar(
+                                    backgroundColor: Colors.greenAccent,
+                                    content: Text(
+                                      'Reset password send to your email',
+                                      textAlign: TextAlign.center,
+                                    ));
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackBar);
+                              }
+                            } else if (value is Failure) {
+                              final snackBar = SnackBar(
+                                  backgroundColor: Colors.redAccent,
+                                  content: Text(value.code));
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBar);
+                            }
+                          });
+                        },
+                        child: Text('Forgot password')),
                     Consumer<ErrorProvider>(
                         builder: (context, errorNotifier, child) {
                       if (errorNotifier.state == ErrorState.noError) {

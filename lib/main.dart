@@ -14,6 +14,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
 import 'package:crayon_management/providers/util_providers/theme_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'route/route.dart' as route;
 
 void main() async {
@@ -22,16 +23,19 @@ void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  // Initialize Firebase
+  SharedPreferences prefs = await SharedPreferences.getInstance();
 
+  // Initialize Firebase
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider<MenuProvider>(create: (context) => MenuProvider()),
       ChangeNotifierProvider<ThemeProvider>(
-        create: (BuildContext context) => ThemeProvider(isDarkMode: true),
+        create: (BuildContext context) =>
+            ThemeProvider(isDarkMode: prefs.getBool('themeDark') ?? true),
       ),
       ChangeNotifierProvider<LocaleProvider>(
-        create: (BuildContext context) => LocaleProvider(),
+        create: (BuildContext context) =>
+            LocaleProvider(prefs.getString('language')),
       ),
     ],
     child: const MyApp(),
