@@ -2,7 +2,7 @@ import 'package:crayon_management/datamodels/confirmation_dialog/confirmation_di
 import 'package:crayon_management/datamodels/lecture/lecture_snipped.dart';
 import 'package:crayon_management/l10n/app_localizations.dart';
 import 'package:crayon_management/providers/user/user_lectures_provider.dart';
-import 'package:crayon_management/providers/user/user_provider.dart';
+
 import 'package:crayon_management/widgets/confirmation_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:crayon_management/route/route.dart' as route;
@@ -69,12 +69,12 @@ class LectureInfoCard extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          lecture.lectureDates[index].startingTime,
+                          lecture.lectureDates[index].startingTime.toString(),
                           textAlign: TextAlign.center,
                           style: Theme.of(context).textTheme.bodyText1,
                         ),
                         Text(
-                          lecture.lectureDates[index].endingTime,
+                          lecture.lectureDates[index].endingTime.toString(),
                           textAlign: TextAlign.center,
                           style: Theme.of(context).textTheme.bodyText1,
                         ),
@@ -124,11 +124,13 @@ class LectureInfoCard extends StatelessWidget {
                                 itemTitle: lecture.title,
                               ))).then((value) {
                         if (value == true) {
-                          Provider.of<UserLectureProvider>(context,
-                                  listen: false)
-                              .removeLecture(lecture);
-                          Provider.of<UserProvider>(context, listen: false)
-                              .removeLecture(lecture);
+                          try {
+                            Provider.of<UserLectureProvider>(context,
+                                    listen: false)
+                                .removeLecture(lecture.getLectureSnipped);
+                          } catch (e) {
+                            print(e);
+                          }
                         }
                       });
                     },

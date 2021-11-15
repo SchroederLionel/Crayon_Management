@@ -6,13 +6,13 @@ import 'package:flutter/material.dart';
 
 class UserLectureProvider extends ChangeNotifier {
   NotifierState _state = NotifierState.initial;
+  List<LectureSnipped> _lectureSnipped = [];
   NotifierState get state => _state;
+
   setNotifierState(NotifierState state) {
     _state = state;
     notifyListeners();
   }
-
-  List<LectureSnipped> _lectureSnipped = [];
 
   void removeLecture(LectureSnipped snipped) {
     setNotifierState(NotifierState.loading);
@@ -21,10 +21,10 @@ class UserLectureProvider extends ChangeNotifier {
     setNotifierState(NotifierState.loaded);
   }
 
-  void addLecture(Lecture lecture) {
+  void addLecture(Lecture lecture) async {
     setNotifierState(NotifierState.loading);
+    await LectureService.addLecture(lecture);
     _lectureSnipped.add(lecture.getLectureSnipped);
-    LectureService.addLecture(lecture);
     setNotifierState(NotifierState.loaded);
   }
 

@@ -1,7 +1,6 @@
 import 'package:crayon_management/datamodels/enum.dart';
 import 'package:crayon_management/datamodels/lecture/lecture_snipped.dart';
 import 'package:crayon_management/providers/lecture/detailed_lecture_provider.dart';
-import 'package:crayon_management/providers/quiz/quiz_provider.dart';
 import 'package:crayon_management/screens/detailed_lecture/components/controls.dart';
 import 'package:crayon_management/screens/detailed_lecture/components/slides_component.dart';
 import 'package:crayon_management/screens/detailed_lecture/components/quiz.dart';

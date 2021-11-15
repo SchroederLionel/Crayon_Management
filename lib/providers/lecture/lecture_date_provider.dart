@@ -5,6 +5,7 @@ class LectureDateProvider extends ChangeNotifier {
   final List<LectureDate> _lecture = [];
   int get getLectureLength => _lecture.length;
   LectureDate getLectureDate(int index) => _lecture[index];
+
   List<LectureDate> get getLectureDates => _lecture;
   void add(LectureDate lectureDate) {
     _lecture.add(lectureDate);

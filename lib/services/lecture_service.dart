@@ -18,7 +18,10 @@ class LectureService {
           .doc(lecture.id)
           .set(lecture.toJson());
       List<Map> list = [];
-      LectureSnipped snipped = lecture.getLectureSnipped;
+      LectureSnipped snipped =
+          LectureSnipped(id: lecture.id, title: lecture.title);
+      snipped.setLectureDates(lecture.lectureDates);
+
       list.add(snipped.toJson());
       await FirebaseFirestore.instance
           .collection('users')

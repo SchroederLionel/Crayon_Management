@@ -1,45 +1,26 @@
+import 'package:crayon_management/datamodels/lecture/custom_time_of_day.dart';
 import 'package:flutter/material.dart';
 
-class TimePickerProvider {
-  TimeOfDay _startingTime = TimeOfDay.now();
-  TimeOfDay _endingTime = TimeOfDay.now();
+class TimePickerProvider extends ChangeNotifier {
+  CustomTimeOfDay _startingTime = CustomTimeOfDay.now();
+  CustomTimeOfDay _endingTime = CustomTimeOfDay.now();
 
-  void _changeStartingTime(TimeOfDay time) {
-    _startingTime = time;
+  setStartingTime(CustomTimeOfDay day) {
+    _startingTime = day;
+    notifyListeners();
   }
 
-  void changeTime(String timeType, TimeOfDay time) {
-    if (timeType.toLowerCase().contains('ends')) {
-      _changeEndingTime(time);
-    } else {
-      _changeStartingTime(time);
-    }
+  setEndingTime(CustomTimeOfDay day) {
+    _endingTime = day;
+    notifyListeners();
   }
 
-  void _changeEndingTime(TimeOfDay time) {
-    _endingTime = time;
+  setStartingAndEndingTime(CustomTimeOfDay start, CustomTimeOfDay ends) {
+    _startingTime = start;
+    _endingTime = ends;
+    notifyListeners();
   }
 
-  TimeOfDay get getStaratingTime => _startingTime;
-  TimeOfDay get getEndingTime => _endingTime;
-
-  String getStartingTimeInString() {
-    return getConvertedTime(_startingTime.hour) +
-        ':' +
-        getConvertedTime(_startingTime.minute);
-  }
-
-  String getEndingTimeInString() {
-    return getConvertedTime(_endingTime.hour) +
-        ':' +
-        getConvertedTime(_endingTime.minute);
-  }
-
-  String getConvertedTime(int time) {
-    if (time < 10) {
-      return '0$time';
-    } else {
-      return '$time';
-    }
-  }
+  CustomTimeOfDay get staratingTime => _startingTime;
+  CustomTimeOfDay get endingTime => _endingTime;
 }

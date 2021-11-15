@@ -2,11 +2,13 @@ import 'package:crayon_management/datamodels/enum.dart';
 import 'package:crayon_management/datamodels/lecture/lecture.dart';
 import 'package:crayon_management/l10n/app_localizations.dart';
 import 'package:crayon_management/providers/lecture/drop_down_day_provider.dart';
+import 'package:crayon_management/providers/lecture/drop_down_type_provider.dart';
 import 'package:crayon_management/providers/lecture/lecture_date_provider.dart';
+import 'package:crayon_management/providers/lecture/time_picker_provider.dart';
 import 'package:crayon_management/providers/user/user_provider.dart';
 import 'package:crayon_management/providers/user/user_lectures_provider.dart';
 import 'package:crayon_management/responsive.dart';
-import 'package:crayon_management/screens/dashboard/components/add_lecture_dialog.dart';
+import 'package:crayon_management/screens/dashboard/components/add_modify_lecture_components/add_lecture_dialog.dart';
 import 'package:crayon_management/screens/dashboard/components/lecture_list.dart';
 import 'package:crayon_management/widgets/error_text.dart';
 import 'package:crayon_management/widgets/loading_widget.dart';
@@ -48,16 +50,20 @@ class Lectures extends StatelessWidget {
                               ),
                               ChangeNotifierProvider<DropDownDayProvider>(
                                 create: (context) => DropDownDayProvider(),
+                              ),
+                              ChangeNotifierProvider<TimePickerProvider>(
+                                create: (context) => TimePickerProvider(),
+                              ),
+                              ChangeNotifierProvider<DropDownTypeProvider>(
+                                create: (context) => DropDownTypeProvider(),
                               )
                             ],
                             child: const AddLectureDialog(
-                              userData: null,
+                              lectureSnipped: null,
                             ));
                       }).then((value) {
                     if (value is Lecture) {
                       Provider.of<UserLectureProvider>(context, listen: false)
-                          .addLecture(value);
-                      Provider.of<UserProvider>(context, listen: false)
                           .addLecture(value);
                     }
                   });

@@ -17,7 +17,6 @@ class _ResetPasswordDailogState extends State<ResetPasswordDailog> {
   late TextEditingController _emailController;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _emailController = TextEditingController(text: '');
   }
@@ -63,6 +62,5 @@ class _ResetPasswordDailogState extends State<ResetPasswordDailog> {
             ],
           ),
         ));
-    ;
   }
 }

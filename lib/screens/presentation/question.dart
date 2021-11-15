@@ -70,7 +70,7 @@ class Question extends StatelessWidget {
                                 scrollDirection: Axis.horizontal,
                                 initialScrollIndex: currentIndex,
                                 itemCount: questionList.length,
-                                itemBuilder: (context, index) => Container(
+                                itemBuilder: (context, index) => SizedBox(
                                     width: 770,
                                     height: 300,
                                     child: Center(

@@ -1,53 +1,60 @@
+import 'package:crayon_management/datamodels/lecture/custom_time_of_day.dart';
 import 'package:crayon_management/providers/lecture/time_picker_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CustomTimePicker extends StatefulWidget {
+  final CustomTimeOfDay day;
   final String timeText;
-  const CustomTimePicker({required this.timeText, Key? key}) : super(key: key);
+  final bool isDayTime;
+  const CustomTimePicker(
+      {required this.day,
+      required this.isDayTime,
+      required this.timeText,
+      Key? key})
+      : super(key: key);
 
   @override
   _CustomTimePickerState createState() => _CustomTimePickerState();
 }
 
 class _CustomTimePickerState extends State<CustomTimePicker> {
-  late TimeOfDay time;
-  late TimeOfDay? picked;
+  late CustomTimeOfDay time;
+  late CustomTimeOfDay? picked;
   late String timeText;
-  late TimePickerProvider timePickerProvider;
 
   @override
   void initState() {
     super.initState();
-    time = TimeOfDay.now();
     timeText = widget.timeText;
-    timePickerProvider =
-        Provider.of<TimePickerProvider>(context, listen: false);
-  }
-
-  Future selectTime(BuildContext context) async {
-    picked = await showTimePicker(context: context, initialTime: time);
-
-    if (picked != null) {
-      setState(() {
-        time = picked!;
-        timePickerProvider.changeTime(timeText, time);
-      });
-    }
+    time = widget.day;
   }
 
   @override
   Widget build(BuildContext context) {
+    var timePickerProvider =
+        Provider.of<TimePickerProvider>(context, listen: false);
+    String text = '$timeText: ${widget.day.toString()}';
+
     return Row(
       children: [
         IconButton(
           icon: const Icon(Icons.alarm),
-          onPressed: () {
-            selectTime(context);
+          onPressed: () async {
+            TimeOfDay? picked =
+                await showTimePicker(context: context, initialTime: time);
+            if (picked != null) {
+              time = CustomTimeOfDay(hour: picked.hour, minute: picked.minute);
+              if (widget.isDayTime) {
+                timePickerProvider.setStartingTime(time);
+              } else {
+                timePickerProvider.setEndingTime(time);
+              }
+            }
           },
         ),
         Text(
-          '$timeText: ${getConvertedTime(time.hour)}: ${getConvertedTime(time.minute)}',
+          text,
           style: Theme.of(context).textTheme.bodyText1,
         )
       ],

@@ -1,9 +1,7 @@
 import 'package:crayon_management/datamodels/lecture/slide.dart';
-import 'package:crayon_management/datamodels/quiz/quiz.dart';
 import 'package:crayon_management/datamodels/route_arguments/presentation_screen_argument.dart';
 import 'package:crayon_management/l10n/app_localizations.dart';
 import 'package:crayon_management/providers/quiz/quiz_provider.dart';
-
 import 'package:crayon_management/route/route.dart' as route;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
