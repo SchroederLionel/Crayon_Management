@@ -2,7 +2,7 @@ import 'package:crayon_management/datamodels/lecture/lecture_date.dart';
 import 'package:flutter/cupertino.dart';
 
 class LectureDateProvider extends ChangeNotifier {
-  final List<LectureDate> _lecture = [];
+  List<LectureDate> _lecture = [];
   int get getLectureLength => _lecture.length;
   LectureDate getLectureDate(int index) => _lecture[index];
 
@@ -14,6 +14,11 @@ class LectureDateProvider extends ChangeNotifier {
 
   void remove(LectureDate lectureDate) {
     _lecture.remove(lectureDate);
+    notifyListeners();
+  }
+
+  void setLectureDates(List<LectureDate> lectureDates) {
+    _lecture = lectureDates;
     notifyListeners();
   }
 }

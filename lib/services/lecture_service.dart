@@ -11,12 +11,14 @@ import 'package:crayon_management/services/authentication.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class LectureService {
-  static Future<Lecture> addLecture(Lecture lecture) async {
+  static Future<LectureSnipped> addLecture(LectureSnipped lecture) async {
     try {
+      Lecture l =
+          Lecture(uid: uid as String, title: lecture.title, id: lecture.id);
       await FirebaseFirestore.instance
           .collection('lectures')
           .doc(lecture.id)
-          .set(lecture.toJson());
+          .set(l.toJson());
       List<Map> list = [];
       LectureSnipped snipped =
           LectureSnipped(id: lecture.id, title: lecture.title);
@@ -25,19 +27,19 @@ class LectureService {
       list.add(snipped.toJson());
       await FirebaseFirestore.instance
           .collection('users')
-          .doc(lecture.uid)
+          .doc(uid)
           .update({'myLectures': FieldValue.arrayUnion(list)});
 
       await FirebaseFirestore.instance
           .collection('lectures')
-          .doc(lecture.uid)
+          .doc(uid)
           .collection('features')
           .doc('questions')
           .set({'questions': []});
 
       await FirebaseFirestore.instance
           .collection('lectures')
-          .doc(lecture.uid)
+          .doc(uid)
           .collection('features')
           .doc('currentQuiz')
           .set({'currentQuiz': []});
@@ -67,6 +69,33 @@ class LectureService {
           .collection('users')
           .doc(uid)
           .update({'myLectures': FieldValue.arrayRemove(list)});
+    } on FirebaseException catch (error) {
+      throw Failure(code: error.code);
+    } on SocketException {
+      throw Failure(code: 'no-internet');
+    } on HttpException {
+      throw Failure(code: 'not-found');
+    } on FormatException {
+      throw Failure(code: 'bad-format');
+    }
+  }
+
+  static Future<List<LectureSnipped>> updateLecture(
+      LectureSnipped lecture, List<LectureSnipped> snippeds) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('lectures')
+          .doc(lecture.id)
+          .set(lecture.toJson(), SetOptions(merge: true));
+
+      List<Map> list = [];
+      list.addAll(snippeds.map((dates) => dates.toJson()));
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .set({'myLectures': list}, SetOptions(merge: true));
+
+      return snippeds;
     } on FirebaseException catch (error) {
       throw Failure(code: error.code);
     } on SocketException {

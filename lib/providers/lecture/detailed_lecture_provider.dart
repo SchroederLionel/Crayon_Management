@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:crayon_management/datamodels/enum.dart';
 import 'package:crayon_management/datamodels/failure.dart';
 import 'package:crayon_management/datamodels/lecture/lecture.dart';

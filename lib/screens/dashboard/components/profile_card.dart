@@ -1,6 +1,8 @@
+import 'package:crayon_management/datamodels/enum.dart';
 import 'package:crayon_management/l10n/app_localizations.dart';
 import 'package:crayon_management/providers/user/user_header_provider.dart';
 import 'package:crayon_management/services/authentication.dart';
+import 'package:crayon_management/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -23,6 +25,11 @@ class ProfileCard extends StatelessWidget {
       ),
       child: Consumer<UserHeaderProvider>(
           builder: (context, userHeaderProvider, child) {
+        if (userHeaderProvider.state == NotifierState.initial) {
+          return Container();
+        } else if (userHeaderProvider.state == NotifierState.loading) {
+          return const LoadingWidget();
+        }
         return DropdownButton(
             value: userHeaderProvider.firstNameAndLastName,
             icon: Container(
@@ -47,9 +54,14 @@ class ProfileCard extends StatelessWidget {
                         child: Icon(Icons.person),
                       ),
                       const SizedBox(width: 5.0),
-                      Text(
-                        userHeaderProvider.firstNameAndLastName,
-                        style: Theme.of(context).textTheme.bodyText1,
+                      Container(
+                        width: 140,
+                        child: Text(
+                          userHeaderProvider.firstNameAndLastName,
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.bodyText1,
+                        ),
                       )
                     ],
                   )),

@@ -1,5 +1,3 @@
-import 'package:crayon_management/datamodels/lecture/custom_time_of_day.dart';
-import 'package:crayon_management/datamodels/lecture/lecture.dart';
 import 'package:crayon_management/datamodels/lecture/lecture_date.dart';
 import 'package:crayon_management/datamodels/lecture/lecture_snipped.dart';
 import 'package:crayon_management/l10n/app_localizations.dart';
@@ -11,7 +9,6 @@ import 'package:crayon_management/screens/dashboard/components/add_modify_lectur
 import 'package:crayon_management/screens/dashboard/components/add_modify_lecture_components/components/drop_down_type.dart';
 import 'package:crayon_management/screens/dashboard/components/add_modify_lecture_components/components/time_interval.dart';
 import 'package:crayon_management/screens/dashboard/components/add_modify_lecture_components/components/time_picker_buttons.dart';
-import 'package:crayon_management/services/authentication.dart';
 import 'package:crayon_management/services/validator_service.dart';
 import 'package:crayon_management/widgets/cancel_button.dart';
 import 'package:crayon_management/widgets/custom_text_form_field.dart';
@@ -39,6 +36,10 @@ class _AddLectureDialogState extends State<AddLectureDialog> {
     _lectureSnipped = widget.lectureSnipped;
     if (_lectureSnipped != null) {
       _titleController = TextEditingController(text: _lectureSnipped!.title);
+      WidgetsBinding.instance!.addPostFrameCallback((_) {
+        Provider.of<LectureDateProvider>(context, listen: false)
+            .setLectureDates(_lectureSnipped!.lectureDates);
+      });
     } else {
       _titleController = TextEditingController(text: '');
     }
@@ -70,10 +71,15 @@ class _AddLectureDialogState extends State<AddLectureDialog> {
           const CancelButton(),
           ElevatedButton(
               onPressed: () {
-                String fileUid = const Uuid().v4();
-                final lecture = Lecture(
+                String fileUid;
+                if (_lectureSnipped == null) {
+                  fileUid = const Uuid().v4();
+                } else {
+                  fileUid = _lectureSnipped!.id;
+                }
+
+                final lecture = LectureSnipped(
                   id: fileUid,
-                  uid: uid as String,
                   title: _titleController.text,
                 );
                 lecture.setLectureDates(lectureProvider.getLectureDates);

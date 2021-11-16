@@ -1,5 +1,6 @@
 import 'package:crayon_management/datamodels/enum.dart';
 import 'package:crayon_management/datamodels/lecture/lecture.dart';
+import 'package:crayon_management/datamodels/lecture/lecture_snipped.dart';
 import 'package:crayon_management/l10n/app_localizations.dart';
 import 'package:crayon_management/providers/lecture/drop_down_day_provider.dart';
 import 'package:crayon_management/providers/lecture/drop_down_type_provider.dart';
@@ -62,7 +63,7 @@ class Lectures extends StatelessWidget {
                               lectureSnipped: null,
                             ));
                       }).then((value) {
-                    if (value is Lecture) {
+                    if (value is LectureSnipped) {
                       Provider.of<UserLectureProvider>(context, listen: false)
                           .addLecture(value);
                     }
@@ -88,25 +89,14 @@ class LectureInfoCardGridView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<UserProvider>(builder: (_, userProvider, __) {
-      if (userProvider.state == NotifierState.initial) {
+    return Consumer<UserLectureProvider>(builder: (_, userLectureProvider, __) {
+      if (userLectureProvider.state == NotifierState.initial) {
         return Container();
-      } else if (userProvider.state == NotifierState.loading) {
+      } else if (userLectureProvider.state == NotifierState.loading) {
         return const LoadingWidget();
-      } else if (userProvider.state == NotifierState.loaded) {
-        return userProvider.user.fold(
-            (failure) => Center(
-                  child: ErrorText(
-                    error: failure.code,
-                  ),
-                ), (userData) {
-          WidgetsBinding.instance!.addPostFrameCallback((_) =>
-              Provider.of<UserLectureProvider>(context, listen: false)
-                  .setLectures(userData.myLectures));
-          return LectureList(
-              crossAxisCount: crossAxisCount,
-              childAspectRatio: childAspectRatio);
-        });
+      } else if (userLectureProvider.state == NotifierState.loaded) {
+        return LectureList(
+            crossAxisCount: crossAxisCount, childAspectRatio: childAspectRatio);
       } else {
         return const Center(
             child: ErrorText(

@@ -1,7 +1,14 @@
 import 'package:crayon_management/datamodels/confirmation_dialog/confirmation_dialog_data.dart';
+import 'package:crayon_management/datamodels/lecture/lecture.dart';
 import 'package:crayon_management/datamodels/lecture/lecture_snipped.dart';
 import 'package:crayon_management/l10n/app_localizations.dart';
+import 'package:crayon_management/providers/lecture/drop_down_day_provider.dart';
+import 'package:crayon_management/providers/lecture/drop_down_type_provider.dart';
+import 'package:crayon_management/providers/lecture/lecture_date_provider.dart';
+import 'package:crayon_management/providers/lecture/time_picker_provider.dart';
 import 'package:crayon_management/providers/user/user_lectures_provider.dart';
+import 'package:crayon_management/screens/dashboard/components/add_modify_lecture_components/add_lecture_dialog.dart';
+import 'package:crayon_management/services/lecture_service.dart';
 
 import 'package:crayon_management/widgets/confirmation_dialog.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +22,10 @@ class LectureInfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var appTranslation = AppLocalizations.of(context);
+
+    var userLectureProvider =
+        Provider.of<UserLectureProvider>(context, listen: false);
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(5.0),
@@ -22,11 +33,49 @@ class LectureInfoCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
           children: [
-            Text(
-              lecture.title,
-              overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.subtitle1,
-            ),
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+              Text(
+                lecture.title,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.subtitle1,
+              ),
+              IconButton(
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return MultiProvider(
+                              providers: [
+                                ChangeNotifierProvider<LectureDateProvider>(
+                                  create: (_) => LectureDateProvider(),
+                                ),
+                                ChangeNotifierProvider<DropDownDayProvider>(
+                                  create: (context) => DropDownDayProvider(),
+                                ),
+                                ChangeNotifierProvider<TimePickerProvider>(
+                                  create: (context) => TimePickerProvider(),
+                                ),
+                                ChangeNotifierProvider<DropDownTypeProvider>(
+                                  create: (context) => DropDownTypeProvider(),
+                                )
+                              ],
+                              child: AddLectureDialog(
+                                lectureSnipped: lecture,
+                              ));
+                        }).then((updatedLecture) {
+                      if (updatedLecture is LectureSnipped) {
+                        print('IAM INNN');
+                        print(updatedLecture.title);
+                        Provider.of<UserLectureProvider>(context, listen: false)
+                            .updateLecture(updatedLecture);
+                      }
+                    });
+                  },
+                  icon: const Icon(
+                    Icons.edit,
+                    color: Colors.amberAccent,
+                  ))
+            ]),
             const SizedBox(
               height: 14.0,
             ),

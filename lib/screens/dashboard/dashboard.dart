@@ -1,3 +1,5 @@
+import 'package:crayon_management/providers/user/user_header_provider.dart';
+import 'package:crayon_management/providers/user/user_lectures_provider.dart';
 import 'package:crayon_management/providers/user/user_provider.dart';
 import 'package:crayon_management/providers/util_providers/menu_provider.dart';
 import 'package:crayon_management/responsive.dart';
@@ -17,8 +19,18 @@ class _DashboardState extends State<Dashboard> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback(
-        (_) => Provider.of<UserProvider>(context, listen: false).getUserData());
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      Provider.of<UserProvider>(context, listen: false)
+          .getUserData()
+          .then((value) => {
+                value.fold((failure) => null, (userData) {
+                  Provider.of<UserHeaderProvider>(context, listen: false)
+                      .setUserData(userData);
+                  Provider.of<UserLectureProvider>(context, listen: false)
+                      .setLectures(userData.myLectures);
+                })
+              });
+    });
   }
 
   @override

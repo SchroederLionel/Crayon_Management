@@ -35,7 +35,7 @@ Route<dynamic> controller(RouteSettings routerSettings) {
       return MaterialPageRoute(
           builder: (context) => MultiProvider(
                 providers: [
-                  ChangeNotifierProvider<UserProvider>(
+                  Provider<UserProvider>(
                       create: (BuildContext context) => UserProvider()),
                   ChangeNotifierProvider<UserHeaderProvider>(
                       create: (BuildContext context) => UserHeaderProvider()),

@@ -29,24 +29,7 @@ class Header extends StatelessWidget {
             style: Theme.of(context).textTheme.headline1,
           ),
         Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
-        Consumer<UserProvider>(builder: (_, userProvider, __) {
-          if (userProvider.state == NotifierState.initial) {
-            return Container();
-          } else if (userProvider.state == NotifierState.loading) {
-            return const LoadingWidget();
-          } else {
-            return userProvider.user.fold(
-                (failure) => ErrorText(
-                      error: failure.code,
-                    ), (userData) {
-              WidgetsBinding.instance!.addPostFrameCallback((_) =>
-                  Provider.of<UserHeaderProvider>(context, listen: false)
-                      .setFirstName(userData.firstNameAndLastName));
-
-              return const ProfileCard();
-            });
-          }
-        })
+        const ProfileCard()
       ],
     );
   }
