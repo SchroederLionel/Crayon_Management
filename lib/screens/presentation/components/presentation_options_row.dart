@@ -14,8 +14,10 @@ import 'package:provider/provider.dart';
 import 'package:universal_html/html.dart';
 
 class PresentationOptionsRow extends StatelessWidget {
+  final List<Quiz> quizes;
   final String lectureId;
-  const PresentationOptionsRow({required this.lectureId, Key? key})
+  const PresentationOptionsRow(
+      {required this.quizes, required this.lectureId, Key? key})
       : super(key: key);
 
   @override
@@ -28,10 +30,12 @@ class PresentationOptionsRow extends StatelessWidget {
     final showOptionProvider =
         Provider.of<ShowOptionProvider>(context, listen: false);
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         IconButton(
-            onPressed: () => showOptionProvider.changeShow(),
+            onPressed: () => WidgetsBinding.instance!
+                .addPostFrameCallback((_) => showOptionProvider.changeShow()),
             icon: const Icon(Icons.remove_red_eye)),
         IconButton(
             onPressed: () {
@@ -87,30 +91,39 @@ class PresentationOptionsRow extends StatelessWidget {
         const SizedBox(
           width: 14,
         ),
-        Consumer<QuizSelectorProvider>(
-          builder: (_, quizSelector, __) {
-            return DropdownButton<Quiz>(
-                value: quizSelector.currentQuiz,
-                icon: const Icon(Icons.arrow_drop_down),
-                iconSize: 14,
-                style: const TextStyle(fontSize: 14, color: Colors.white24),
-                underline: Container(
-                  height: 0,
-                ),
-                onChanged: (Quiz? quiz) {
-                  if (quiz != null) {
-                    quizSelector.changeQuiz(quiz);
+        quizes.isEmpty
+            ? Container()
+            : Consumer<QuizSelectorProvider>(
+                builder: (_, quizSelector, __) {
+                  if (quizSelector.quizes.isEmpty) {
+                    return Container(
+                      width: 100,
+                    );
+                  } else {
+                    return DropdownButton<Quiz>(
+                        value: quizSelector.currentQuiz,
+                        icon: const Icon(Icons.arrow_drop_down),
+                        iconSize: 14,
+                        style: const TextStyle(
+                            fontSize: 14, color: Colors.white24),
+                        underline: Container(
+                          height: 0,
+                        ),
+                        onChanged: (Quiz? quiz) {
+                          if (quiz != null) {
+                            quizSelector.changeQuiz(quiz);
+                          }
+                        },
+                        items: quizSelector.quizes
+                            .map<DropdownMenuItem<Quiz>>((Quiz quiz) {
+                          return DropdownMenuItem<Quiz>(
+                            value: quiz,
+                            child: Text(quiz.title),
+                          );
+                        }).toList());
                   }
                 },
-                items: quizSelector.quizes
-                    .map<DropdownMenuItem<Quiz>>((Quiz quiz) {
-                  return DropdownMenuItem<Quiz>(
-                    value: quiz,
-                    child: Text(quiz.title),
-                  );
-                }).toList());
-          },
-        ),
+              ),
         const Spacer(),
         IconButton(
             onPressed: () {

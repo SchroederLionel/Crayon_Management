@@ -1,12 +1,10 @@
 import 'package:crayon_management/datamodels/enum.dart';
-import 'package:crayon_management/datamodels/lecture/lecture.dart';
 import 'package:crayon_management/datamodels/lecture/lecture_snipped.dart';
 import 'package:crayon_management/l10n/app_localizations.dart';
 import 'package:crayon_management/providers/lecture/drop_down_day_provider.dart';
 import 'package:crayon_management/providers/lecture/drop_down_type_provider.dart';
 import 'package:crayon_management/providers/lecture/lecture_date_provider.dart';
 import 'package:crayon_management/providers/lecture/time_picker_provider.dart';
-import 'package:crayon_management/providers/user/user_provider.dart';
 import 'package:crayon_management/providers/user/user_lectures_provider.dart';
 import 'package:crayon_management/responsive.dart';
 import 'package:crayon_management/screens/dashboard/components/add_modify_lecture_components/add_lecture_dialog.dart';

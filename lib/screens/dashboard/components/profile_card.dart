@@ -54,7 +54,7 @@ class ProfileCard extends StatelessWidget {
                         child: Icon(Icons.person),
                       ),
                       const SizedBox(width: 5.0),
-                      Container(
+                      SizedBox(
                         width: 140,
                         child: Text(
                           userHeaderProvider.firstNameAndLastName,

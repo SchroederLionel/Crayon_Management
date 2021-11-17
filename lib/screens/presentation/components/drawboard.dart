@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:crayon_management/datamodels/drawboard/drawing_point.dart';
 import 'package:crayon_management/providers/presentation/drawingboard/canvas_provider.dart';
 import 'package:crayon_management/providers/presentation/drawingboard/color_picker_provider.dart';

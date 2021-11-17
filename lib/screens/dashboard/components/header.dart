@@ -1,12 +1,7 @@
-import 'package:crayon_management/datamodels/enum.dart';
 import 'package:crayon_management/l10n/app_localizations.dart';
-import 'package:crayon_management/providers/user/user_header_provider.dart';
-import 'package:crayon_management/providers/user/user_provider.dart';
 import 'package:crayon_management/providers/util_providers/menu_provider.dart';
 import 'package:crayon_management/responsive.dart';
 import 'package:crayon_management/screens/dashboard/components/profile_card.dart';
-import 'package:crayon_management/widgets/error_text.dart';
-import 'package:crayon_management/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

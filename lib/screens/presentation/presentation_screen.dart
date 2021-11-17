@@ -4,11 +4,12 @@ import 'package:crayon_management/datamodels/route_arguments/presentation_screen
 import 'package:crayon_management/providers/presentation/current_pdf_provider.dart';
 import 'package:crayon_management/providers/presentation/page_count_provider.dart';
 import 'package:crayon_management/providers/presentation/presentation_provider.dart';
+import 'package:crayon_management/providers/presentation/quiz_selector_provider.dart';
 import 'package:crayon_management/providers/presentation/show_options_provider.dart';
 import 'package:crayon_management/screens/presentation/components/page_count.dart';
 import 'package:crayon_management/screens/presentation/components/presentation_controls.dart';
 import 'package:crayon_management/screens/presentation/components/presentation_options_row.dart';
-import 'package:crayon_management/screens/presentation/question.dart';
+import 'package:crayon_management/screens/presentation/components/question.dart';
 import 'package:crayon_management/services/question_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -42,9 +43,12 @@ class _PresentationScreenState extends State<PresentationScreen> {
     arguement = widget.arg;
     _jumpToPageController = TextEditingController(text: '');
     _scrollController = ItemScrollController();
-    WidgetsBinding.instance!.addPostFrameCallback((_) =>
-        Provider.of<PresentationProvider>(context, listen: false)
-            .getSlide(widget.arg.fileId));
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      Provider.of<PresentationProvider>(context, listen: false)
+          .getSlide(widget.arg.fileId);
+      Provider.of<QuizSelectorProvider>(context, listen: false).quizes =
+          widget.arg.quizes;
+    });
   }
 
   @override
@@ -113,17 +117,20 @@ class _PresentationScreenState extends State<PresentationScreen> {
                         ),
                       ),
                       Consumer<ShowOptionProvider>(
-                          builder: (_, showOptionProvider, child) {
-                        return !showOptionProvider.show
-                            ? IconButton(
-                                onPressed: () =>
-                                    showOptionProvider.changeShow(),
+                          builder: (_, showOptionProvider, __) {
+                        return showOptionProvider.show
+                            ? PresentationOptionsRow(
+                                lectureId: arguement.lectureId,
+                                quizes: arguement.quizes)
+                            : IconButton(
+                                onPressed: () => WidgetsBinding.instance!
+                                        .addPostFrameCallback((_) {
+                                      showOptionProvider.changeShow();
+                                    }),
                                 icon: const Icon(
                                   Icons.remove_red_eye,
                                   color: Colors.white24,
-                                ))
-                            : PresentationOptionsRow(
-                                lectureId: arguement.lectureId);
+                                ));
                       }),
                       PresentationControls(scrollController: _scrollController),
                       Container(

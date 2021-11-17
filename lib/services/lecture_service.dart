@@ -15,6 +15,7 @@ class LectureService {
     try {
       Lecture l =
           Lecture(uid: uid as String, title: lecture.title, id: lecture.id);
+      l.setLectureDates(lecture.lectureDates);
       await FirebaseFirestore.instance
           .collection('lectures')
           .doc(lecture.id)
@@ -22,6 +23,7 @@ class LectureService {
       List<Map> list = [];
       LectureSnipped snipped =
           LectureSnipped(id: lecture.id, title: lecture.title);
+
       snipped.setLectureDates(lecture.lectureDates);
 
       list.add(snipped.toJson());
@@ -32,17 +34,24 @@ class LectureService {
 
       await FirebaseFirestore.instance
           .collection('lectures')
-          .doc(uid)
+          .doc(lecture.id)
           .collection('features')
           .doc('questions')
           .set({'questions': []});
 
       await FirebaseFirestore.instance
           .collection('lectures')
-          .doc(uid)
+          .doc(lecture.id)
           .collection('features')
           .doc('currentQuiz')
           .set({'currentQuiz': []});
+
+      await FirebaseFirestore.instance
+          .collection('lectures')
+          .doc(lecture.id)
+          .collection('features')
+          .doc('quizes')
+          .set({'quizes': []});
 
       return lecture;
     } on FirebaseException catch (error) {

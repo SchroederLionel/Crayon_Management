@@ -1,4 +1,3 @@
-import 'dart:html';
 import 'package:crayon_management/l10n/app_localizations.dart';
 import 'package:crayon_management/providers/slide_data_provider.dart';
 import 'package:crayon_management/services/validator_service.dart';
@@ -6,6 +5,7 @@ import 'package:crayon_management/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dropzone/flutter_dropzone.dart';
 import 'package:provider/provider.dart';
+import 'package:universal_html/html.dart';
 
 class DropZone extends StatefulWidget {
   final String lectureId;

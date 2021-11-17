@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class QuizSelectorProvider extends ChangeNotifier {
   late Quiz _currentQuiz;
-  List<Quiz> quizes;
+  List<Quiz> quizes = [];
 
   QuizSelectorProvider({required this.quizes}) {
     _currentQuiz = quizes.first;

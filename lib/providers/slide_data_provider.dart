@@ -1,11 +1,10 @@
-import 'dart:html';
-
 import 'package:crayon_management/datamodels/failure.dart';
 import 'package:crayon_management/datamodels/lecture/slide.dart';
 import 'package:crayon_management/services/lecture_service.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:universal_html/html.dart';
 import 'package:uuid/uuid.dart';
 
 class SlideDataProvider extends ChangeNotifier {

@@ -135,7 +135,7 @@ class _SignInState extends State<SignIn> {
                             }
                           });
                         },
-                        child: Text('Forgot password')),
+                        child: const Text('Forgot password')),
                     Consumer<ErrorProvider>(
                         builder: (context, errorNotifier, child) {
                       if (errorNotifier.state == ErrorState.noError) {

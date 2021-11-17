@@ -1,4 +1,3 @@
-import 'package:crayon_management/datamodels/enum.dart';
 import 'package:crayon_management/datamodels/user/user_data.dart';
 import 'package:crayon_management/l10n/app_localizations.dart';
 import 'package:crayon_management/providers/user/user_header_provider.dart';

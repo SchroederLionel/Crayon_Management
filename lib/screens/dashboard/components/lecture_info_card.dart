@@ -1,5 +1,4 @@
 import 'package:crayon_management/datamodels/confirmation_dialog/confirmation_dialog_data.dart';
-import 'package:crayon_management/datamodels/lecture/lecture.dart';
 import 'package:crayon_management/datamodels/lecture/lecture_snipped.dart';
 import 'package:crayon_management/l10n/app_localizations.dart';
 import 'package:crayon_management/providers/lecture/drop_down_day_provider.dart';
@@ -8,8 +7,6 @@ import 'package:crayon_management/providers/lecture/lecture_date_provider.dart';
 import 'package:crayon_management/providers/lecture/time_picker_provider.dart';
 import 'package:crayon_management/providers/user/user_lectures_provider.dart';
 import 'package:crayon_management/screens/dashboard/components/add_modify_lecture_components/add_lecture_dialog.dart';
-import 'package:crayon_management/services/lecture_service.dart';
-
 import 'package:crayon_management/widgets/confirmation_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:crayon_management/route/route.dart' as route;
@@ -22,9 +19,6 @@ class LectureInfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var appTranslation = AppLocalizations.of(context);
-
-    var userLectureProvider =
-        Provider.of<UserLectureProvider>(context, listen: false);
 
     return Card(
       child: Padding(
