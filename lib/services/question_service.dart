@@ -21,8 +21,7 @@ class QuestionService {
     throw Failure(code: '');
   }
 
-  static Stream<List<String>> removeQuestion(
-      String lectureId, List<String> questions) {
+  static void removeQuestion(String lectureId, List<String> questions) {
     try {
       FirebaseFirestore.instance
           .collection('lectures')

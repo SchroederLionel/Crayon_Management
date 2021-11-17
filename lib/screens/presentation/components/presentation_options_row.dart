@@ -1,4 +1,5 @@
 import 'package:crayon_management/datamodels/quiz/quiz.dart';
+import 'package:crayon_management/datamodels/route_arguments/quiz_launch.dart';
 import 'package:crayon_management/providers/presentation/current_pdf_provider.dart';
 import 'package:crayon_management/providers/presentation/drawingboard/canvas_provider.dart';
 import 'package:crayon_management/providers/presentation/drawingboard/color_picker_provider.dart';
@@ -7,8 +8,10 @@ import 'package:crayon_management/providers/presentation/drawingboard/pdf_provid
 import 'package:crayon_management/providers/presentation/page_count_provider.dart';
 import 'package:crayon_management/providers/presentation/quiz_selector_provider.dart';
 import 'package:crayon_management/providers/presentation/show_options_provider.dart';
+
 import 'package:crayon_management/screens/presentation/components/drawboard.dart';
 import 'package:crayon_management/screens/presentation/components/qr_dialog.dart';
+import 'package:crayon_management/screens/presentation/components/quiz/quiz_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:universal_html/html.dart';
@@ -26,9 +29,11 @@ class PresentationOptionsRow extends StatelessWidget {
         Provider.of<CurrentPdfProvider>(context, listen: false);
     final pageCountProvider =
         Provider.of<PageCountProvider>(context, listen: false);
-
     final showOptionProvider =
         Provider.of<ShowOptionProvider>(context, listen: false);
+    final quizSelector =
+        Provider.of<QuizSelectorProvider>(context, listen: false);
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -91,39 +96,13 @@ class PresentationOptionsRow extends StatelessWidget {
         const SizedBox(
           width: 14,
         ),
-        quizes.isEmpty
-            ? Container()
-            : Consumer<QuizSelectorProvider>(
-                builder: (_, quizSelector, __) {
-                  if (quizSelector.quizes.isEmpty) {
-                    return Container(
-                      width: 100,
-                    );
-                  } else {
-                    return DropdownButton<Quiz>(
-                        value: quizSelector.currentQuiz,
-                        icon: const Icon(Icons.arrow_drop_down),
-                        iconSize: 14,
-                        style: const TextStyle(
-                            fontSize: 14, color: Colors.white24),
-                        underline: Container(
-                          height: 0,
-                        ),
-                        onChanged: (Quiz? quiz) {
-                          if (quiz != null) {
-                            quizSelector.changeQuiz(quiz);
-                          }
-                        },
-                        items: quizSelector.quizes
-                            .map<DropdownMenuItem<Quiz>>((Quiz quiz) {
-                          return DropdownMenuItem<Quiz>(
-                            value: quiz,
-                            child: Text(quiz.title),
-                          );
-                        }).toList());
-                  }
-                },
-              ),
+        ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed('quiz',
+                  arguments: QuizLaunchArguement(
+                      lectureId: lectureId, quizes: quizes));
+            },
+            child: Text('Open quiz mode')),
         const Spacer(),
         IconButton(
             onPressed: () {

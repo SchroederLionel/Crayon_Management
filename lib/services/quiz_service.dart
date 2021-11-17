@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crayon_management/datamodels/failure.dart';
+import 'package:crayon_management/datamodels/quiz/quit_participation.dart';
 import 'package:crayon_management/datamodels/quiz/quiz.dart';
 
 class QuizService {
@@ -81,5 +82,63 @@ class QuizService {
     } on FormatException {
       throw Failure(code: 'bad-format');
     }
+  }
+
+  static Stream<QuizParticipation>? getQuizParticiants(String lectureID) {
+    try {
+      return FirebaseFirestore.instance
+          .collection('lectures')
+          .doc(lectureID)
+          .collection('features')
+          .doc('currentQuiz')
+          .snapshots()
+          .map((snapShot) {
+        return QuizParticipation.fromJson(snapShot.data());
+      });
+    } catch (e) {}
+  }
+
+  static allowParticipantsToJoinLobby(String lectureId) async {
+    try {
+      FirebaseFirestore.instance
+          .collection('lectures')
+          .doc(lectureId)
+          .collection('features')
+          .doc('currentQuiz')
+          .set({'openLobby': true}, SetOptions(merge: true));
+    } catch (e) {}
+  }
+
+  static resetCurrentQuiz(String lectureId) async {
+    try {
+      FirebaseFirestore.instance
+          .collection('lectures')
+          .doc(lectureId)
+          .collection('features')
+          .doc('currentQuiz')
+          .set({});
+    } catch (e) {}
+  }
+
+  static dissalowParticipantsToJoinLobby(String lectureId) async {
+    try {
+      FirebaseFirestore.instance
+          .collection('lectures')
+          .doc(lectureId)
+          .collection('features')
+          .doc('currentQuiz')
+          .set({'openLobby': false}, SetOptions(merge: true));
+    } catch (e) {}
+  }
+
+  static startQuiz(String lectureId, Quiz quiz) async {
+    try {
+      FirebaseFirestore.instance
+          .collection('lectures')
+          .doc(lectureId)
+          .collection('features')
+          .doc('currentQuiz')
+          .set({'currentQuiz': quiz.toJson()}, SetOptions(merge: true));
+    } catch (e) {}
   }
 }

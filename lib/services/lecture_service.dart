@@ -44,7 +44,7 @@ class LectureService {
           .doc(lecture.id)
           .collection('features')
           .doc('currentQuiz')
-          .set({'currentQuiz': []});
+          .set({});
 
       await FirebaseFirestore.instance
           .collection('lectures')
