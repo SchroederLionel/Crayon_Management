@@ -85,6 +85,7 @@ class QuizService {
   }
 
   static Stream<QuizParticipation>? getQuizParticiants(String lectureID) {
+    print('GET QUIZ PARTI CALLED');
     try {
       return FirebaseFirestore.instance
           .collection('lectures')

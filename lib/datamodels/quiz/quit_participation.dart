@@ -1,17 +1,29 @@
 import 'dart:convert';
 
 class QuizParticipation {
+  bool isLobbyOpen = false;
   List<String> participants = [];
   List<UserResponses> userResponses = [];
-  QuizParticipation({required this.participants, required this.userResponses});
+  QuizParticipation({
+    required this.participants,
+    required this.userResponses,
+  });
+
+  setLobbyOpen(bool open) => isLobbyOpen = open;
 
   factory QuizParticipation.fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return QuizParticipation(participants: [], userResponses: []);
     }
     List<String> participants = [];
+    bool isLobbyOpen = false;
+    if (json['openLobby'] != null) {
+      isLobbyOpen = json['openLobby'] as bool;
+    }
     if (json['participants'] == null) {
-      return QuizParticipation(participants: [], userResponses: []);
+      var quizP = QuizParticipation(participants: [], userResponses: []);
+      quizP.setLobbyOpen(isLobbyOpen);
+      return quizP;
     } else {
       final participansdata = jsonEncode(json['participants']);
       participants =
@@ -24,12 +36,15 @@ class QuizParticipation {
             .map((userResponse) => UserResponses.fromJson(userResponse))
             .toList()
         : <UserResponses>[];
-    return QuizParticipation(
+    var quizP = QuizParticipation(
         participants: participants, userResponses: userResponses);
+    quizP.setLobbyOpen(isLobbyOpen);
+    return quizP;
   }
 
   @override
   Map<String, dynamic> toJson() => {
+        'openLobby': jsonEncode(isLobbyOpen),
         'participants': jsonEncode(participants),
         'userResponses':
             userResponses.map((userResponse) => userResponse.toJson()).toList()

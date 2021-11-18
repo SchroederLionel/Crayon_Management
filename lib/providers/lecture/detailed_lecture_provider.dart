@@ -37,7 +37,6 @@ class DetailedLectureProvider extends ChangeNotifier {
         )
         .run()
         .then((lecture) => _setLecture(lecture));
-
     _setState(NotifierState.loaded);
   }
 

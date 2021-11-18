@@ -1,5 +1,6 @@
 import 'package:crayon_management/datamodels/confirmation_dialog/confirmation_dialog_data.dart';
 import 'package:crayon_management/datamodels/enum.dart';
+import 'package:crayon_management/datamodels/route_arguments/quiz_launch.dart';
 import 'package:crayon_management/l10n/app_localizations.dart';
 import 'package:crayon_management/providers/quiz/question_provider.dart';
 import 'package:crayon_management/providers/quiz/quiz_provider.dart';
@@ -39,12 +40,23 @@ class _QuizState extends State<Quiz> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
               appTranslation!.translate('quiz') ?? 'Quiz',
               style: Theme.of(context).textTheme.subtitle1,
             ),
+            const SizedBox(width: 14),
+            ElevatedButton(
+                onPressed: () {
+                  quizProvider.quizes.fold(
+                      (failure) => null,
+                      (quizes) => Navigator.of(context).pushNamed('quiz',
+                          arguments: QuizLaunchArguement(
+                              lectureId: widget.lectureId, quizes: quizes)));
+                },
+                child: Text('Start a quiz')),
+            const Spacer(),
             ElevatedButton.icon(
                 onPressed: () {
                   showDialog(
