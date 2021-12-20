@@ -1,9 +1,11 @@
 import 'package:crayon_management/datamodels/enum.dart';
+import 'package:crayon_management/datamodels/lecture/lecture.dart';
 import 'package:crayon_management/datamodels/lecture/lecture_snipped.dart';
 import 'package:crayon_management/providers/lecture/detailed_lecture_provider.dart';
 import 'package:crayon_management/screens/detailed_lecture/components/controls.dart';
 import 'package:crayon_management/screens/detailed_lecture/components/slides_component.dart';
 import 'package:crayon_management/screens/detailed_lecture/components/quiz.dart';
+import 'package:crayon_management/screens/presentation/components/qr_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -44,6 +46,14 @@ class _DetailedLectureScreenState extends State<DetailedLectureScreen> {
                     style: Theme.of(context).textTheme.headline1,
                   ),
                   IconButton(
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) =>
+                                QrDialog(lectureId: widget.lecture.id));
+                      },
+                      icon: Icon(Icons.qr_code)),
+                  IconButton(
                       onPressed: () => Navigator.pop(context),
                       icon: const Icon(
                         Icons.close,
@@ -69,7 +79,7 @@ class _DetailedLectureScreenState extends State<DetailedLectureScreen> {
                             : lecture.slides.isEmpty
                                 ? Container()
                                 : Controls(
-                                    lectureId: lecture.id,
+                                    lecture: lecture,
                                     slides: lecture.slides,
                                   ));
                   }
@@ -78,9 +88,20 @@ class _DetailedLectureScreenState extends State<DetailedLectureScreen> {
               const SizedBox(
                 height: 14,
               ),
-              Quiz(
-                lectureId: widget.lecture.id,
-              ),
+              Consumer<DetailedLectureProvider>(
+                  builder: (_, lectureNotifier, __) {
+                if (lectureNotifier.state == NotifierState.initial) {
+                  return Container();
+                } else if (lectureNotifier.state == NotifierState.loading) {
+                  return const CircularProgressIndicator();
+                } else {
+                  return lectureNotifier.lecture.fold(
+                      (failure) => Text(failure.toString()),
+                      (lecture) => Quiz(
+                            lecture: lecture as Lecture,
+                          ));
+                }
+              }),
               const SizedBox(
                 height: 14,
               ),

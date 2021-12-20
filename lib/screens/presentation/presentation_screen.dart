@@ -120,7 +120,7 @@ class _PresentationScreenState extends State<PresentationScreen> {
                           builder: (_, showOptionProvider, __) {
                         return showOptionProvider.show
                             ? PresentationOptionsRow(
-                                lectureId: arguement.lectureId,
+                                lecture: arguement.lecture,
                                 quizes: arguement.quizes)
                             : IconButton(
                                 onPressed: () => WidgetsBinding.instance!
@@ -138,10 +138,10 @@ class _PresentationScreenState extends State<PresentationScreen> {
                         child: StreamProvider<List<String>>(
                           create: (context) =>
                               QuestionService.getQuestionSnapshots(
-                                  arguement.lectureId),
+                                  arguement.lecture.id),
                           initialData: const [],
                           child: Question(
-                            lectureId: arguement.lectureId,
+                            lectureId: arguement.lecture.id,
                           ),
                         ),
                       ),

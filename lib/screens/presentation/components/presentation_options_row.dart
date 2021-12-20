@@ -1,3 +1,4 @@
+import 'package:crayon_management/datamodels/lecture/lecture.dart';
 import 'package:crayon_management/datamodels/quiz/quiz.dart';
 import 'package:crayon_management/datamodels/route_arguments/quiz_launch.dart';
 import 'package:crayon_management/providers/presentation/current_pdf_provider.dart';
@@ -11,16 +12,16 @@ import 'package:crayon_management/providers/presentation/show_options_provider.d
 
 import 'package:crayon_management/screens/presentation/components/drawboard.dart';
 import 'package:crayon_management/screens/presentation/components/qr_dialog.dart';
-import 'package:crayon_management/screens/presentation/components/quiz/quiz_screen.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:universal_html/html.dart';
 
 class PresentationOptionsRow extends StatelessWidget {
   final List<Quiz> quizes;
-  final String lectureId;
+  final Lecture lecture;
   const PresentationOptionsRow(
-      {required this.quizes, required this.lectureId, Key? key})
+      {required this.quizes, required this.lecture, Key? key})
       : super(key: key);
 
   @override
@@ -47,7 +48,7 @@ class PresentationOptionsRow extends StatelessWidget {
               showDialog<void>(
                   context: context,
                   builder: (BuildContext context) {
-                    return QrDialog(lectureId: lectureId);
+                    return QrDialog(lectureId: lecture.id);
                   });
             },
             icon: const Icon(
@@ -99,8 +100,8 @@ class PresentationOptionsRow extends StatelessWidget {
         ElevatedButton(
             onPressed: () {
               Navigator.of(context).pushNamed('quiz',
-                  arguments: QuizLaunchArguement(
-                      lectureId: lectureId, quizes: quizes));
+                  arguments:
+                      QuizLaunchArguement(lecture: lecture, quizes: quizes));
             },
             child: Text('Open quiz mode')),
         const Spacer(),

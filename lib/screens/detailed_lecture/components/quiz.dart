@@ -1,5 +1,6 @@
 import 'package:crayon_management/datamodels/confirmation_dialog/confirmation_dialog_data.dart';
 import 'package:crayon_management/datamodels/enum.dart';
+import 'package:crayon_management/datamodels/lecture/lecture.dart';
 import 'package:crayon_management/datamodels/route_arguments/quiz_launch.dart';
 import 'package:crayon_management/l10n/app_localizations.dart';
 import 'package:crayon_management/providers/quiz/question_provider.dart';
@@ -14,8 +15,8 @@ import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 
 class Quiz extends StatefulWidget {
-  final String lectureId;
-  const Quiz({required this.lectureId, Key? key}) : super(key: key);
+  final Lecture lecture;
+  const Quiz({required this.lecture, Key? key}) : super(key: key);
 
   @override
   State<Quiz> createState() => _QuizState();
@@ -27,7 +28,7 @@ class _QuizState extends State<Quiz> {
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((_) =>
         Provider.of<QuizProvider>(context, listen: false)
-            .getQuizes(widget.lectureId));
+            .getQuizes(widget.lecture.id));
   }
 
   @override
@@ -53,7 +54,7 @@ class _QuizState extends State<Quiz> {
                       (failure) => null,
                       (quizes) => Navigator.of(context).pushNamed('quiz',
                           arguments: QuizLaunchArguement(
-                              lectureId: widget.lectureId, quizes: quizes)));
+                              lecture: widget.lecture, quizes: quizes)));
                 },
                 child: Text('Start a quiz')),
             const Spacer(),
@@ -74,7 +75,7 @@ class _QuizState extends State<Quiz> {
                           child: const QuizDialog(),
                         );
                       }).then((value) {
-                    quizProvider.addQuiz(widget.lectureId, value);
+                    quizProvider.addQuiz(widget.lecture.id, value);
                   });
                 },
                 icon: const Icon(Icons.add),
@@ -136,7 +137,7 @@ class _QuizState extends State<Quiz> {
                                                       ))).then((value) {
                                                 if (value == true) {
                                                   quizProvider.removeQuiz(
-                                                      widget.lectureId,
+                                                      widget.lecture.id,
                                                       listQuiz[index]);
                                                 }
                                               });

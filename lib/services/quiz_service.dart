@@ -84,17 +84,22 @@ class QuizService {
     }
   }
 
-  static Stream<QuizParticipation>? getQuizParticiants(String lectureID) {
-    print('GET QUIZ PARTI CALLED');
+  static Stream<List<String>>? getQuizParticiants(String lectureID) {
     try {
       return FirebaseFirestore.instance
           .collection('lectures')
           .doc(lectureID)
           .collection('features')
-          .doc('currentQuiz')
+          .doc('lobby')
           .snapshots()
           .map((snapShot) {
-        return QuizParticipation.fromJson(snapShot.data());
+        var json = snapShot.data();
+        if (json != null) {
+          if (json.containsKey('participants')) {
+            return List.from(json['participants']);
+          }
+        }
+        return [];
       });
     } catch (e) {}
   }
@@ -104,9 +109,7 @@ class QuizService {
       FirebaseFirestore.instance
           .collection('lectures')
           .doc(lectureId)
-          .collection('features')
-          .doc('currentQuiz')
-          .set({'openLobby': true}, SetOptions(merge: true));
+          .set({'isLobbyOpen': true}, SetOptions(merge: true));
     } catch (e) {}
   }
 
@@ -115,9 +118,7 @@ class QuizService {
       FirebaseFirestore.instance
           .collection('lectures')
           .doc(lectureId)
-          .collection('features')
-          .doc('currentQuiz')
-          .set({});
+          .set({'isLobbyOpen': false}, SetOptions(merge: true));
     } catch (e) {}
   }
 
@@ -126,20 +127,15 @@ class QuizService {
       FirebaseFirestore.instance
           .collection('lectures')
           .doc(lectureId)
-          .collection('features')
-          .doc('currentQuiz')
-          .set({'openLobby': false}, SetOptions(merge: true));
+          .set({'isLobbyOpen': false}, SetOptions(merge: true));
     } catch (e) {}
   }
 
   static startQuiz(String lectureId, Quiz quiz) async {
     try {
-      FirebaseFirestore.instance
-          .collection('lectures')
-          .doc(lectureId)
-          .collection('features')
-          .doc('currentQuiz')
-          .set({'currentQuiz': quiz.toJson()}, SetOptions(merge: true));
+      FirebaseFirestore.instance.collection('lectures').doc(lectureId).set(
+          {'currentQuiz': quiz.toJson(), 'isLobbyOpen': false},
+          SetOptions(merge: true));
     } catch (e) {}
   }
 }

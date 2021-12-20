@@ -58,7 +58,6 @@ class LectureInfoCard extends StatelessWidget {
                               ));
                         }).then((updatedLecture) {
                       if (updatedLecture is LectureSnipped) {
-                        print('IAM INNN');
                         print(updatedLecture.title);
                         Provider.of<UserLectureProvider>(context, listen: false)
                             .updateLecture(updatedLecture);

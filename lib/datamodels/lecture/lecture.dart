@@ -4,10 +4,10 @@ import 'package:crayon_management/datamodels/lecture/slide.dart';
 
 class Lecture extends LectureSnipped {
   String uid;
-
+  bool isLobbyOpen;
   List<Slide> slides = <Slide>[];
 
-  Lecture({required this.uid, required title, required id})
+  Lecture(this.isLobbyOpen, {required this.uid, required title, required id})
       : super(title: title, id: id);
 
   setSlides(List<Slide> slides) => this.slides = slides;
@@ -18,6 +18,7 @@ class Lecture extends LectureSnipped {
     final uid = json!['uid'] as String;
     final id = json['id'] as String;
     final title = json['title'] as String;
+    final isLobbyOpen = json['isLobbyOpen'] ?? false;
 
     final slidesData = json['slides'] as List<dynamic>?;
     final slides = slidesData != null
@@ -31,7 +32,7 @@ class Lecture extends LectureSnipped {
             .toList()
         : <LectureDate>[];
 
-    Lecture lecture = Lecture(uid: uid, title: title, id: id);
+    Lecture lecture = Lecture(isLobbyOpen, uid: uid, title: title, id: id);
     lecture.setSlides(slides);
 
     lecture.setLectureDates(lecturesDates);

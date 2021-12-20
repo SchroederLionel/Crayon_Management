@@ -13,7 +13,8 @@ class QrDialog extends StatelessWidget {
         width: 600,
         alignment: Alignment.center,
         child: QrImage(
-          foregroundColor: Colors.white,
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
           data: lectureId,
           version: QrVersions.auto,
           size: 500.0,

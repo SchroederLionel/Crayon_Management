@@ -1,3 +1,4 @@
+import 'package:crayon_management/datamodels/lecture/lecture.dart';
 import 'package:crayon_management/datamodels/lecture/slide.dart';
 import 'package:crayon_management/datamodels/route_arguments/presentation_screen_argument.dart';
 import 'package:crayon_management/l10n/app_localizations.dart';
@@ -8,8 +9,8 @@ import 'package:provider/provider.dart';
 
 class Controls extends StatefulWidget {
   final List<Slide> slides;
-  final String lectureId;
-  const Controls({required this.lectureId, required this.slides, Key? key})
+  final Lecture lecture;
+  const Controls({required this.lecture, required this.slides, Key? key})
       : super(key: key);
 
   @override
@@ -68,7 +69,7 @@ class _ControlsState extends State<Controls> {
                             Provider.of<QuizProvider>(context, listen: false)
                                 .quizes
                                 .fold((l) => [], (quizes) => quizes),
-                        lectureId: widget.lectureId,
+                        lecture: widget.lecture,
                         fileId: currentSlide!.fileId)),
                 icon: const Icon(Icons.open_in_browser),
                 label: Text(

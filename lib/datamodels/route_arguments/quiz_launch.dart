@@ -1,8 +1,9 @@
+import 'package:crayon_management/datamodels/lecture/lecture.dart';
 import 'package:crayon_management/datamodels/quiz/quiz.dart';
 
 class QuizLaunchArguement {
+  Lecture lecture;
   List<Quiz> quizes;
-  final String lectureId;
 
-  QuizLaunchArguement({required this.lectureId, required this.quizes});
+  QuizLaunchArguement({required this.lecture, required this.quizes});
 }

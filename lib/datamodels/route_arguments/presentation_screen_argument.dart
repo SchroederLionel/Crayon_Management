@@ -1,9 +1,10 @@
+import 'package:crayon_management/datamodels/lecture/lecture.dart';
 import 'package:crayon_management/datamodels/quiz/quiz.dart';
 
 class PresentationScreenArgument {
   List<Quiz> quizes;
-  final String lectureId;
+  Lecture lecture;
   final String fileId;
   PresentationScreenArgument(
-      {required this.lectureId, required this.fileId, required this.quizes});
+      {required this.lecture, required this.fileId, required this.quizes});
 }

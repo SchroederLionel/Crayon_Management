@@ -13,9 +13,9 @@ import 'package:crayon_management/providers/quiz/quiz_provider.dart';
 import 'package:crayon_management/providers/user/user_header_provider.dart';
 import 'package:crayon_management/providers/user/user_lectures_provider.dart';
 import 'package:crayon_management/screens/detailed_lecture/detailed_lecture_screen.dart';
-import 'package:crayon_management/screens/presentation/components/quiz/quiz_screen.dart';
 
 import 'package:crayon_management/screens/presentation/presentation_screen.dart';
+import 'package:crayon_management/screens/quiz/quiz_screen.dart';
 
 import 'package:flutter/material.dart';
 
@@ -94,10 +94,10 @@ Route<dynamic> controller(RouteSettings routerSettings) {
                             QuizSelectorProvider(quizes: arg.quizes)),
                     ChangeNotifierProvider<LobbyProvider>(
                         create: (context) =>
-                            LobbyProvider(lectureId: arg.lectureId))
+                            LobbyProvider(lectureId: arg.lecture.id))
                   ],
                   child: QuizScreen(
-                    lectureId: arg.lectureId,
+                    lecture: arg.lecture,
                   )));
     default:
       return MaterialPageRoute(builder: (context) => const LoginScreen());

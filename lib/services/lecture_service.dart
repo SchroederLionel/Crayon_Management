@@ -13,8 +13,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 class LectureService {
   static Future<LectureSnipped> addLecture(LectureSnipped lecture) async {
     try {
-      Lecture l =
-          Lecture(uid: uid as String, title: lecture.title, id: lecture.id);
+      Lecture l = Lecture(false,
+          uid: uid as String, title: lecture.title, id: lecture.id);
       l.setLectureDates(lecture.lectureDates);
       await FirebaseFirestore.instance
           .collection('lectures')
