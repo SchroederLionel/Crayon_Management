@@ -56,7 +56,7 @@ class QuizOptionsRow extends StatelessWidget {
             onPressed: () async {
               var resultingDuration = await showDurationPicker(
                 context: context,
-                initialTime: const Duration(minutes: 4),
+                initialTime: const Duration(seconds: 100),
                 baseUnit: BaseUnit.minute,
               );
             },

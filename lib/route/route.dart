@@ -81,8 +81,8 @@ Route<dynamic> controller(RouteSettings routerSettings) {
                   Provider<CurrentPdfProvider>(
                       create: (context) => CurrentPdfProvider()),
                   ChangeNotifierProvider<QuizSelectorProvider>(
-                      create: (context) =>
-                          QuizSelectorProvider(quizes: arg.quizes)),
+                      create: (context) => QuizSelectorProvider(
+                          quizes: arg.quizes, lectureId: arg.lecture.id)),
                   ChangeNotifierProvider<ShowOptionProvider>(
                       create: (context) => ShowOptionProvider()),
                 ],
@@ -96,12 +96,13 @@ Route<dynamic> controller(RouteSettings routerSettings) {
     case quiz:
       var arg = routerSettings.arguments as QuizLaunchArguement;
       return MaterialPageRoute(
-          settings: RouteSettings(name: '/lecture/${arg.lecture.title}/quiz'),
+          settings: RouteSettings(
+              name: '/lecture/${arg.lecture.title.replaceAll(' ', '')}/quiz'),
           builder: (context) => MultiProvider(
                   providers: [
                     ChangeNotifierProvider<QuizSelectorProvider>(
-                        create: (context) =>
-                            QuizSelectorProvider(quizes: arg.quizes)),
+                        create: (context) => QuizSelectorProvider(
+                            quizes: arg.quizes, lectureId: arg.lecture.id)),
                     ChangeNotifierProvider<LobbyProvider>(
                         create: (context) =>
                             LobbyProvider(lectureId: arg.lecture.id))

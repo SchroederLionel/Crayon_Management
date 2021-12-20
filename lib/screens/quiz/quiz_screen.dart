@@ -3,6 +3,7 @@ import 'package:crayon_management/datamodels/quiz/quit_participation.dart';
 import 'package:crayon_management/datamodels/quiz/quiz.dart';
 import 'package:crayon_management/providers/presentation/quiz_selector_provider.dart';
 import 'package:crayon_management/providers/quiz/lobby_provider.dart';
+import 'package:crayon_management/screens/quiz/components/quiz_stepper.dart';
 import 'package:crayon_management/screens/quiz/explain_quiz_dialog.dart';
 import 'package:crayon_management/screens/quiz/quiz_lobby.dart';
 import 'package:crayon_management/screens/quiz/quiz_options_row.dart';
@@ -59,35 +60,7 @@ class _QuizScreenState extends State<QuizScreen> {
                       ))
                 ],
               ),
-              const SizedBox(
-                height: 14,
-              ),
-              Text(
-                'Setup',
-                style: Theme.of(context).textTheme.headline2,
-              ),
-              QuizOptionsRow(lecture: widget.lecture),
-              const SizedBox(
-                height: 14,
-              ),
-              Text(
-                'Lobby',
-                style: Theme.of(context).textTheme.headline2,
-              ),
-              const QuizLobby(),
-              const SizedBox(
-                height: 14,
-              ),
-              Container(
-                alignment: Alignment.bottomCenter,
-                child: ElevatedButton(
-                  onPressed: () {
-                    QuizService.startQuiz(
-                        widget.lecture.id, quizSelctor.currentQuiz);
-                  },
-                  child: Text('Start Quiz'),
-                ),
-              )
+              const Expanded(child: QuizStepper())
             ],
           ),
         ),

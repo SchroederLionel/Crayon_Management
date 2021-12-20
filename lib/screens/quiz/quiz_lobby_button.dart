@@ -31,10 +31,9 @@ class _QuizLobbyButtonState extends State<QuizLobbyButton> {
             setState(() {
               isLobbyOpen = true;
             });
-            print('LOBBY IS NOW OPEN');
+
             QuizService.dissalowParticipantsToJoinLobby(widget.lecture.id);
           } else {
-            print('LOBBY IS NOW OPEN');
             setState(() {
               isLobbyOpen = false;
             });
