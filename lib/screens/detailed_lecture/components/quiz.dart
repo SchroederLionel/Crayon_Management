@@ -13,6 +13,7 @@ import 'package:crayon_management/widgets/error_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
+import 'package:crayon_management/route/route.dart' as route;
 
 class Quiz extends StatefulWidget {
   final Lecture lecture;
@@ -52,7 +53,7 @@ class _QuizState extends State<Quiz> {
                 onPressed: () {
                   quizProvider.quizes.fold(
                       (failure) => null,
-                      (quizes) => Navigator.of(context).pushNamed('quiz',
+                      (quizes) => Navigator.of(context).pushNamed(route.quiz,
                           arguments: QuizLaunchArguement(
                               lecture: widget.lecture, quizes: quizes)));
                 },

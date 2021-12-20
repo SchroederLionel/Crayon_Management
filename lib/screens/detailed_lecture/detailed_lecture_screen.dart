@@ -39,12 +39,13 @@ class _DetailedLectureScreenState extends State<DetailedLectureScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
                     widget.lecture.title,
                     style: Theme.of(context).textTheme.headline1,
                   ),
+                  const Spacer(),
                   IconButton(
                       onPressed: () {
                         showDialog(
@@ -52,7 +53,7 @@ class _DetailedLectureScreenState extends State<DetailedLectureScreen> {
                             builder: (context) =>
                                 QrDialog(lectureId: widget.lecture.id));
                       },
-                      icon: Icon(Icons.qr_code)),
+                      icon: const Icon(Icons.qr_code)),
                   IconButton(
                       onPressed: () => Navigator.pop(context),
                       icon: const Icon(

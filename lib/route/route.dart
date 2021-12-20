@@ -24,19 +24,22 @@ import 'package:crayon_management/screens/dashboard/dashboard.dart';
 import 'package:provider/provider.dart';
 
 /// Route Names
-const String loginScreen = 'login';
-const String dashboard = 'dashboard';
-const String detailedLecture = 'detailedLecture';
-const String presentation = 'presentation';
-const String quiz = 'quiz';
+const String loginScreen = '/login';
+const String dashboard = '/dashboard';
+const String detailedLecture = '/dashboard/lecture';
+const String presentation = '/dashboard/lecture/presentation';
+const String quiz = '/dashboard/lecture/quiz';
 
 /// Routes of the application.
 Route<dynamic> controller(RouteSettings routerSettings) {
   switch (routerSettings.name) {
     case loginScreen:
-      return MaterialPageRoute(builder: (context) => const LoginScreen());
+      return MaterialPageRoute(
+          settings: const RouteSettings(name: ''),
+          builder: (context) => const LoginScreen());
     case dashboard:
       return MaterialPageRoute(
+          settings: const RouteSettings(name: 'dashboard'),
           builder: (context) => MultiProvider(
                 providers: [
                   Provider<UserProvider>(
@@ -49,7 +52,10 @@ Route<dynamic> controller(RouteSettings routerSettings) {
                 child: const Dashboard(),
               ));
     case detailedLecture:
+      LectureSnipped snipped = routerSettings.arguments as LectureSnipped;
       return MaterialPageRoute(
+          settings: RouteSettings(
+              name: 'dashboard/lecture/${snipped.title.replaceAll(' ', '')}'),
           builder: (context) => MultiProvider(
                   providers: [
                     ChangeNotifierProvider<DetailedLectureProvider>(
@@ -58,11 +64,14 @@ Route<dynamic> controller(RouteSettings routerSettings) {
                         create: (context) => QuizProvider())
                   ],
                   child: DetailedLectureScreen(
-                    lecture: routerSettings.arguments as LectureSnipped,
+                    lecture: snipped,
                   )));
     case presentation:
       var arg = routerSettings.arguments as PresentationScreenArgument;
       return MaterialPageRoute(
+          settings: RouteSettings(
+              name:
+                  '/lecture/${arg.lecture.title.replaceAll(' ', '')}/presentation'),
           builder: (context) => MultiProvider(
                 providers: [
                   ChangeNotifierProvider<PresentationProvider>(
@@ -87,6 +96,7 @@ Route<dynamic> controller(RouteSettings routerSettings) {
     case quiz:
       var arg = routerSettings.arguments as QuizLaunchArguement;
       return MaterialPageRoute(
+          settings: RouteSettings(name: '/lecture/${arg.lecture.title}/quiz'),
           builder: (context) => MultiProvider(
                   providers: [
                     ChangeNotifierProvider<QuizSelectorProvider>(

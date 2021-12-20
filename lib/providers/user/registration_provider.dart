@@ -7,6 +7,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:validators/validators.dart';
+import 'package:crayon_management/route/route.dart' as route;
 
 class RegistrationProvider extends ChangeNotifier {
   LoadingState _state = LoadingState.no;
@@ -37,8 +38,8 @@ class RegistrationProvider extends ChangeNotifier {
       setState(LoadingState.no);
       response.fold(
           (failure) => errorProvider.setErrorState(failure.toString()),
-          (userData) =>
-              Navigator.pushNamed(context, 'dashboard', arguments: userData));
+          (userData) => Navigator.pushNamed(context, route.dashboard,
+              arguments: userData));
       notifyListeners();
     }
   }

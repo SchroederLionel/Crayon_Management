@@ -7,6 +7,7 @@ import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:validators/validators.dart';
+import 'package:crayon_management/route/route.dart' as route;
 
 class LoginProvider extends ChangeNotifier {
   LoadingState _state = LoadingState.no;
@@ -33,7 +34,7 @@ class LoginProvider extends ChangeNotifier {
       response
           .fold((failure) => errorProvider.setErrorState(failure.toString()),
               (userCredential) {
-        Navigator.pushNamed(context, 'dashboard');
+        Navigator.pushNamed(context, route.dashboard);
       });
     }
   }

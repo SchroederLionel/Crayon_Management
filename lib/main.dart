@@ -15,11 +15,12 @@ import 'package:provider/provider.dart';
 
 import 'package:crayon_management/providers/util_providers/theme_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_strategy/url_strategy.dart';
 import 'route/route.dart' as route;
 
 void main() async {
   // Removes # from url.
-  // setPathUrlStrategy();
+  setPathUrlStrategy();
 
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();

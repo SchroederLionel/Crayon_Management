@@ -77,15 +77,18 @@ class _SlidesComponentState extends State<SlidesComponent> {
           height: 14,
         ),
         SizedBox(
-            height: 50,
-            child: ListView.builder(
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              itemCount: lecture.slides.length,
-              itemBuilder: (context, index) {
-                return Card(
+          height: 70,
+          child: ListView.builder(
+            shrinkWrap: true,
+            scrollDirection: Axis.horizontal,
+            itemCount: lecture.slides.length,
+            itemBuilder: (context, index) {
+              return Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(14.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
                         lecture.slides[index].title,
@@ -116,9 +119,11 @@ class _SlidesComponentState extends State<SlidesComponent> {
                           ))
                     ],
                   ),
-                );
-              },
-            )),
+                ),
+              );
+            },
+          ),
+        ),
       ],
     );
   }
