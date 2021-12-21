@@ -6,10 +6,6 @@ class QuizThirdStepLobby extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-        builder: (context, constraints) => SizedBox(
-            height: constraints.maxHeight,
-            width: constraints.maxWidth,
-            child: const QuizLobby()));
+    return const QuizLobby();
   }
 }

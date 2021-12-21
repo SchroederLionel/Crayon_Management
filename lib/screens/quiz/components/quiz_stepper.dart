@@ -1,4 +1,6 @@
 import 'package:crayon_management/screens/quiz/components/stepper/quiz_first_step.dart';
+import 'package:crayon_management/screens/quiz/components/stepper/quiz_fith_step.dart';
+import 'package:crayon_management/screens/quiz/components/stepper/quiz_fourth_step_start.dart';
 import 'package:crayon_management/screens/quiz/components/stepper/quiz_thrid_step_lobby.dart';
 
 import 'package:crayon_management/screens/quiz/components/stepper/quiz_second_step_time.dart';
@@ -20,32 +22,64 @@ class _QuizStepperState extends State<QuizStepper> {
       type: StepperType.horizontal,
       currentStep: _currentStep,
       steps: getSteps(),
+      onStepTapped: (step) => setState(() => _currentStep = step),
       onStepContinue: () {
-        setState(() {
-          _currentStep += 1;
-        });
+        final isLastStep = _currentStep == getSteps().length - 1;
+        if (isLastStep) {
+          print('Completed');
+        } else {
+          setState(() {
+            _currentStep += 1;
+          });
+        }
+      },
+      controlsBuilder: (context, {onStepContinue, onStepCancel}) {
+        final isLastStep = _currentStep == getSteps().length - 1;
+        return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          ElevatedButton(child: Text('NEXT'), onPressed: onStepContinue),
+          const SizedBox(width: 20),
+          if (_currentStep != 0)
+            ElevatedButton(child: Text('Back'), onPressed: onStepCancel),
+        ]);
       },
       onStepCancel: () {
-        setState(() {
-          _currentStep -= 1;
-        });
+        _currentStep == 0
+            ? null
+            : setState(() {
+                _currentStep -= 1;
+              });
       },
     );
   }
 
   List<Step> getSteps() => [
         Step(
-            title: Text('Select the quiz you want to start'),
+            state: _currentStep > 0 ? StepState.complete : StepState.indexed,
+            title: Text('Select Quiz'),
             isActive: _currentStep >= 1,
             content: QuizFirstStep()),
         Step(
-            title: Text('How mutch time should the quiz take.'),
+            state: _currentStep > 1 ? StepState.complete : StepState.indexed,
+            title: Text('Time'),
             isActive: _currentStep >= 2,
             content: QuizSecondStepTime()),
         Step(
-          title: Text('Player lobby'),
+          state: _currentStep > 2 ? StepState.complete : StepState.indexed,
+          title: Text('Lobby'),
           content: QuizThirdStepLobby(),
           isActive: _currentStep >= 3,
+        ),
+        Step(
+          state: _currentStep > 2 ? StepState.complete : StepState.indexed,
+          title: Text('Start quiz'),
+          content: QuizFourthStepStart(),
+          isActive: _currentStep >= 4,
+        ),
+        Step(
+          state: _currentStep > 2 ? StepState.complete : StepState.indexed,
+          title: Text('Timer'),
+          content: QuizFithStep(),
+          isActive: _currentStep >= 5,
         ),
       ];
 }

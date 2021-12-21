@@ -11,9 +11,16 @@ class QuizSelectorProvider extends ChangeNotifier {
   }
 
   Quiz get currentQuiz => _currentQuiz;
-
-  changeQuiz(Quiz quiz) {
-    _currentQuiz = quiz;
-    notifyListeners();
+  void changeQuiz(Quiz quiz) {
+    if (quiz != _currentQuiz) {
+      _currentQuiz = quiz;
+      notifyListeners();
+    }
   }
+
+  int _seconds = 100;
+
+  int get seconds => _seconds;
+
+  void setSeconds(int seconds) => _seconds = seconds;
 }
