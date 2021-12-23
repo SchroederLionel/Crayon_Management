@@ -10,12 +10,16 @@ class QuizFourthStepStart extends StatelessWidget {
   Widget build(BuildContext context) {
     final quizSelctor =
         Provider.of<QuizSelectorProvider>(context, listen: false);
-    return Center(
-      child: ElevatedButton(
-        onPressed: () {
-          QuizService.startQuiz(quizSelctor.lectureId, quizSelctor.currentQuiz);
-        },
-        child: Text('Start Quiz'),
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 20),
+      child: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            QuizService.startQuiz(
+                quizSelctor.lectureId, quizSelctor.currentQuiz);
+          },
+          child: Text('Start Quiz'),
+        ),
       ),
     );
   }

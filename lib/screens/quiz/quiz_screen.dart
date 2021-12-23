@@ -10,7 +10,6 @@ import 'package:crayon_management/screens/quiz/quiz_options_row.dart';
 import 'package:crayon_management/services/quiz_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:duration_picker/duration_picker.dart';
 
 class QuizScreen extends StatefulWidget {
   final Lecture lecture;
@@ -60,7 +59,7 @@ class _QuizScreenState extends State<QuizScreen> {
                       ))
                 ],
               ),
-              const Expanded(child: QuizStepper())
+              Expanded(child: QuizStepper(lectureId: widget.lecture.id))
             ],
           ),
         ),

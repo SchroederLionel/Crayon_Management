@@ -11,25 +11,39 @@ class QuizSecondStepTime extends StatefulWidget {
 }
 
 class _QuizSecondStepTimeState extends State<QuizSecondStepTime> {
-  Duration result = const Duration(seconds: 100);
+  Duration? time;
   @override
   Widget build(BuildContext context) {
     return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          DurationPicker(
-            onChange: (Duration value) => setState(() {
-              result = value;
-              Provider.of<QuizSelectorProvider>(context)
-                  .setSeconds(result.inMilliseconds);
-            }),
-            baseUnit: BaseUnit.second,
-            duration: result,
-          ),
+          time == null
+              ? const SizedBox()
+              : DurationPicker(
+                  onChange: (Duration value) => setState(() {
+                    time = value;
+                    Provider.of<QuizSelectorProvider>(context, listen: false)
+                        .setSeconds(time!.inSeconds);
+                  }),
+                  baseUnit: BaseUnit.second,
+                  duration: time!,
+                ),
           const SizedBox(height: 20),
-          Text('${result.inSeconds}/s'),
+          time == null ? const SizedBox() : Text('${time!.inSeconds}/s'),
           const SizedBox(height: 20),
         ]);
+  }
+
+  @override
+  void initState() {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      setState(() {
+        time = Duration(
+            seconds: Provider.of<QuizSelectorProvider>(context, listen: false)
+                .seconds);
+      });
+    });
+    super.initState();
   }
 }

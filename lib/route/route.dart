@@ -3,6 +3,7 @@ import 'package:crayon_management/datamodels/route_arguments/presentation_screen
 import 'package:crayon_management/datamodels/route_arguments/quiz_launch.dart';
 import 'package:crayon_management/providers/lecture/detailed_lecture_provider.dart';
 import 'package:crayon_management/providers/quiz/lobby_provider.dart';
+import 'package:crayon_management/providers/quiz/user_responses_provider.dart';
 import 'package:crayon_management/providers/user/user_provider.dart';
 import 'package:crayon_management/providers/presentation/current_pdf_provider.dart';
 import 'package:crayon_management/providers/presentation/page_count_provider.dart';
@@ -100,6 +101,8 @@ Route<dynamic> controller(RouteSettings routerSettings) {
               name: '/lecture/${arg.lecture.title.replaceAll(' ', '')}/quiz'),
           builder: (context) => MultiProvider(
                   providers: [
+                    ChangeNotifierProvider<UserResponsesProvider>(
+                        create: (context) => UserResponsesProvider()),
                     ChangeNotifierProvider<QuizSelectorProvider>(
                         create: (context) => QuizSelectorProvider(
                             quizes: arg.quizes, lectureId: arg.lecture.id)),

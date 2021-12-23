@@ -1,13 +1,15 @@
 import 'package:crayon_management/screens/quiz/components/stepper/quiz_first_step.dart';
 import 'package:crayon_management/screens/quiz/components/stepper/quiz_fith_step.dart';
 import 'package:crayon_management/screens/quiz/components/stepper/quiz_fourth_step_start.dart';
+import 'package:crayon_management/screens/quiz/components/stepper/quiz_sixth_step_result.dart';
 import 'package:crayon_management/screens/quiz/components/stepper/quiz_thrid_step_lobby.dart';
 
 import 'package:crayon_management/screens/quiz/components/stepper/quiz_second_step_time.dart';
 import 'package:flutter/material.dart';
 
 class QuizStepper extends StatefulWidget {
-  const QuizStepper({Key? key}) : super(key: key);
+  final String lectureId;
+  const QuizStepper({Key? key, required this.lectureId}) : super(key: key);
 
   @override
   State<QuizStepper> createState() => _QuizStepperState();
@@ -22,7 +24,7 @@ class _QuizStepperState extends State<QuizStepper> {
       type: StepperType.horizontal,
       currentStep: _currentStep,
       steps: getSteps(),
-      onStepTapped: (step) => setState(() => _currentStep = step),
+      // onStepTapped: (step) => setState(() => _currentStep = step),
       onStepContinue: () {
         final isLastStep = _currentStep == getSteps().length - 1;
         if (isLastStep) {
@@ -70,15 +72,21 @@ class _QuizStepperState extends State<QuizStepper> {
           isActive: _currentStep >= 3,
         ),
         Step(
-          state: _currentStep > 2 ? StepState.complete : StepState.indexed,
+          state: _currentStep > 3 ? StepState.complete : StepState.indexed,
           title: Text('Start quiz'),
           content: QuizFourthStepStart(),
           isActive: _currentStep >= 4,
         ),
         Step(
-          state: _currentStep > 2 ? StepState.complete : StepState.indexed,
+          state: _currentStep > 4 ? StepState.complete : StepState.indexed,
           title: Text('Timer'),
           content: QuizFithStep(),
+          isActive: _currentStep >= 5,
+        ),
+        Step(
+          state: _currentStep > 5 ? StepState.complete : StepState.indexed,
+          title: Text('Result'),
+          content: QuizSixthStepResult(lectureId: widget.lectureId),
           isActive: _currentStep >= 5,
         ),
       ];

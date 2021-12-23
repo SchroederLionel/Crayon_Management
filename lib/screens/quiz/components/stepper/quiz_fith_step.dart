@@ -18,7 +18,10 @@ class _QuizFithStepState extends State<QuizFithStep> {
   void initState() {
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       setState(() {
-        _start = Provider.of<QuizSelectorProvider>(context).seconds;
+        _start =
+            Provider.of<QuizSelectorProvider>(context, listen: false).seconds +
+                2;
+
         startTimer();
       });
     });
@@ -31,11 +34,19 @@ class _QuizFithStepState extends State<QuizFithStep> {
     if (_start == null) {
       return const SizedBox();
     }
-    return Text("$_start");
+    return Center(
+      child: Text(
+        '$_start',
+        style: Theme.of(context)
+            .textTheme
+            .headline1!
+            .copyWith(fontSize: 160, fontWeight: FontWeight.bold),
+      ),
+    );
   }
 
   void startTimer() {
-    const oneSec = const Duration(seconds: 1);
+    const oneSec = Duration(seconds: 1);
     _timer = Timer.periodic(
       oneSec,
       (Timer timer) {
