@@ -29,7 +29,7 @@ class _QuizStepperState extends State<QuizStepper> {
         currentStep: provider.currentPage,
         steps: getSteps(provider),
         controlsBuilder: (context, {onStepContinue, onStepCancel}) =>
-            provider.getButtons(),
+            provider.getButtons(context),
       );
     });
   }
@@ -54,7 +54,7 @@ class _QuizStepperState extends State<QuizStepper> {
               provider.currentPage > 2 ? StepState.complete : StepState.indexed,
           title: Text('Lobby'),
           content: QuizThirdStepLobby(),
-          isActive: _currentStep >= 3,
+          isActive: provider.currentPage >= 3,
         ),
         Step(
           state:
@@ -68,7 +68,7 @@ class _QuizStepperState extends State<QuizStepper> {
               provider.currentPage > 4 ? StepState.complete : StepState.indexed,
           title: Text('Result'),
           content: QuizSixthStepResult(lectureId: widget.lectureId),
-          isActive: _currentStep >= 5,
+          isActive: provider.currentPage >= 5,
         ),
         Step(
           state:

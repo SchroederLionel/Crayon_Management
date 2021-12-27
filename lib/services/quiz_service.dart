@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crayon_management/datamodels/failure.dart';
-import 'package:crayon_management/datamodels/quiz/quit_participation.dart';
 import 'package:crayon_management/datamodels/quiz/quiz.dart';
 
 class QuizService {
@@ -104,12 +103,19 @@ class QuizService {
     } catch (e) {}
   }
 
-  static allowParticipantsToJoinLobby(String lectureId) async {
+  static Future<void> allowParticipantsToJoinLobby(String lectureId) async {
     try {
       FirebaseFirestore.instance
           .collection('lectures')
           .doc(lectureId)
-          .set({'isLobbyOpen': true}, SetOptions(merge: true));
+          .collection('features')
+          .doc('lobby')
+          .set({'participants': []});
+      return FirebaseFirestore.instance
+          .collection('lectures')
+          .doc(lectureId)
+          .set({'isLobbyOpen': true, 'currentQuiz': null},
+              SetOptions(merge: true));
     } catch (e) {}
   }
 
@@ -122,12 +128,11 @@ class QuizService {
     } catch (e) {}
   }
 
-  static dissalowParticipantsToJoinLobby(String lectureId) async {
+  static closeLobbyAndStartQuiz(String lectureId, Quiz quiz) async {
     try {
-      FirebaseFirestore.instance
-          .collection('lectures')
-          .doc(lectureId)
-          .set({'isLobbyOpen': false}, SetOptions(merge: true));
+      FirebaseFirestore.instance.collection('lectures').doc(lectureId).set(
+          {'isLobbyOpen': false, 'currentQuiz': quiz.toJson()},
+          SetOptions(merge: true));
     } catch (e) {}
   }
 
@@ -136,6 +141,17 @@ class QuizService {
       FirebaseFirestore.instance.collection('lectures').doc(lectureId).set(
           {'currentQuiz': quiz.toJson(), 'isLobbyOpen': false},
           SetOptions(merge: true));
+    } catch (e) {}
+  }
+
+  static cleanQuiz(String lectureId) async {
+    try {
+      FirebaseFirestore.instance
+          .collection('lectures')
+          .doc(lectureId)
+          .collection('features')
+          .doc('responses')
+          .set({'responses': []});
     } catch (e) {}
   }
 }

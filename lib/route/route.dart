@@ -103,7 +103,8 @@ Route<dynamic> controller(RouteSettings routerSettings) {
           builder: (context) => MultiProvider(
                   providers: [
                     ChangeNotifierProvider<StepperProvider>(
-                        create: (context) => StepperProvider(context: context)),
+                        create: (context) => StepperProvider(
+                            context: context, lectureId: arg.lecture.id)),
                     ChangeNotifierProvider<UserResponsesProvider>(
                         create: (context) => UserResponsesProvider()),
                     ChangeNotifierProvider<QuizSelectorProvider>(

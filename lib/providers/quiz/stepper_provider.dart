@@ -1,12 +1,19 @@
 import 'package:crayon_management/datamodels/enum.dart';
+import 'package:crayon_management/datamodels/failure.dart';
+import 'package:crayon_management/datamodels/quiz/quiz.dart';
+import 'package:crayon_management/providers/presentation/quiz_selector_provider.dart';
+import 'package:crayon_management/services/quiz_service.dart';
+import 'package:crayon_management/widgets/snackbar.dart';
+import 'package:dartz/dartz.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class StepperProvider extends ChangeNotifier {
   BuildContext context;
-
-  StepperProvider({required this.context});
+  String lectureId;
+  StepperProvider({required this.context, required this.lectureId});
 
   StepperState _state = StepperState.select;
   int _currentPage = 0;
@@ -35,7 +42,7 @@ class StepperProvider extends ChangeNotifier {
     }
   }
 
-  Widget getButtons() {
+  Widget getButtons(BuildContext context) {
     if (_state == StepperState.select) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -51,7 +58,26 @@ class StepperProvider extends ChangeNotifier {
         children: [
           ElevatedButton(
               child: Text('Time Picked (You wont be able to go back)'),
-              onPressed: () => setState(StepperState.lobby)),
+              onPressed: () async {
+                Either<Failure, void> quizes = await Task(() =>
+                        QuizService.allowParticipantsToJoinLobby(lectureId))
+                    .attempt()
+                    .map(
+                      (either) => either.leftMap((obj) {
+                        try {
+                          return obj as Failure;
+                        } catch (e) {
+                          throw obj;
+                        }
+                      }),
+                    )
+                    .run();
+                quizes.fold((failure) {
+                  CustomSnackbar(
+                      text: 'Could not close the lobby', color: Colors.red);
+                  setState(StepperState.lobby);
+                }, (success) => setState(StepperState.lobby));
+              }),
           const SizedBox(width: 20),
           ElevatedButton(
               child: Text('Back'),
@@ -63,8 +89,31 @@ class StepperProvider extends ChangeNotifier {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ElevatedButton(
-              child: Text('Closing Lobby '),
-              onPressed: () => setState(StepperState.countdown)),
+              child: Text('Start quiz'),
+              onPressed: () async {
+                Either<Failure, void> quizes = await Task(() =>
+                        QuizService.closeLobbyAndStartQuiz(
+                            lectureId,
+                            Provider.of<QuizSelectorProvider>(context,
+                                    listen: false)
+                                .currentQuiz))
+                    .attempt()
+                    .map(
+                      (either) => either.leftMap((obj) {
+                        try {
+                          return obj as Failure;
+                        } catch (e) {
+                          throw obj;
+                        }
+                      }),
+                    )
+                    .run();
+                quizes.fold((failure) {
+                  CustomSnackbar(
+                      text: 'Could not close the lobby', color: Colors.red);
+                  setState(StepperState.countdown);
+                }, (success) => setState(StepperState.countdown));
+              }),
         ],
       );
     } else if (_state == StepperState.countdown) {
@@ -84,7 +133,30 @@ class StepperProvider extends ChangeNotifier {
         children: [
           ElevatedButton(
               child: Text('Finished'),
-              onPressed: () => Navigator.of(context).pop()),
+              onPressed: () async {
+                Either<Failure, void> quizes =
+                    await Task(() => QuizService.cleanQuiz(
+                              lectureId,
+                            ))
+                        .attempt()
+                        .map(
+                          (either) => either.leftMap((obj) {
+                            try {
+                              return obj as Failure;
+                            } catch (e) {
+                              throw obj;
+                            }
+                          }),
+                        )
+                        .run();
+                quizes.fold((failure) {
+                  CustomSnackbar(
+                      text: 'Could not close the lobby', color: Colors.red);
+                  setState(StepperState.countdown);
+                }, (success) => Navigator.of(context).pop());
+
+                ;
+              }),
         ],
       );
     }

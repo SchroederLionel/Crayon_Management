@@ -1,6 +1,7 @@
 import 'package:crayon_management/datamodels/lecture/lecture.dart';
 import 'package:crayon_management/services/quiz_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class QuizLobbyButton extends StatefulWidget {
   final Lecture lecture;
@@ -32,7 +33,7 @@ class _QuizLobbyButtonState extends State<QuizLobbyButton> {
               isLobbyOpen = true;
             });
 
-            QuizService.dissalowParticipantsToJoinLobby(widget.lecture.id);
+            // QuizService.closeLobbyAndStartQuiz(widget.lecture.id,widget.);
           } else {
             setState(() {
               isLobbyOpen = false;

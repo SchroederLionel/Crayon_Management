@@ -36,14 +36,25 @@ class _QuizFithStepState extends State<QuizFithStep> {
     if (_start == null) {
       return const SizedBox();
     }
-    return Center(
-      child: Text(
-        '$_start',
-        style: Theme.of(context)
-            .textTheme
-            .headline1!
-            .copyWith(fontSize: 160, fontWeight: FontWeight.bold),
-      ),
+    return Column(
+      children: [
+        Center(
+          child: Text(
+            '$_start',
+            style: Theme.of(context)
+                .textTheme
+                .headline1!
+                .copyWith(fontSize: 160, fontWeight: FontWeight.bold),
+          ),
+        ),
+        ElevatedButton(
+            onPressed: () {
+              _timer.cancel();
+              Provider.of<StepperProvider>(context, listen: false)
+                  .setState(StepperState.result);
+            },
+            child: Text('Finish quiz early'))
+      ],
     );
   }
 
