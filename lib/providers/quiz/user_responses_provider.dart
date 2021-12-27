@@ -39,23 +39,25 @@ class UserResponsesProvider extends ChangeNotifier {
     setState(NotifierState.loaded);
   }
 
-  Map<String, int> getHowManyGotQuestionRightAndWrong(
-      String question, List<QuizResultUser> responses) {
-    int howManyTrue = 0;
-    int howManyFalse = 0;
-    for (QuizResultUser response in responses) {
-      bool didTheQuesitonRight = false;
-      for (QuizResponse qres in response.responses) {
-        if (qres.question.toLowerCase().trim() ==
-            question.toLowerCase().trim()) {
-          didTheQuesitonRight = true;
-          break;
-        }
-      }
-      didTheQuesitonRight == true ? howManyTrue += 1 : howManyFalse += 1;
-    }
+  Map<String, String>? getHowManyGotQuestionRightAndWrong(String question) {
+    return _quizResponses.fold((l) => null, (responses) {
+      int howManyTrue = 0;
+      int howManyFalse = 0;
 
-    return {"right": howManyTrue, "wrong": howManyFalse};
+      for (QuizResultUser response in responses) {
+        bool didTheQuesitonRight = false;
+        for (QuizResponse qres in response.responses) {
+          if (qres.question.toLowerCase().trim() ==
+              question.toLowerCase().trim()) {
+            didTheQuesitonRight = true;
+            break;
+          }
+        }
+        didTheQuesitonRight == true ? howManyTrue += 1 : howManyFalse += 1;
+      }
+
+      return {"right": '$howManyTrue', "wrong": '$howManyFalse'};
+    });
   }
 
   int getMaxScore(Quiz quiz, int timeAvailable) {

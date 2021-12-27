@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:crayon_management/datamodels/enum.dart';
 import 'package:crayon_management/providers/presentation/quiz_selector_provider.dart';
+import 'package:crayon_management/providers/quiz/stepper_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -53,6 +55,8 @@ class _QuizFithStepState extends State<QuizFithStep> {
         if (_start == 0) {
           setState(() {
             timer.cancel();
+            Provider.of<StepperProvider>(context, listen: false)
+                .setState(StepperState.result);
           });
         } else {
           setState(() {
