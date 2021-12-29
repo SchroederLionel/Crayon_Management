@@ -66,91 +66,94 @@ class _PresentationScreenState extends State<PresentationScreen> {
     final pageCountProvider =
         Provider.of<PageCountProvider>(context, listen: false);
 
-    return Consumer<PresentationProvider>(
-        builder: (_, presentationNotifier, __) {
-      if (presentationNotifier.state == NotifierState.initial) {
-        return Container();
-      } else if (presentationNotifier.state == NotifierState.loading) {
-        return const Center(
-            child: SizedBox(
-                height: 100, width: 100, child: CircularProgressIndicator()));
-      } else if (presentationNotifier.state == NotifierState.loaded) {
-        return presentationNotifier.slide.fold(
-            (failure) => Center(child: Text(failure.toString())),
-            (uint8list) => uint8list == null
-                ? Container()
-                : Stack(
-                    children: [
-                      Center(
-                        child: Container(
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: 40, vertical: 40),
-                          child: PdfDocumentLoader.openData(uint8list,
-                              documentBuilder:
-                                  (context, pdfDocument, pageCount) {
-                            pageCountProvider.initValue(pageCount, 0);
-                            currentPdfProvider
-                                .setCurrentPdfDocument(pdfDocument);
+    return SafeArea(
+      child: Consumer<PresentationProvider>(
+          builder: (_, presentationNotifier, __) {
+        if (presentationNotifier.state == NotifierState.initial) {
+          return Container();
+        } else if (presentationNotifier.state == NotifierState.loading) {
+          return const Center(
+              child: SizedBox(
+                  height: 100, width: 100, child: CircularProgressIndicator()));
+        } else if (presentationNotifier.state == NotifierState.loaded) {
+          return presentationNotifier.slide.fold(
+              (failure) => Center(child: Text(failure.toString())),
+              (uint8list) => uint8list == null
+                  ? Container()
+                  : Stack(
+                      children: [
+                        Center(
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 40, vertical: 40),
+                            child: PdfDocumentLoader.openData(uint8list,
+                                documentBuilder:
+                                    (context, pdfDocument, pageCount) {
+                              pageCountProvider.initValue(pageCount, 0);
+                              currentPdfProvider
+                                  .setCurrentPdfDocument(pdfDocument);
 
-                            return ScrollablePositionedList.builder(
-                                minCacheExtent: 4,
-                                initialScrollIndex: 0,
-                                itemCount: pageCount,
-                                itemScrollController: _scrollController,
-                                scrollDirection: Axis.horizontal,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemBuilder: (context, index) => SizedBox(
-                                      height: size!.height - 80,
-                                      width: size!.width - 100,
-                                      child: PdfPageView(
-                                        pdfDocument: pdfDocument,
-                                        pageNumber: index + 1,
-                                        pageBuilder: (context, textureBuilder,
-                                            pageSize) {
-                                          return Center(
-                                            child: textureBuilder(),
-                                          );
-                                        },
-                                      ),
-                                    ));
-                          }),
-                        ),
-                      ),
-                      Consumer<ShowOptionProvider>(
-                          builder: (_, showOptionProvider, __) {
-                        return showOptionProvider.show
-                            ? PresentationOptionsRow(
-                                lecture: arguement.lecture,
-                                quizes: arguement.quizes)
-                            : IconButton(
-                                onPressed: () => WidgetsBinding.instance!
-                                        .addPostFrameCallback((_) {
-                                      showOptionProvider.changeShow();
-                                    }),
-                                icon: const Icon(
-                                  Icons.remove_red_eye,
-                                  color: Colors.white24,
-                                ));
-                      }),
-                      PresentationControls(scrollController: _scrollController),
-                      Container(
-                        alignment: Alignment.bottomLeft,
-                        child: StreamProvider<List<String>>(
-                          create: (context) =>
-                              QuestionService.getQuestionSnapshots(
-                                  arguement.lecture.id),
-                          initialData: const [],
-                          child: Question(
-                            lectureId: arguement.lecture.id,
+                              return ScrollablePositionedList.builder(
+                                  minCacheExtent: 4,
+                                  initialScrollIndex: 0,
+                                  itemCount: pageCount,
+                                  itemScrollController: _scrollController,
+                                  scrollDirection: Axis.horizontal,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemBuilder: (context, index) => SizedBox(
+                                        height: size!.height - 80,
+                                        width: size!.width - 100,
+                                        child: PdfPageView(
+                                          pdfDocument: pdfDocument,
+                                          pageNumber: index + 1,
+                                          pageBuilder: (context, textureBuilder,
+                                              pageSize) {
+                                            return Center(
+                                              child: textureBuilder(),
+                                            );
+                                          },
+                                        ),
+                                      ));
+                            }),
                           ),
                         ),
-                      ),
-                      const PageCount()
-                    ],
-                  ));
-      } else {
-        return Container();
-      }
-    });
+                        Consumer<ShowOptionProvider>(
+                            builder: (_, showOptionProvider, __) {
+                          return showOptionProvider.show
+                              ? PresentationOptionsRow(
+                                  lecture: arguement.lecture,
+                                  quizes: arguement.quizes)
+                              : IconButton(
+                                  onPressed: () => WidgetsBinding.instance!
+                                          .addPostFrameCallback((_) {
+                                        showOptionProvider.changeShow();
+                                      }),
+                                  icon: const Icon(
+                                    Icons.remove_red_eye,
+                                    color: Colors.white24,
+                                  ));
+                        }),
+                        PresentationControls(
+                            scrollController: _scrollController),
+                        Container(
+                          alignment: Alignment.bottomLeft,
+                          child: StreamProvider<List<String>>(
+                            create: (context) =>
+                                QuestionService.getQuestionSnapshots(
+                                    arguement.lecture.id),
+                            initialData: const [],
+                            child: Question(
+                              lectureId: arguement.lecture.id,
+                            ),
+                          ),
+                        ),
+                        const PageCount()
+                      ],
+                    ));
+        } else {
+          return Container();
+        }
+      }),
+    );
   }
 }

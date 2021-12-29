@@ -12,7 +12,7 @@ import 'package:crayon_management/providers/presentation/show_options_provider.d
 
 import 'package:crayon_management/screens/presentation/components/drawboard.dart';
 import 'package:crayon_management/screens/presentation/components/qr_dialog.dart';
-
+import 'package:crayon_management/route/route.dart' as route;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:universal_html/html.dart';
@@ -32,8 +32,6 @@ class PresentationOptionsRow extends StatelessWidget {
         Provider.of<PageCountProvider>(context, listen: false);
     final showOptionProvider =
         Provider.of<ShowOptionProvider>(context, listen: false);
-    final quizSelector =
-        Provider.of<QuizSelectorProvider>(context, listen: false);
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -97,13 +95,15 @@ class PresentationOptionsRow extends StatelessWidget {
         const SizedBox(
           width: 14,
         ),
-        ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).pushNamed('quiz',
-                  arguments:
-                      QuizLaunchArguement(lecture: lecture, quizes: quizes));
-            },
-            child: Text('Open quiz mode')),
+        quizes.isEmpty
+            ? const SizedBox()
+            : ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed(route.quiz,
+                      arguments: QuizLaunchArguement(
+                          lecture: lecture, quizes: quizes));
+                },
+                child: Text('Open quiz mode')),
         const Spacer(),
         IconButton(
             onPressed: () {

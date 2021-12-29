@@ -1,9 +1,8 @@
 import 'package:crayon_management/datamodels/lecture/lecture.dart';
 import 'package:crayon_management/screens/quiz/components/stepper/quiz_stepper.dart';
-import 'package:crayon_management/services/quiz_service.dart';
+
 import 'package:crayon_management/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class QuizScreen extends StatefulWidget {
   final Lecture lecture;
