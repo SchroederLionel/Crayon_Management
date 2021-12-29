@@ -38,7 +38,7 @@ class QuizService {
           .collection('features')
           .doc('quizes')
           .get();
-      //Lecture.fromJson(lectureDocument.data());
+
       if (quizDocument.exists) {
         if (quizDocument.data() != null) {
           if (quizDocument.data()!.containsKey('quizes')) {

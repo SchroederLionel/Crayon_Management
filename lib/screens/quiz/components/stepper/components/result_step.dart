@@ -9,16 +9,15 @@ import 'package:crayon_management/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class QuizSixthStepResult extends StatefulWidget {
+class ResultStep extends StatefulWidget {
   final String lectureId;
-  const QuizSixthStepResult({Key? key, required this.lectureId})
-      : super(key: key);
+  const ResultStep({Key? key, required this.lectureId}) : super(key: key);
 
   @override
-  _QuizSixthStepResultState createState() => _QuizSixthStepResultState();
+  _ResultSteptState createState() => _ResultSteptState();
 }
 
-class _QuizSixthStepResultState extends State<QuizSixthStepResult> {
+class _ResultSteptState extends State<ResultStep> {
   @override
   void initState() {
     WidgetsBinding.instance!.addPostFrameCallback((_) {

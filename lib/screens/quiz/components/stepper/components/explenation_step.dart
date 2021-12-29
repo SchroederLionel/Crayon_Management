@@ -1,20 +1,17 @@
-import 'package:crayon_management/datamodels/quiz/quit_participation.dart';
 import 'package:crayon_management/providers/presentation/quiz_selector_provider.dart';
 import 'package:crayon_management/providers/quiz/user_responses_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class QuizSeventhStepExplenation extends StatefulWidget {
-  const QuizSeventhStepExplenation({Key? key}) : super(key: key);
+class ExplenationStep extends StatefulWidget {
+  const ExplenationStep({Key? key}) : super(key: key);
 
   @override
-  State<QuizSeventhStepExplenation> createState() =>
-      _QuizSeventhStepExplenationState();
+  State<ExplenationStep> createState() => _ExplenationStepState();
 }
 
-class _QuizSeventhStepExplenationState
-    extends State<QuizSeventhStepExplenation> {
-  PageController _controller = PageController();
+class _ExplenationStepState extends State<ExplenationStep> {
+  final PageController _controller = PageController();
   int currentPage = 0;
   @override
   Widget build(BuildContext context) {
@@ -36,7 +33,16 @@ class _QuizSeventhStepExplenationState
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    IconButton(icon: Icon(Icons.arrow_left), onPressed: () {}),
+                    IconButton(
+                        icon: const Icon(Icons.arrow_left),
+                        onPressed: () {
+                          if (currentPage != 0) {
+                            setState(() {
+                              currentPage--;
+                              _controller.jumpToPage(currentPage);
+                            });
+                          }
+                        }),
                     Text(
                       questions[index].question,
                       style: Theme.of(context)
@@ -44,7 +50,16 @@ class _QuizSeventhStepExplenationState
                           .headline1!
                           .copyWith(fontSize: 48),
                     ),
-                    const Icon(Icons.arrow_right),
+                    IconButton(
+                        onPressed: () {
+                          if (currentPage < questions.length - 1) {
+                            setState(() {
+                              currentPage++;
+                              _controller.jumpToPage(currentPage);
+                            });
+                          }
+                        },
+                        icon: const Icon(Icons.arrow_right)),
                   ],
                 ),
                 Row(
@@ -75,5 +90,11 @@ class _QuizSeventhStepExplenationState
             );
           }),
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }

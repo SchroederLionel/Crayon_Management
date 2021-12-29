@@ -1,12 +1,11 @@
 import 'package:crayon_management/providers/quiz/stepper_provider.dart';
-import 'package:crayon_management/screens/quiz/components/stepper/quiz_first_step.dart';
-import 'package:crayon_management/screens/quiz/components/stepper/quiz_fith_step.dart';
-import 'package:crayon_management/screens/quiz/components/stepper/quiz_fourth_step_start.dart';
-import 'package:crayon_management/screens/quiz/components/stepper/quiz_seventh_step_explenation.dart';
-import 'package:crayon_management/screens/quiz/components/stepper/quiz_sixth_step_result.dart';
-import 'package:crayon_management/screens/quiz/components/stepper/quiz_thrid_step_lobby.dart';
-
-import 'package:crayon_management/screens/quiz/components/stepper/quiz_second_step_time.dart';
+import 'package:crayon_management/screens/quiz/components/stepper/components/select_quiz_step.dart';
+import 'package:crayon_management/screens/quiz/components/stepper/components/count_down_step.dart';
+import 'package:crayon_management/screens/quiz/components/stepper/components/select_time_step.dart';
+import 'package:crayon_management/screens/quiz/components/stepper/components/explenation_step.dart';
+import 'package:crayon_management/screens/quiz/components/stepper/components/result_step.dart';
+import 'package:crayon_management/screens/quiz/components/stepper/components/lobby_step.dart';
+import 'package:crayon_management/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -19,8 +18,6 @@ class QuizStepper extends StatefulWidget {
 }
 
 class _QuizStepperState extends State<QuizStepper> {
-  int _currentStep = 0;
-
   @override
   Widget build(BuildContext context) {
     return Consumer<StepperProvider>(builder: (_, provider, __) {
@@ -39,42 +36,44 @@ class _QuizStepperState extends State<QuizStepper> {
             state: provider.currentPage > 0
                 ? StepState.complete
                 : StepState.indexed,
-            title: Text('Select Quiz'),
+            title: const CustomText(
+                safetyText: 'Select Quiz', textCode: 'select-quiz'),
             isActive: provider.currentPage >= 1,
-            content: QuizFirstStep()),
+            content: const SelectQuizStep()),
         Step(
             state: provider.currentPage > 1
                 ? StepState.complete
                 : StepState.indexed,
-            title: Text('Time'),
+            title: const CustomText(safetyText: 'Time', textCode: 'time'),
             isActive: provider.currentPage >= 2,
-            content: QuizSecondStepTime()),
+            content: const SelectTimeStep()),
         Step(
           state:
               provider.currentPage > 2 ? StepState.complete : StepState.indexed,
-          title: Text('Lobby'),
-          content: QuizThirdStepLobby(),
+          title: const CustomText(safetyText: 'Lobby', textCode: 'lobby'),
+          content: LobbyStep(lectureId: widget.lectureId),
           isActive: provider.currentPage >= 3,
         ),
         Step(
           state:
               provider.currentPage > 3 ? StepState.complete : StepState.indexed,
-          title: Text('Timer'),
-          content: QuizFithStep(),
+          title: const CustomText(safetyText: 'Timer', textCode: 'timer'),
+          content: const CountDownStep(),
           isActive: provider.currentPage >= 4,
         ),
         Step(
           state:
               provider.currentPage > 4 ? StepState.complete : StepState.indexed,
-          title: Text('Result'),
-          content: QuizSixthStepResult(lectureId: widget.lectureId),
+          title: const CustomText(safetyText: 'Result', textCode: 'result'),
+          content: ResultStep(lectureId: widget.lectureId),
           isActive: provider.currentPage >= 5,
         ),
         Step(
           state:
               provider.currentPage > 5 ? StepState.complete : StepState.indexed,
-          title: Text('Explenation'),
-          content: const QuizSeventhStepExplenation(),
+          title: const CustomText(
+              safetyText: 'Explentation', textCode: 'explentation'),
+          content: const ExplenationStep(),
           isActive: provider.currentPage >= 6,
         ),
       ];

@@ -1,17 +1,21 @@
 import 'package:crayon_management/providers/presentation/quiz_selector_provider.dart';
+import 'package:crayon_management/widgets/custom_text.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class QuizFirstStep extends StatelessWidget {
-  const QuizFirstStep({Key? key}) : super(key: key);
+class SelectQuizStep extends StatelessWidget {
+  const SelectQuizStep({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Consumer<QuizSelectorProvider>(
       builder: (_, quizSelector, __) {
         if (quizSelector.quizes.isEmpty) {
-          return const Text('No quizes are available!');
+          return const CustomText(
+            safetyText: 'No quizes are available!',
+            textCode: 'no-quizes-are-available',
+          );
         } else {
           return SizedBox(
             height: 350,

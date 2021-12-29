@@ -9,7 +9,9 @@ import 'package:crayon_management/providers/quiz/response_provider.dart';
 import 'package:crayon_management/providers/util_providers/error_provider.dart';
 import 'package:crayon_management/screens/detailed_lecture/add_quiz/quiz_dialog.dart';
 import 'package:crayon_management/widgets/confirmation_dialog.dart';
+import 'package:crayon_management/widgets/custom_text.dart';
 import 'package:crayon_management/widgets/error_text.dart';
+import 'package:crayon_management/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
@@ -49,15 +51,7 @@ class _QuizState extends State<Quiz> {
               style: Theme.of(context).textTheme.subtitle1,
             ),
             const SizedBox(width: 14),
-            ElevatedButton(
-                onPressed: () {
-                  quizProvider.quizes.fold(
-                      (failure) => null,
-                      (quizes) => Navigator.of(context).pushNamed(route.quiz,
-                          arguments: QuizLaunchArguement(
-                              lecture: widget.lecture, quizes: quizes)));
-                },
-                child: Text('Start a quiz')),
+            getQuizButton(context),
             const Spacer(),
             ElevatedButton.icon(
                 onPressed: () {
@@ -175,5 +169,31 @@ class _QuizState extends State<Quiz> {
             })),
       ],
     );
+  }
+
+  Widget getQuizButton(BuildContext context) {
+    return Consumer<QuizProvider>(builder: (_, provider, __) {
+      if (provider.state == NotifierState.initial) {
+        return const SizedBox();
+      } else if (provider.state == NotifierState.loaded) {
+        return provider.quizes.fold((failure) => const SizedBox(), (quizes) {
+          if (quizes.isEmpty) {
+            return const SizedBox();
+          } else {
+            return ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed(route.quiz,
+                      arguments: QuizLaunchArguement(
+                          lecture: widget.lecture, quizes: quizes));
+                },
+                child: const CustomText(
+                    safetyText: 'Start quiz', textCode: 'start-quiz'));
+          }
+        });
+      } else if (provider.state == NotifierState.loading) {
+        return const LoadingWidget();
+      }
+      return const SizedBox();
+    });
   }
 }

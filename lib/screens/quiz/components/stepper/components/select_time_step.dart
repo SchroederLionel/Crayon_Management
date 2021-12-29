@@ -3,14 +3,14 @@ import 'package:duration_picker/duration_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class QuizSecondStepTime extends StatefulWidget {
-  const QuizSecondStepTime({Key? key}) : super(key: key);
+class SelectTimeStep extends StatefulWidget {
+  const SelectTimeStep({Key? key}) : super(key: key);
 
   @override
-  State<QuizSecondStepTime> createState() => _QuizSecondStepTimeState();
+  State<SelectTimeStep> createState() => _SelectTimeStepState();
 }
 
-class _QuizSecondStepTimeState extends State<QuizSecondStepTime> {
+class _SelectTimeStepState extends State<SelectTimeStep> {
   Duration? time;
   @override
   Widget build(BuildContext context) {

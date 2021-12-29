@@ -6,14 +6,14 @@ import 'package:crayon_management/providers/quiz/stepper_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class QuizFithStep extends StatefulWidget {
-  const QuizFithStep({Key? key}) : super(key: key);
+class CountDownStep extends StatefulWidget {
+  const CountDownStep({Key? key}) : super(key: key);
 
   @override
-  State<QuizFithStep> createState() => _QuizFithStepState();
+  State<CountDownStep> createState() => _CountDownStepState();
 }
 
-class _QuizFithStepState extends State<QuizFithStep> {
+class _CountDownStepState extends State<CountDownStep> {
   late Timer _timer;
   int? _start;
   @override
